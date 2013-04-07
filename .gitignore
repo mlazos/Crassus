@@ -1,0 +1,6 @@
+bin/edu/**
+*~
+.metadata
+tmp/**
+tmp/**/*
+*.swp
