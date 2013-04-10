@@ -39,10 +39,11 @@ public interface StockPlot {
 	 */
 	public void setRsOnSameChart(boolean isRsOnSameChart);
 	
+	
 	/**
-	 * turns the Relative Strength chart on
+	 * Turn RS on or off
 	 */
-	public void setRsOnSameChart();
+	public void setRS(boolean isRsOn);
 	
 	/**
 	 * 
