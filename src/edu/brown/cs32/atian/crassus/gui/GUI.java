@@ -7,4 +7,8 @@ public interface GUI {
 	 */
 	public void launch();
 	
+	/**
+	 * Should be called when there is new data to draw to the screen
+	 */
+	public void update();
 }
