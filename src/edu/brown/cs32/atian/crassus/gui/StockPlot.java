@@ -31,20 +31,32 @@ public interface StockPlot {
 	 */
 	//public JFreeChart getRelativeStrengthChart();
 	
-	public void addDatasetToPrimaryChart(Color color );
+	public void addSeries(SeriesWrapper series);
+
 	
 	/**
-	 * @param state indicates whether the relative strength data should be drawn on the same chart as the stock price data
+	 * This function determines whether the relative strength chart should be separate from the primary chart.
 	 */
-	public void setRsOnSameChart(boolean state);
+	public void setRsOnSameChart(boolean isRsOnSameChart);
+	
 	
 	/**
-	 * turns the Relative Strength chart on
+	 * Turn RS on or off
 	 */
-	public void turnRsOn() throws CantTurnRsOnAfterChartsRetreivedException;
+	public void setRS(boolean isRsOn);
 	
+	/**
+	 * 
+	 * @return whether the relative strength chart is currently separate from the primary chart.
+	 */
 	public boolean isRsOn();
 	
+	/**
+	 * 
+	 * @param width - the desired width of the output
+	 * @param height - the desired hegith of the output
+	 * @return - a buffered image showing the chart. 
+	 */
 	public BufferedImage getPrimaryBufferedImage(int width, int height);
 	
 	public BufferedImage getRsBufferedImage(int width, int height);

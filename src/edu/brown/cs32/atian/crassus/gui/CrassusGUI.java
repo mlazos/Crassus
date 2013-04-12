@@ -30,116 +30,36 @@ public class CrassusGUI implements GUI {
 	
 	private JScrollPane eventListScrollPane;
 	
-	private JComponent plotView;
+	private CrassusPlotPane plotPane;
 
 	public CrassusGUI() {
 		
 		frame = new JFrame("Crassus");
 		frame.getContentPane().setBackground(Color.WHITE);
-	
-		//MAKE LIST OF STOCKS
-		String[] strings = {"one","two","three","four","five"};
-		JList list = new JList(strings);
-		//list.setModel(new DefaultListModel());
-		list.setLayoutOrientation(JList.VERTICAL);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		stockListScrollPane = new JScrollPane(list);
-		stockListScrollPane.setBackground(Color.WHITE);
-		stockListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		stockListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		stockListScrollPane.setPreferredSize(new Dimension(180,250));
-		
-		//CREATE AND USE BORDER FOR STOCK LIST
-		{
-			//Border line = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-			Border margin = BorderFactory.createEmptyBorder(5,5,5,5);
-			//Border stockBorder = BorderFactory.createCompoundBorder(margin,line);
-			//stockListScrollPane.setBorder(stockBorder);
-			stockListScrollPane.setBorder(margin);
-		}
-		
-		JLabel stockLabel = new JLabel("Tickers", JLabel.CENTER);
-		stockLabel.setBackground(Color.WHITE);
-		
-		JPanel stockBox = new JPanel();
-		stockBox.setBackground(Color.WHITE);
-		stockBox.setLayout(new BorderLayout());
-		stockBox.add(stockLabel,BorderLayout.NORTH);
-		stockBox.add(stockListScrollPane,BorderLayout.CENTER);
-		
+		CrassusStockTablePane stockBox = new CrassusStockTablePane();
 
-		//CREATE AND USE BORDER FOR STOCK BOX
-		{
-			Border line = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-			Border margin = BorderFactory.createEmptyBorder(10,10,50,10);
-			Border stockBorder = BorderFactory.createCompoundBorder(margin,line);
-			stockBox.setBorder(stockBorder);
-		}
+		CrassusEventTablePane eventBox = new CrassusEventTablePane();
+		
+		//frame.add(eventBox, BorderLayout.EAST);
+		
+		//make plot pane
+		plotPane = new CrassusPlotPane();
 		
 		
+		JPanel stockInfo = new JPanel();
+		stockInfo.setBackground(Color.WHITE);
+		stockInfo.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(20,20,20,20),
+				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+		stockInfo.setLayout(new BorderLayout());
+		stockInfo.add(eventBox, BorderLayout.EAST);
+		stockInfo.add(plotPane,BorderLayout.CENTER);
+
 		frame.add(stockBox, BorderLayout.WEST);
-		
-		//MAKE LIST OF EVENTS
-		String[] strings2 = {"alpha","beta","gamma"};
-		JList list2 = new JList(strings2);
-		//list2.setModel(new DefaultListModel());
-		list2.setLayoutOrientation(JList.VERTICAL);
-		list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		eventListScrollPane = new JScrollPane(list2);
-		eventListScrollPane.setBackground(Color.WHITE);
-		eventListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		eventListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		eventListScrollPane.setPreferredSize(new Dimension(180,250));
-		
-		//CREATE AND USE BORDER FOR EVENT
-		{
-			//Border blackLine = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-			Border margin = BorderFactory.createEmptyBorder(10,10,10,10);
-			//Border eventBorder = BorderFactory.createCompoundBorder(margin,blackLine);
-			//eventListScrollPane.setBorder(eventBorder);
-			eventListScrollPane.setBorder(margin);
-		}
-
-		JLabel eventLabel = new JLabel("Events",JLabel.CENTER);
-		eventLabel.setBackground(Color.WHITE);
-		
-		JPanel eventBox = new JPanel();
-		eventBox.setBackground(Color.WHITE);
-		eventBox.setLayout(new BorderLayout());
-		eventBox.add(eventLabel,BorderLayout.NORTH);
-		eventBox.add(eventListScrollPane,BorderLayout.CENTER);
-
-		//CREATE AND USE BORDER FOR EVENT BOX
-		{
-			Border line = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-			Border margin = BorderFactory.createEmptyBorder(10,10,50,10);
-			Border stockBorder = BorderFactory.createCompoundBorder(margin,line);
-			eventBox.setBorder(stockBorder);
-		}
-		
-		
-		frame.add(eventBox, BorderLayout.EAST);
-		
-		//MAKE PLOT (WITH FAKE IMAGE)
-		//TODO replace fake image with actual data
-		BufferedImage defaultImage = new BufferedImage(500,500,BufferedImage.TYPE_INT_RGB);
-		plotView = new JLabel(new ImageIcon(defaultImage));
-		
-		//CREATE AND USE BORDER FOR STOCK
-		{
-			Border margin = BorderFactory.createEmptyBorder(30,30,30,30);
-			plotView.setBorder(margin);
-		}
-		
-		frame.add(plotView,BorderLayout.CENTER);
-
-			
-		//TODO initialize Swing components
-		
-		//frame.add(plotView, BorderLayout.CENTER);
-		
+		frame.add(stockInfo,BorderLayout.CENTER);
+		frame.setMinimumSize(new Dimension(700,400));
 	}
 	
 	/* (non-Javadoc)
