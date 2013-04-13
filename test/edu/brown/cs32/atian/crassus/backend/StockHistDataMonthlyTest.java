@@ -4,10 +4,7 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author lyzhang
  */
-public class StockHistDataWeeklyTest {
+public class StockHistDataMonthlyTest {
     
-    public StockHistDataWeeklyTest() {
+    public StockHistDataMonthlyTest() {
     }
     
     @BeforeClass
@@ -39,23 +36,21 @@ public class StockHistDataWeeklyTest {
     @After
     public void tearDown() {
     }
-
-   
+  
     /**
-     * Test of getHistData method, of class StockHistDataWeekly.
+     * Test of getHistData method, of class StockHistDataMonthly.
      */
     @Test
     public void testGetHistData() {
          System.out.println("getHistData");
 
-        StockHistDataWeekly instance = new StockHistDataWeekly("msft");
+        StockHistDataMonthly instance = new StockHistDataMonthly("msft");
         instance.Init();
 
         ArrayList<StockTimeFrameData> allHistData = instance.getHistData();
         StockTimeFrameData firstDay = allHistData.get(0);
-        assert(firstDay.time.equals("1986-03-13"));        
-     
+        assert(firstDay.time.equals("1986-03-13"));      
+       
    
     }
-
 }
