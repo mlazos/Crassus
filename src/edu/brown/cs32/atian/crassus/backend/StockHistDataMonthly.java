@@ -18,12 +18,12 @@ import java.util.ArrayList;
  *
  * @author lyzhang
  */
-public class StockHistDataWeekly implements StockHistData {
+public class StockHistDataMonthly implements StockHistData {
 
     private String _ticker;
     private ArrayList<StockTimeFrameData> histData;
 
-    public StockHistDataWeekly(String ticker) {
+    public StockHistDataMonthly(String ticker) {
         _ticker = ticker;
         histData = new ArrayList<StockTimeFrameData>();
     }
@@ -31,13 +31,13 @@ public class StockHistDataWeekly implements StockHistData {
     @Override
     public boolean Init() {
         String begYear = "1900";
-        String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear + "&g=w&ignore=.csv";
-
+        String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear + "&g=m&ignore=.csv";
+ 
         HttpURLConnection connection = null;
         URL serverAddress = null;
         //OutputStreamWriter wr = null;
         BufferedReader reader = null;
-        
+
         String line = null;
 
         try {
@@ -54,7 +54,7 @@ public class StockHistDataWeekly implements StockHistData {
             connection.connect();
             //read the result from the server
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            
+
             line = reader.readLine();  // skip the header line
             while ((line = reader.readLine()) != null) {
                 StockTimeFrameData newTFData = new StockTimeFrameData();
@@ -111,6 +111,6 @@ public class StockHistDataWeekly implements StockHistData {
 
     @Override
     public String getFreq() {
-        return "Weekly";
+        return "Monthly";
     }
 }

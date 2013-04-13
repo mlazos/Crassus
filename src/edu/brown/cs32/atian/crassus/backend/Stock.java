@@ -11,10 +11,11 @@ import java.util.ArrayList;
  * @author lyzhang
  */
 public interface Stock {
-     void setTicker(String ticker);
+     //void setTicker(String ticker);
      boolean initialize();   // false mean it fails to get data from data source
      void addEvent(StockEvent event);
      void deleteEvent(String eventName);     
+     StockEvent getEvent(String eventName);
      
      String getTicker();
      String getCompanyName();  

@@ -29,14 +29,14 @@ public class StockHistDataDaily implements StockHistData {
     }
 
     @Override
-    public void Init() {
+    public boolean Init() {
         String begYear = "1900";
         String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear;
         HttpURLConnection connection = null;
         URL serverAddress = null;
         //OutputStreamWriter wr = null;
-        BufferedReader rd = null;
-        StringBuilder sb = null;
+        BufferedReader reader = null;
+        //StringBuilder sb = null;
         String line = null;
 
         try {
@@ -52,11 +52,11 @@ public class StockHistDataDaily implements StockHistData {
 
             connection.connect();
             //read the result from the server
-            rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            sb = new StringBuilder();
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            //sb = new StringBuilder();
 
-            line = rd.readLine();  // skip the header line
-            while ((line = rd.readLine()) != null) {
+            line = reader.readLine();  // skip the header line
+            while ((line = reader.readLine()) != null) {
                 StockTimeFrameData newTFData = new StockTimeFrameData();
                 String[] splitted = line.split(",");
                 if (splitted.length < 7) {
@@ -74,19 +74,24 @@ public class StockHistDataDaily implements StockHistData {
 
                 histData.add(0, newTFData);   // latest last
             }
-
+            
+            return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         } catch (ProtocolException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         }
     }
 

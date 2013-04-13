@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author lyzhang
  */
 public interface StockHistData {
-    void Init();   
+    boolean Init();   
 //    void setFreq(String freq);   // // freq = "daily" or "monthly" or "weekly", we will support daily first
     
     // every row corresponds to one day, or one week or one month, depending on freq
