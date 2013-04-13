@@ -9,9 +9,11 @@ package edu.brown.cs32.atian.crassus.backend;
  * @author lyzhang
  */
  class StockTimeFrameData {
-     String Time;   
-     float OpenPrice;
-     float ClosePrice;
-     float High;
-     float Low;    
+     String time;   
+     float open;
+     float close;
+     float high;
+     float low;    
+     int volume;
+     float adjustedClose;
 }
