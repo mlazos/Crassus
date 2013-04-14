@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class StockHistDataWeekly implements StockHistData {
 
     private String _ticker;
-    private ArrayList<StockTimeFrameData> histData;
+    private List<StockTimeFrameData> histData;
 
     public StockHistDataWeekly(String ticker) {
         _ticker = ticker;
@@ -58,20 +59,20 @@ public class StockHistDataWeekly implements StockHistData {
 
             line = rd.readLine();  // skip the header line
             while ((line = rd.readLine()) != null) {
-                StockTimeFrameData newTFData = new StockTimeFrameData();
                 String[] splitted = line.split(",");
                 if (splitted.length < 7) {
                     System.err.println("ERROR: wrong data:" + _ticker + ":" + line);
                     System.exit(1);
 
                 }
-                newTFData.time = splitted[0];
-                newTFData.open = Float.parseFloat(splitted[1]);
-                newTFData.high = Float.parseFloat(splitted[2]);
-                newTFData.low = Float.parseFloat(splitted[3]);
-                newTFData.close = Float.parseFloat(splitted[4]);
-                newTFData.volume = Integer.parseInt(splitted[5]);
-                newTFData.adjustedClose = Float.parseFloat(splitted[6]);
+                
+           		StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0],	// time
+      					 Double.parseDouble(splitted[1]),							// open
+      					 Double.parseDouble(splitted[2]), 							// high
+      					 Double.parseDouble(splitted[3]), 							// low
+      					 Double.parseDouble(splitted[4]),							// close
+      					 Integer.parseInt(splitted[5]), 							// volume
+      					 Double.parseDouble(splitted[6]));							// adjusted close
 
                 histData.add(0, newTFData);   // latest last
             }
@@ -92,17 +93,17 @@ public class StockHistDataWeekly implements StockHistData {
     }
 
     @Override
-    public ArrayList<StockTimeFrameData> getHistData() {
+    public List<StockTimeFrameData> getHistData() {
         return histData;
     }
 
     @Override
-    public float getWeek52Low() {
+    public double getWeek52Low() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public float getWeek52High() {
+    public double getWeek52High() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

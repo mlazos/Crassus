@@ -1,12 +1,21 @@
 package edu.brown.cs32.atian.crassus.backend;
 
+import java.util.*;
+import edu.brown.cs32.atian.crassus.gui.StockPlot;
+
 public interface StockEvent {
 
-	void getIntraDayTestData();
+	//void getIntraDayTestData();
 
-	void getLongTermTestData();
+	//void getLongTermTestData();
 	
-	void addToPlot();
+	/**
+	 * Adds the indicator data to the plot.
+	 */
+	void addToPlot(StockPlot stockPlot);
 	
-	void refresh();
+	/**
+	 * Refreshes the indicator data values.
+	 */
+	void refresh(List<StockTimeFrameData> data);
 }

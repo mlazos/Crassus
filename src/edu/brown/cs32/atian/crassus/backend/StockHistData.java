@@ -4,7 +4,7 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,12 +15,12 @@ public interface StockHistData {
 //    void setFreq(String freq);   // // freq = "daily" or "monthly" or "weekly", we will support daily first
     
     // every row corresponds to one day, or one week or one month, depending on freq
-    ArrayList<StockTimeFrameData> getHistData();    // latest data last
+    List<StockTimeFrameData> getHistData();    // latest data last
     // see example of historial data: (we will make lastest data last)
     // http://ichart.finance.yahoo.com/table.csv?s=AAPL&c=1962
     
-    float getWeek52Low();
-    float getWeek52High();     
+    double getWeek52Low();
+    double getWeek52High();     
     
     String getFreq();    
 }

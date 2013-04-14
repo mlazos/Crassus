@@ -4,14 +4,14 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author lyzhang
  */
 public interface StockList {
-    ArrayList<Stock> getStockList();
+    List<Stock> getStockList();
     void add(Stock s);
     void delete(Stock s);
     void refreshAll();
