@@ -30,15 +30,15 @@ public class StockHistDataWeekly implements StockHistData {
     }
 
     @Override
-    public void Init() {
+    public boolean Init() {
         String begYear = "1900";
         String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear + "&g=w&ignore=.csv";
-        //http://ichart.finance.yahoo.com/table.csv?s=msft&c=1962&g=w&ignore=.csv
+
         HttpURLConnection connection = null;
         URL serverAddress = null;
         //OutputStreamWriter wr = null;
-        BufferedReader rd = null;
-        StringBuilder sb = null;
+        BufferedReader reader = null;
+        
         String line = null;
 
         try {
@@ -54,16 +54,14 @@ public class StockHistDataWeekly implements StockHistData {
 
             connection.connect();
             //read the result from the server
-            rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            sb = new StringBuilder();
-
-            line = rd.readLine();  // skip the header line
-            while ((line = rd.readLine()) != null) {
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            
+            line = reader.readLine(); // skip the header line
+            while ((line = reader.readLine()) != null) {
                 String[] splitted = line.split(",");
                 if (splitted.length < 7) {
                     System.err.println("ERROR: wrong data:" + _ticker + ":" + line);
                     System.exit(1);
-
                 }
                 
            		StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0],	// time
@@ -76,19 +74,23 @@ public class StockHistDataWeekly implements StockHistData {
 
                 histData.add(0, newTFData);   // latest last
             }
-
+            return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         } catch (ProtocolException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
+            return false;
         }
     }
 

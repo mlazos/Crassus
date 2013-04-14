@@ -18,12 +18,12 @@ import java.util.ArrayList;
  *
  * @author lyzhang
  */
-public class StockHistDataDaily implements StockHistData {
+public class StockHistDataMonthly implements StockHistData {
 
     private String _ticker;
     private ArrayList<StockTimeFrameData> histData;
 
-    public StockHistDataDaily(String ticker) {
+    public StockHistDataMonthly(String ticker) {
         _ticker = ticker;
         histData = new ArrayList<StockTimeFrameData>();
     }
@@ -31,12 +31,13 @@ public class StockHistDataDaily implements StockHistData {
     @Override
     public boolean Init() {
         String begYear = "1900";
-        String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear;
+        String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear + "&g=m&ignore=.csv";
+ 
         HttpURLConnection connection = null;
         URL serverAddress = null;
         //OutputStreamWriter wr = null;
         BufferedReader reader = null;
-        //StringBuilder sb = null;
+
         String line = null;
 
         try {
@@ -53,11 +54,9 @@ public class StockHistDataDaily implements StockHistData {
             connection.connect();
             //read the result from the server
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            //sb = new StringBuilder();
 
             line = reader.readLine();  // skip the header line
             while ((line = reader.readLine()) != null) {
-
                 String[] splitted = line.split(",");
                 if (splitted.length < 7) {
                     System.err.println("ERROR: wrong data:" + _ticker + ":" + line);
@@ -65,17 +64,16 @@ public class StockHistDataDaily implements StockHistData {
 
                 }
                 
-           		StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0],	// time
-           					 Double.parseDouble(splitted[1]),						// open
-           					 Double.parseDouble(splitted[2]), 						// high
-           					 Double.parseDouble(splitted[3]), 						// low
-           					 Double.parseDouble(splitted[4]),						// close
-           					 Integer.parseInt(splitted[5]), 						// volume
-           					 Double.parseDouble(splitted[6]));						// adjusted close
+                StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0],	// time
+     					 Double.parseDouble(splitted[1]),							// open
+     					 Double.parseDouble(splitted[2]), 							// high
+     					 Double.parseDouble(splitted[3]), 							// low
+     					 Double.parseDouble(splitted[4]),							// close
+     					 Integer.parseInt(splitted[5]), 							// volume
+     					 Double.parseDouble(splitted[6]));							// adjusted close
 
                 histData.add(0, newTFData);   // latest last
             }
-            
             return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -113,6 +111,6 @@ public class StockHistDataDaily implements StockHistData {
 
     @Override
     public String getFreq() {
-        return "Daily";
+        return "Monthly";
     }
 }

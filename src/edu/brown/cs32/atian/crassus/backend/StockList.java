@@ -11,8 +11,10 @@ import java.util.List;
  * @author lyzhang
  */
 public interface StockList {
+
     List<Stock> getStockList();
+    Stock getStock(String ticker);
     void add(Stock s);
-    void delete(Stock s);
+    void delete(String ticker);
     void refreshAll();
 }
