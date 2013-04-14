@@ -3,6 +3,7 @@ package edu.brown.cs32.atian.crassus.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.*;
@@ -50,7 +51,7 @@ public class CrassusStockTablePane extends JPanel {
 		
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBackground(Color.WHITE);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,10,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(200,250));
@@ -64,6 +65,24 @@ public class CrassusStockTablePane extends JPanel {
 		this.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(20,20,20,20),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+		
+		JButton addButton = new JButton("+");
+		JButton removeButton = new JButton("-");
+		
+		JPanel buttonHolder = new JPanel();
+		buttonHolder.setBackground(Color.WHITE);
+		buttonHolder.setLayout(new FlowLayout());
+		buttonHolder.add(addButton);
+		buttonHolder.add(removeButton);
+		
+		JPanel buttonAndLine = new JPanel();
+		buttonAndLine.setLayout(new BoxLayout(buttonAndLine,BoxLayout.Y_AXIS));
+		JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
+		sep.setBackground(Color.GRAY);
+		buttonAndLine.add(sep);
+		buttonAndLine.add(buttonHolder);
+		
+		this.add(buttonAndLine, BorderLayout.SOUTH);
 	}
 	
 }

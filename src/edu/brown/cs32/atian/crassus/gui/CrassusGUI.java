@@ -20,6 +20,7 @@ public class CrassusGUI implements GUI {
 	 * for testing purposes only
 	 */
 	public static void main(String[] args){
+		UIManager.getDefaults().put("Button.background",new Color(0xFFFFFF));//make JButtons less ugly
 		GUI gui = new CrassusGUI();
 		gui.launch();
 	}
@@ -67,7 +68,7 @@ public class CrassusGUI implements GUI {
 	 */
 	@Override
 	public void launch() {
-		frame.pack();
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
 	}
 
