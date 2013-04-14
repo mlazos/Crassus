@@ -13,7 +13,7 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  * above and below the moving average.
  *
  */
-public class BollingerBands implements StockEvent {
+public class BollingerBands implements Indicator {
 
 	private List<IndicatorDatum> middleBand;
 	private List<IndicatorDatum> lowerBand;
@@ -27,6 +27,7 @@ public class BollingerBands implements StockEvent {
 		middleBand = new ArrayList<IndicatorDatum>();
 		upperBand = new ArrayList<IndicatorDatum>();
 		lowerBand = new ArrayList<IndicatorDatum>();
+		refresh(data);
 	}
 	
 
@@ -89,11 +90,11 @@ public class BollingerBands implements StockEvent {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void refresh(List<StockTimeFrameData> data) {
-		this.data = data;
-
+	
+	/**
+	 * Updates the Bollinger Bands.
+	 */
+	private void updateBollingerBands() {
 		for (int i = 0; (i + period - 1) < data.size(); i++) {
 			double avg = calcSMA(i, i + period - 1);
 			double stdDev = calcStdDev(i, i + period - 1, avg);
@@ -107,6 +108,12 @@ public class BollingerBands implements StockEvent {
 			middleBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg));
 			upperBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg + (bandWidth * stdDev)));
 			lowerBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg - (bandWidth * stdDev)));
-		}		
+		}
+	}
+
+	@Override
+	public void refresh(List<StockTimeFrameData> data) {
+		this.data = data;
+		updateBollingerBands();
 	}
 }

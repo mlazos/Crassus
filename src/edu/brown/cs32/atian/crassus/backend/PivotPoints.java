@@ -20,7 +20,7 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  * remains active for the duration of that day.
  *
  */
-public class PivotPoints implements StockEvent {
+public class PivotPoints implements Indicator {
 	
 	private List<IndicatorDatum> pivotPoints;
 	private List<IndicatorDatum> support1;
@@ -41,15 +41,18 @@ public class PivotPoints implements StockEvent {
 		resistance1 = new ArrayList<IndicatorDatum>();
 		resistance2 = new ArrayList<IndicatorDatum>();
 		resistance3 = new ArrayList<IndicatorDatum>();
+		refresh(data);
 	}
 
 	@Override
 	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
-		
 	}
 	
-	private List<IndicatorDatum> calcStdPivot() {
+	/**
+	 * Updates the pivot points and resistance and support lines. 
+	 */
+	private void updateStdPivot() {
 		
 		// first value has no previous
 		for (int i = 1; i < data.size(); i++) {
@@ -73,14 +76,12 @@ public class PivotPoints implements StockEvent {
 			resistance2.add(new IndicatorDatum(currTimeLabel, r2));
 			resistance3.add(new IndicatorDatum(currTimeLabel, r3));
 		}
-		
-		return null;
 	}
 	
 
 	@Override
 	public void refresh(List<StockTimeFrameData> data) {
 		this.data = data;
-		calcStdPivot();
+		updateStdPivot();
 	}
 }
