@@ -4,21 +4,25 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author lyzhang
  */
 public interface StockHistData {
-    void setTicker(String ticker);   
-    void setFreq(String freq);   // // freq = "daily" or "monthly" or "weekly"
-    
-    ArrayList<StockHistTimeFrameData> getHistData();   
-    float getOpenPrice();    
-    float getPertChgFromOpen();
-    float getWeek52Low();
-    float getWeek52High();     
-    
-    String getFreq();    
+
+    boolean Init();
+//    void setFreq(String freq);   // // freq = "daily" or "monthly" or "weekly", we will support daily first
+
+    // every row corresponds to one day, or one week or one month, depending on freq
+    List<StockTimeFrameData> getHistData();    // latest data last
+    // see example of historial data: (we will make lastest data last)
+    // http://ichart.finance.yahoo.com/table.csv?s=AAPL&c=1962
+
+    double getWeek52Low();
+
+    double getWeek52High();
+
+    String getFreq();
 }
