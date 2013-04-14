@@ -21,11 +21,11 @@ import java.util.ArrayList;
 public class StockHistDataDaily implements StockHistData {
 
     private String _ticker;
-    private ArrayList<StockTimeFrameData> histData;
+    private ArrayList<StockTimeFrameData> _histData;
 
     public StockHistDataDaily(String ticker) {
         _ticker = ticker;
-        histData = new ArrayList<StockTimeFrameData>();
+        _histData = new ArrayList<StockTimeFrameData>();
     }
 
     @Override
@@ -64,18 +64,17 @@ public class StockHistDataDaily implements StockHistData {
                     System.exit(1);
 
                 }
-                
-           		StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0],	// time
-           					 Double.parseDouble(splitted[1]),						// open
-           					 Double.parseDouble(splitted[2]), 						// high
-           					 Double.parseDouble(splitted[3]), 						// low
-           					 Double.parseDouble(splitted[4]),						// close
-           					 Integer.parseInt(splitted[5]), 						// volume
-           					 Double.parseDouble(splitted[6]));						// adjusted close
 
-                histData.add(0, newTFData);   // latest last
+                StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0], //Time
+                        Double.parseDouble(splitted[1]),   //Open				
+                        Double.parseDouble(splitted[2]),   //High				
+                        Double.parseDouble(splitted[3]),   //Low
+                        Double.parseDouble(splitted[4]),   //Close	
+                        Integer.parseInt(splitted[5]),     //Volume
+                        Double.parseDouble(splitted[6]));  //Adjusted Close
+                _histData.add(0, newTFData);   // from the earliest to the latest
             }
-            
+
             return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -98,7 +97,7 @@ public class StockHistDataDaily implements StockHistData {
 
     @Override
     public ArrayList<StockTimeFrameData> getHistData() {
-        return histData;
+        return _histData;
     }
 
     @Override

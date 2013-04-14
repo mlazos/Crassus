@@ -19,11 +19,13 @@ public class StockListImpl implements StockList {
     }
     
 
+    @Override
     public ArrayList<Stock> getStockList() {
         return _stocks;
     }
     
 
+    @Override
     public Stock getStock(String ticker) {
         for(Stock s : _stocks) {
             if(s.getTicker().equalsIgnoreCase(ticker)) {
@@ -34,11 +36,13 @@ public class StockListImpl implements StockList {
     }
     
 
+    @Override
     public void add(Stock s) {
         _stocks.add(s);
     }
     
 
+    @Override
     public void delete(String ticker) {
          Stock s = this.getStock(ticker);
          if(s!=null) {
@@ -46,7 +50,8 @@ public class StockListImpl implements StockList {
          }
      }
     
-     public void refreshAll() {
+    @Override 
+    public void refreshAll() {
          
      }
 }
