@@ -19,6 +19,10 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  * Typical is 20-day lookback period. Lowering this value produces
  * tighter channel lines.
  * 
+ * Upper Channel Line: lockBackPeriod high
+ * Lower Channel Line: lockBackPeriod low
+ * Centerline: (lockBackPeriod high + lockBackPeriod low)/2 
+ * 
  * source: http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:price_channels
  *
  */
@@ -37,6 +41,7 @@ public class PriceChannel implements Indicator {
 		upperChannel = new ArrayList<IndicatorDatum>();
 		lowerChannel = new ArrayList<IndicatorDatum>();
 		centreLine = new ArrayList<IndicatorDatum>();
+		refresh(data);
 	}
 	
 	/**

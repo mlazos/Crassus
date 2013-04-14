@@ -10,7 +10,6 @@ public class IndicatorDatum {
 	
 	private String timeLabel;
 	private double value;
-	private double timePoint;
 	
 	public IndicatorDatum(String timeLabel, double value) {
 		this.timeLabel = timeLabel;

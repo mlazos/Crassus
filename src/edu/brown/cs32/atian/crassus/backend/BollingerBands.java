@@ -100,9 +100,9 @@ public class BollingerBands implements Indicator {
 			double avg = calcSMA(i, i + period - 1);
 			double stdDev = calcStdDev(i, i + period - 1, avg);
 			
-			if (i == 0) {																// for first 20 days in list (oldest 20 days)
-				for (int j = 0; j < 19; j++) {
-					middleBand.add(new IndicatorDatum(data.get(j).getTime(), avg));		// add 19 times for previous 19 days
+			if (i == 0) {
+				for (int j = 0; j < period - 1; j++) {
+					middleBand.add(new IndicatorDatum(data.get(j).getTime(), avg));		// add (period-1) times
 				}
 			}
 			

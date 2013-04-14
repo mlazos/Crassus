@@ -13,8 +13,8 @@ public class RelativeStrengthIndex implements Indicator {
 	public RelativeStrengthIndex(List<StockTimeFrameData> data, int period) {
 		this.data = data;
 		this.period = period;
+		refresh(data);
 	}
-	
 	
 	private void updateRSI() {
 		
