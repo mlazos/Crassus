@@ -21,11 +21,11 @@ import java.util.ArrayList;
 public class StockHistDataDaily implements StockHistData {
 
     private String _ticker;
-    private ArrayList<StockTimeFrameData> histData;
+    private ArrayList<StockTimeFrameData> _histData;
 
     public StockHistDataDaily(String ticker) {
         _ticker = ticker;
-        histData = new ArrayList<StockTimeFrameData>();
+        _histData = new ArrayList<StockTimeFrameData>();
     }
 
     @Override
@@ -57,24 +57,24 @@ public class StockHistDataDaily implements StockHistData {
 
             line = reader.readLine();  // skip the header line
             while ((line = reader.readLine()) != null) {
-                StockTimeFrameData newTFData = new StockTimeFrameData();
+
                 String[] splitted = line.split(",");
                 if (splitted.length < 7) {
                     System.err.println("ERROR: wrong data:" + _ticker + ":" + line);
                     System.exit(1);
 
                 }
-                newTFData.time = splitted[0];
-                newTFData.open = Float.parseFloat(splitted[1]);
-                newTFData.high = Float.parseFloat(splitted[2]);
-                newTFData.low = Float.parseFloat(splitted[3]);
-                newTFData.close = Float.parseFloat(splitted[4]);
-                newTFData.volume = Integer.parseInt(splitted[5]);
-                newTFData.adjustedClose = Float.parseFloat(splitted[6]);
 
-                histData.add(0, newTFData);   // latest last
+                StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0], //Time
+                        Double.parseDouble(splitted[1]),   //Open				
+                        Double.parseDouble(splitted[2]),   //High				
+                        Double.parseDouble(splitted[3]),   //Low
+                        Double.parseDouble(splitted[4]),   //Close	
+                        Integer.parseInt(splitted[5]),     //Volume
+                        Double.parseDouble(splitted[6]));  //Adjusted Close
+                _histData.add(0, newTFData);   // from the earliest to the latest
             }
-            
+
             return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -97,16 +97,16 @@ public class StockHistDataDaily implements StockHistData {
 
     @Override
     public ArrayList<StockTimeFrameData> getHistData() {
-        return histData;
+        return _histData;
     }
 
     @Override
-    public float getWeek52Low() {
+    public double getWeek52Low() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public float getWeek52High() {
+    public double getWeek52High() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
