@@ -8,52 +8,52 @@ package edu.brown.cs32.atian.crassus.backend;
  *
  * @author lyzhang
  */
- class StockTimeFrameData {
-	 
-     private String time;   
-     private double open;
-     private double close;
-     private double high;
-     private double low;    
-     private int volume;
-     private double adjustedClose;
-	 
-	 public StockTimeFrameData(String time, double open, double high, double low,
-			 double close, int volume, double adjustedClose) {
-		 
-		 this.open = open;
-		 this.close = close;
-		 this.high = high;
-		 this.low = low;
-		 this.volume = volume;
-		 this.adjustedClose = adjustedClose;
-	 }
+class StockTimeFrameData {
 
-	public String getTime() {
-		return time;
-	}
-	
-	public double getOpen() {
-		return open;
-	}
-	 
-	public double getHigh() {
-		return high;
-	}
-	
-	public double getLow() {
-		return low;
-	}
-	
-	public double getClose() {
-		return close;
-	}
-	
-	public int getVolume() {
-		return volume;
-	}
-	
-	public double getAdjustedClose() {
-		return adjustedClose;
-	}
+    private String _time;
+    private double _open;
+    private double _high;
+    private double _low;
+    private double _close;
+    private int _volume;
+    private double _adjustedClose;
+
+    public StockTimeFrameData(String time, double open, double high, double low,
+            double close, int volume, double adjustedClose) {
+
+        _open = open;
+        _high = high;
+        _low = low;
+        _close = close;
+        _volume = volume;
+        _adjustedClose = adjustedClose;
+    }
+
+    public String getTime() {
+        return _time;
+    }
+
+    public double getOpen() {
+        return _open;
+    }
+
+    public double getHigh() {
+        return _high;
+    }
+
+    public double getLow() {
+        return _low;
+    }
+
+    public double getClose() {
+        return _close;
+    }
+
+    public int getVolume() {
+        return _volume;
+    }
+
+    public double getAdjustedClose() {
+        return _adjustedClose;
+    }
 }

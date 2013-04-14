@@ -20,28 +20,49 @@ public class StockImpl implements Stock {
 
     public StockImpl(String ticker) {
         _ticker = ticker;
-
-        _events = new ArrayList<StockEvent>();
-    }
-
-    public boolean initialize() {   // false mean it fails to get data from data source
-
         _daily = new StockHistDataDaily(_ticker);
         _weekly = new StockHistDataWeekly(_ticker);
         _monthly = new StockHistDataMonthly(_ticker);
+        _events = new ArrayList<StockEvent>();
+    }
 
+    @Override
+    public boolean initialize() {   // false mean it fails to get data from data source
         boolean init1 = _daily.Init();
-        boolean init2 = _daily.Init();
-        boolean init3 = _daily.Init();
+        boolean init2 = _weekly.Init();
+        boolean init3 = _monthly.Init();
 
         if (init1 && init2 && init3) {
             return true;
         } else {
             return false;
         }
-
     }
 
+    @Override
+    public void addEvent(StockEvent event) {
+        _events.add(event);
+    }
+
+    @Override
+    public void deleteEvent(String eventName) {
+        StockEvent e = this.getEvent(eventName);
+        if (e != null) {
+            this._events.remove(e);
+        }
+    }
+
+    @Override
+    public String getTicker() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getCompanyName() {
+        return "";
+    }
+
+    @Override
     public StockHistData getStockHistData(String freq) {
 
         if (freq.equalsIgnoreCase("daily")) {
@@ -55,10 +76,17 @@ public class StockImpl implements Stock {
         }
     }
 
+    @Override
+    public StockRealTimeData getStockRealTimeData() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public ArrayList<StockEvent> getEventList() {
         return _events;
     }
 
+    @Override
     public StockEvent getEvent(String eventName) {
         for (StockEvent e : _events) {
 //            if (s.getEventname().equalsIgnoreCase(eventName)) {
@@ -68,29 +96,7 @@ public class StockImpl implements Stock {
         return null;
     }
 
-    public void addEvent(StockEvent event) {
-        _events.add(event);
-    }
-
-    public void deleteEvent(String eventName) {
-        StockEvent e = this.getEvent(eventName);
-        if(e != null) {
-            this._events.remove(e);
-        }
-    }
-    
-    public String getCompanyName() {
-        return "";
-    }
-
+    @Override
     public void refresh() {
-    }
-
-    public String getTicker() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public StockRealTimeData getStockRealTimeData() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
