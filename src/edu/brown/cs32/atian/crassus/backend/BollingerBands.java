@@ -22,15 +22,16 @@ public class BollingerBands implements Indicator {
 	private List<StockTimeFrameData> data;
 	private int bandWidth;
 	
-	public BollingerBands(List<StockTimeFrameData> data) {
+	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) {
 		this.data = data;
+		this.period = period;
+		this.bandWidth = bandWidth;
 		middleBand = new ArrayList<IndicatorDatum>();
 		upperBand = new ArrayList<IndicatorDatum>();
 		lowerBand = new ArrayList<IndicatorDatum>();
 		refresh(data);
 	}
 	
-
 	/**
 	 * Creates new Bollinger Band stock event.
 	 * 
