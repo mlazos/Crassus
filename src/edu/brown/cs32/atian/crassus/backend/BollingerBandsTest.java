@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class BollingerBandsTest {
 
-	static BollingerBands bb; 
+	private static BollingerBands bb; 
 	
 	@BeforeClass
 	public static void setUp() {

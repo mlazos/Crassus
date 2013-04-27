@@ -9,9 +9,9 @@ import org.junit.Test;
 
 public class PivotPointTest {
 
-	static PivotPoints ppStandard;
-	static PivotPoints ppDemark;
-	static PivotPoints ppFibonacci;
+	private static PivotPoints ppStandard;
+	private static PivotPoints ppDemark;
+	private static PivotPoints ppFibonacci;
 	
 	@BeforeClass
 	public static void setUp() {
