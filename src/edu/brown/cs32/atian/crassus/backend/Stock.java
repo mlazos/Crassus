@@ -31,5 +31,8 @@ public interface Stock {
 
     StockEvent getEvent(String eventName);
 
+    double getWeek52Low();
+    double getWeek52High();    
+    
     void refresh();
 }

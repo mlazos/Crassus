@@ -41,21 +41,30 @@ public class PivotPoints implements Indicator {
 		resistance1 = new ArrayList<IndicatorDatum>();
 		resistance2 = new ArrayList<IndicatorDatum>();
 		resistance3 = new ArrayList<IndicatorDatum>();
-		
-		switch (pivotOption) {
-		case "standard": 
-			pivotType = 0;
-			break;
-		case "fibonacci":
-			pivotType = 1;
-			break;
-		case "demark":
-			pivotType = 2;
-			break;
-		default:
-			pivotType = 0;
-			break;
-		}
+		if(pivotOption.equals("standard")) {
+                    pivotType = 0;
+                } else if(pivotOption.equals("fibonacci")) {
+                    pivotType = 1;
+                } else if(pivotOption.equals("demark")) {
+                    pivotType = 2;
+                } else  {
+                    pivotType = 0;
+                }
+// my compile don't like switch for string
+//		switch (pivotOption) {
+//		case "standard": 
+//			pivotType = 0;
+//			break;
+//		case "fibonacci":
+//			pivotType = 1;
+//			break;
+//		case "demark":
+//			pivotType = 2;
+//			break;
+//		default:
+//			pivotType = 0;
+//			break;
+//		}
 		
 		refresh(data);
 	}

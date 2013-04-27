@@ -5,7 +5,6 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author lyzhang
  */
-public class StockHistDataMonthlyTest {
+public class StockImplTest {
     
-    public StockHistDataMonthlyTest() {
+    public StockImplTest() {
     }
     
     @BeforeClass
@@ -37,21 +36,19 @@ public class StockHistDataMonthlyTest {
     @After
     public void tearDown() {
     }
-  
+
+
     /**
-     * Test of getHistData method, of class StockHistDataMonthly.
+     * Test of getCompanyName method, of class StockImpl.
      */
     @Test
-    public void testGetHistData() {
-         System.out.println("getHistData");
+    public void testGetCompanyName() {
+        System.out.println("getCompanyName");
+        
+        Stock googleStock = new StockImpl("GOOG");
+        //googleStock.initialize();
+        String result = googleStock.getCompanyName();
 
-        StockHistDataMonthly instance = new StockHistDataMonthly("msft");
-        instance.Init();
-
-        List<StockTimeFrameData> allHistData = instance.getHistData();
-        StockTimeFrameData firstDay = allHistData.get(0);
-        assert(firstDay.getTime().equals("1986-03-13"));      
-       
-   
     }
+
 }

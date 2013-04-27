@@ -11,17 +11,16 @@ import java.util.List;
  * @author lyzhang
  */
 public interface StockRealTimeData {
-    
+    boolean Init();
     // return up to days real time data (every row corresponds to about a minute) including the latest
-    List<StockTimeFrameData> getRealTimeData(int days);   // latest data last
-    // see example for real time data
-    // http://chartapi.finance.yahoo.com/instrument/1.0/msft/chartdata;type=quote;range=1d/csv/
+    List<StockTimeFrameData> getRealTimeData();   // latest data last
+
     
-    float getPertChgFromOpen();    
-    float getOpenPrice();
-    float getCurrPrice();
-    float getTodayLow();
-    float getTodayHigh();
+    double getPertChgFromOpen();    
+    double getOpenPrice();
+    double getCurrPrice();
+    double getTodayLow();
+    double getTodayHigh();
     
     void refresh();  
 }
