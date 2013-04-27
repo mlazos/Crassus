@@ -20,7 +20,7 @@ class StockTimeFrameData {
 
     public StockTimeFrameData(String time, double open, double high, double low,
             double close, int volume, double adjustedClose) {
-
+        _time = time;
         _open = open;
         _high = high;
         _low = low;
