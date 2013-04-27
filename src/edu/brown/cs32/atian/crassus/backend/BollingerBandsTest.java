@@ -19,29 +19,29 @@ public class BollingerBandsTest {
 	    //        double close, int volume, double adjustedClose)
 		
 		List<StockTimeFrameData> data = new ArrayList<>();
-		data.add(new StockTimeFrameData("", 0, 0, 0, 88.71, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 89.05, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 89.24, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 89.39, 0, 0));	
-		data.add(new StockTimeFrameData("", 0, 0, 0, 89.51, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 89.69, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 89.75, 0, 0)); 	
-		data.add(new StockTimeFrameData("", 0, 0, 0, 89.91, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 90.08, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 90.38, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 90.66, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 90.86, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 90.88, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 90.91, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 90.99, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.15, 0, 0)); //15
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.19, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.12, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.17, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.25, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.24, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.17, 0, 0)); 
-		data.add(new StockTimeFrameData("", 0, 0, 0, 91.05, 0, 0)); 
+		data.add(new StockTimeFrameData("a", 0, 0, 0, 88.71, 0, 0)); 
+		data.add(new StockTimeFrameData("b", 0, 0, 0, 89.05, 0, 0)); 
+		data.add(new StockTimeFrameData("c", 0, 0, 0, 89.24, 0, 0)); 
+		data.add(new StockTimeFrameData("d", 0, 0, 0, 89.39, 0, 0));	
+		data.add(new StockTimeFrameData("e", 0, 0, 0, 89.51, 0, 0)); 
+		data.add(new StockTimeFrameData("f", 0, 0, 0, 89.69, 0, 0)); 
+		data.add(new StockTimeFrameData("g", 0, 0, 0, 89.75, 0, 0)); 	
+		data.add(new StockTimeFrameData("h", 0, 0, 0, 89.91, 0, 0)); 
+		data.add(new StockTimeFrameData("i", 0, 0, 0, 90.08, 0, 0)); 
+		data.add(new StockTimeFrameData("j", 0, 0, 0, 90.38, 0, 0)); 
+		data.add(new StockTimeFrameData("k", 0, 0, 0, 90.66, 0, 0)); 
+		data.add(new StockTimeFrameData("l", 0, 0, 0, 90.86, 0, 0)); 
+		data.add(new StockTimeFrameData("m", 0, 0, 0, 90.88, 0, 0)); 
+		data.add(new StockTimeFrameData("n", 0, 0, 0, 90.91, 0, 0)); 
+		data.add(new StockTimeFrameData("o", 0, 0, 0, 90.99, 0, 0)); 
+		data.add(new StockTimeFrameData("p", 0, 0, 0, 91.15, 0, 0));
+		data.add(new StockTimeFrameData("q", 0, 0, 0, 91.19, 0, 0)); 
+		data.add(new StockTimeFrameData("r", 0, 0, 0, 91.12, 0, 0)); 
+		data.add(new StockTimeFrameData("s", 0, 0, 0, 91.17, 0, 0)); 
+		data.add(new StockTimeFrameData("t", 0, 0, 0, 91.25, 0, 0)); 
+		data.add(new StockTimeFrameData("u", 0, 0, 0, 91.24, 0, 0)); 
+		data.add(new StockTimeFrameData("v", 0, 0, 0, 91.17, 0, 0)); 
+		data.add(new StockTimeFrameData("x", 0, 0, 0, 91.05, 0, 0)); 
 		bb = new BollingerBands(data, 20, 2);
 	}
 	
@@ -83,19 +83,31 @@ public class BollingerBandsTest {
 		assertTrue(lowerBand.size() == 4);
 		
 		assertTrue(Math.abs(upperBand.get(0).getValue()) - 91.908284 < 0.00001);
+		assertTrue(upperBand.get(0).getTimeLabel().equals("t"));
 		assertTrue(Math.abs(middleBand.get(0).getValue()) - 90.2945 < 0.00001);
+		assertTrue(middleBand.get(0).getTimeLabel().equals("t"));
 		assertTrue(Math.abs(lowerBand.get(0).getValue()) - 88.680716 < 0.00001);
+		assertTrue(lowerBand.get(0).getTimeLabel().equals("t"));
 
 		assertTrue(Math.abs(upperBand.get(1).getValue()) - 91.90994 < 0.00001);
+		assertTrue(upperBand.get(1).getTimeLabel().equals("u"));
 		assertTrue(Math.abs(middleBand.get(1).getValue()) - 90.421 < 0.00001);
+		assertTrue(middleBand.get(1).getTimeLabel().equals("u"));
 		assertTrue(Math.abs(lowerBand.get(1).getValue()) - 88.93506 < 0.00001);
+		assertTrue(lowerBand.get(1).getTimeLabel().equals("u"));
 
 		assertTrue(Math.abs(upperBand.get(2).getValue() - 91.9084) < 0.00001);
+		assertTrue(upperBand.get(2).getTimeLabel().equals("v"));
 		assertTrue(Math.abs(middleBand.get(2).getValue() - 90.5270) < 0.00001);
+		assertTrue(middleBand.get(2).getTimeLabel().equals("v"));
 		assertTrue(Math.abs(lowerBand.get(2).getValue() - 89.145594) < 0.00001);
+		assertTrue(lowerBand.get(2).getTimeLabel().equals("v"));
 
 		assertTrue(Math.abs(upperBand.get(3).getValue()) - 91.88199 < 0.00001);
+		assertTrue(upperBand.get(3).getTimeLabel().equals("x"));
 		assertTrue(Math.abs(middleBand.get(3).getValue()) - 90.6175 < 0.00001);
+		assertTrue(middleBand.get(3).getTimeLabel().equals("x"));
 		assertTrue(Math.abs(lowerBand.get(3).getValue()) - 89.3530 < 0.00001);
+		assertTrue(lowerBand.get(3).getTimeLabel().equals("x"));
 	}
 }

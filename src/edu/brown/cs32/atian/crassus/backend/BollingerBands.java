@@ -112,7 +112,7 @@ public class BollingerBands implements Indicator {
 					middleBand.add(new IndicatorDatum(data.get(j).getTime(), avg));		// add (period-1) times
 				}
 			}*/
-			
+
 			middleBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg));
 			upperBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg + (bandWidth * stdDev)));
 			lowerBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg - (bandWidth * stdDev)));
