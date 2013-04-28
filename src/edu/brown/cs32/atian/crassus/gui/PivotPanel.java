@@ -72,4 +72,8 @@ public class PivotPanel extends JPanel {
 	}
 	*/
 
+	public String toString()
+	{
+		return "Pivot Point Event";
+	}
 }

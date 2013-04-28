@@ -62,5 +62,10 @@ public class StochOscillPanel extends JPanel {
 		
 	}
 	*/
+	
+	public String toString()
+	{
+		return "Stochastic Oscillator Event";
+	}
 
 }

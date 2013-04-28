@@ -57,5 +57,9 @@ public class RSIPanel extends JPanel {
 		
 	}
 	*/
-
+	
+	public String toString()
+	{
+		return "Relative Strength Index Event";
+	}
 }

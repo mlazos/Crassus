@@ -80,4 +80,8 @@ public class MACDPanel extends JPanel {
 	}
 	*/
 
+	public String toString()
+	{
+		return "Moving Avg. Convergence Event";
+	}
 }

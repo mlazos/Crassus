@@ -3,9 +3,12 @@ package edu.brown.cs32.atian.crassus.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class EventWindowFrame implements EventWindow {
 
@@ -15,7 +18,7 @@ public class EventWindowFrame implements EventWindow {
 	 */
 	public static void main(String[] args) 
 	{
-		EventWindowFrame w = new EventWindowFrame("Set Bolinger Band Event", new StochOscillPanel());
+		EventWindowFrame w = new EventWindowFrame();
 		w.display();
 	}
 	
@@ -25,15 +28,27 @@ public class EventWindowFrame implements EventWindow {
 		frame.setVisible(true);
 	}
 
-	public EventWindowFrame(String eventType, JPanel panel)
+	public EventWindowFrame()
 	{
-		frame = new JFrame(eventType);
+		//add dropdown to main Frame
+		JPanel[] eventList = {new BolingerBandPanel(), new MACDPanel(), new PivotPanel(), new PriceChannelPanel(), new RSIPanel(), new StochOscillPanel()};
+		JComboBox<JPanel> selectEvent = new JComboBox<JPanel>(eventList);
+		selectEvent.setSelectedIndex(0); 
+		//selectEvent.setPreferredSize(new Dimension(200,20));
+		JPanel dropDownPanel = new JPanel();
+		//dropDownPanel.setMinimumSize(new Dimension(200,20));
+		//dropDownPanel.setMaximumSize(new Dimension(200, 20));
+		dropDownPanel.add(selectEvent);
+		dropDownPanel.setBorder(new EmptyBorder(20,20,20,20));
+		
+		frame = new JFrame("Bolinger Band Event");
 		frame.setResizable(false);
 		frame.setSize(500, 450);
 		frame.setMinimumSize(new Dimension(500, 450));
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setLayout(new BorderLayout());
-		frame.add(panel, BorderLayout.CENTER);
+		frame.add(dropDownPanel, BorderLayout.NORTH);
+		frame.add(new BolingerBandPanel(), BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

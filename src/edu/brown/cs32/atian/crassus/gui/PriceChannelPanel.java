@@ -57,5 +57,10 @@ public class PriceChannelPanel extends JPanel {
 		
 	}
 	*/
+	
+	public String toString()
+	{
+		return "Price Channel Event";
+	}
 
 }
