@@ -17,13 +17,11 @@ public interface Stock {
 
     void addEvent(Indicator event);
 
-    void deleteEvent(String eventName);
-
     String getTicker();
 
     String getCompanyName();
 
-    StockHistData getStockHistData(String freq);   // freq = "daily" or "monthly" or "weekly"
+ //   StockHistData getStockHistData(String freq);   // freq = "daily" or "monthly" or "weekly"
 
     StockRealTimeData getStockRealTimeData();
 
@@ -35,4 +33,6 @@ public interface Stock {
     double getWeek52High();    
     
     void refresh();
+
+	void deleteEvent(Indicator event);
 }
