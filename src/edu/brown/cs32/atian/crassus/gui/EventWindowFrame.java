@@ -48,8 +48,8 @@ public class EventWindowFrame implements EventWindow {
 		
 		frame = new JFrame("Bolinger Band Event");
 		frame.setResizable(false);
-		frame.setSize(500, 450);
-		frame.setMinimumSize(new Dimension(500, 450));
+		frame.setSize(325, 450);
+		frame.setMinimumSize(new Dimension(325, 450));
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setLayout(new BorderLayout());
 		frame.add(dropDownPanel, BorderLayout.NORTH);
@@ -74,8 +74,8 @@ public class EventWindowFrame implements EventWindow {
 			frame.remove(currentPanel);
 			currentPanel = newPanel;
 			frame.add(currentPanel, BorderLayout.CENTER);
-			frame.setSize(500, 60 + panelDim.height);
-			frame.setMinimumSize(new Dimension(500, 60 + panelDim.height));
+			frame.setSize(325, 60 + panelDim.height);
+			frame.setMinimumSize(new Dimension(325, 60 + panelDim.height));
 			frame.pack();
 			frame.setVisible(true);
 			
