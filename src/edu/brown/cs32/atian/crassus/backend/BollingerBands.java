@@ -11,7 +11,11 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  * 
  * Typical value of period is 20 days with bands 2 * standard deviations
  * above and below the moving average.
+ * 
+ * Bandwidth is the number of standard deviations above and below SMA; 
+ * typical value is 2.
  *
+ * Bands are calculated using close prices.
  */
 public class BollingerBands implements Indicator {
 
@@ -44,10 +48,13 @@ public class BollingerBands implements Indicator {
 		this.lowerBand = new ArrayList<IndicatorDatum>();
 		this.upperBand = new ArrayList<IndicatorDatum>();
 		this.bandWidth = bandWidth;
+		updateBollingerBands();
 	}
 	
 	/**
-	 * Calculates the standard deviation given start and end index of data.
+	 * Calculates the standard deviation given start and end index of data inclusive.
+	 * 
+	 * Uses formula stdDev = sqrt(1/N * sum((x(i) - movingAvg))^2) for i = 1:N 
 	 * 
 	 * @param startIndex						int start index
 	 * @param endIndex							int end index
@@ -55,7 +62,7 @@ public class BollingerBands implements Indicator {
 	 * @return									double standard deviation of given close values
 	 * @throws ArrayIndexOutOfBoundsException	if array index of data is out of bounds
 	 */
-	private double calcStdDev(int startIndex, int endIndex, double movingAvg) 
+	double calcStdDev(int startIndex, int endIndex, double movingAvg) 
 			throws ArrayIndexOutOfBoundsException {
 		
 		double sum = 0;
@@ -76,7 +83,7 @@ public class BollingerBands implements Indicator {
 	 * @return				double simple moving average of given close values
 	 * @throws ArrayIndexOutOfBoundsException	if array index of data is out of bounds
 	 */
-	private double calcSMA(int startIndex, int endIndex) throws ArrayIndexOutOfBoundsException {
+	double calcSMA(int startIndex, int endIndex) throws ArrayIndexOutOfBoundsException {
 		
 		double sum = 0;
 		for (int i = startIndex; i <= endIndex; i++) {
@@ -100,16 +107,29 @@ public class BollingerBands implements Indicator {
 			double avg = calcSMA(i, i + period - 1);
 			double stdDev = calcStdDev(i, i + period - 1, avg);
 			
-			if (i == 0) {
+			/*if (i == 0) {
 				for (int j = 0; j < period - 1; j++) {
 					middleBand.add(new IndicatorDatum(data.get(j).getTime(), avg));		// add (period-1) times
 				}
-			}
-			
+			}*/
+
 			middleBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg));
 			upperBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg + (bandWidth * stdDev)));
 			lowerBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg - (bandWidth * stdDev)));
 		}
+	}
+	
+	
+	List<IndicatorDatum> getUpperBand() {
+		return upperBand;
+	}
+	
+	List<IndicatorDatum> getMiddleBand() {
+		return middleBand;
+	}
+	
+	List<IndicatorDatum> getLowerBand() {
+		return lowerBand;
 	}
 
 	@Override

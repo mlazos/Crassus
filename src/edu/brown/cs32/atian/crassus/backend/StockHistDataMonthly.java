@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,15 +22,16 @@ import java.util.ArrayList;
 public class StockHistDataMonthly implements StockHistData {
 
     private String _ticker;
-    private ArrayList<StockTimeFrameData> histData;
+    private ArrayList<StockTimeFrameData> _histData;
 
     public StockHistDataMonthly(String ticker) {
         _ticker = ticker;
-        histData = new ArrayList<StockTimeFrameData>();
+        _histData = new ArrayList<StockTimeFrameData>();
     }
 
     @Override
     public boolean Init() {
+                _histData.clear();
         String begYear = "1900";
         String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear + "&g=m&ignore=.csv";
 
@@ -72,7 +74,7 @@ public class StockHistDataMonthly implements StockHistData {
                         Integer.parseInt(splitted[5]),   // volume
                         Double.parseDouble(splitted[6]));// adjusted close
 
-                histData.add(0, newTFData);   // from the earliest to the latest
+                _histData.add(0, newTFData);   // from the earliest to the latest
             }
             return true;
         } catch (MalformedURLException e) {
@@ -95,18 +97,8 @@ public class StockHistDataMonthly implements StockHistData {
     }
 
     @Override
-    public ArrayList<StockTimeFrameData> getHistData() {
-        return histData;
-    }
-
-    @Override
-    public double getWeek52Low() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public double getWeek52High() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<StockTimeFrameData> getHistData() {
+        return _histData;
     }
 
     @Override

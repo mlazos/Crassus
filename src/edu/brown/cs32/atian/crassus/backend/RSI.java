@@ -1,21 +1,30 @@
 package edu.brown.cs32.atian.crassus.backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
-public class RelativeStrengthIndex implements Indicator {
+public class RSI implements Indicator {
 
 	private List<StockTimeFrameData> data;
 	private List<IndicatorDatum> RSIPoints;
 	private int period;
 	
-	public RelativeStrengthIndex(List<StockTimeFrameData> data, int period) {
+	public RSI(List<StockTimeFrameData> data, int period) {
 		this.data = data;
 		this.period = period;
+		this.RSIPoints = new ArrayList<IndicatorDatum>();
 		refresh(data);
 	}
 	
+	List<IndicatorDatum> getRSIPoints() {
+		return RSIPoints;
+	}
+	
+	/**
+	 * Updates the RSI data points
+	 */
 	private void updateRSI() {
 		
 		double avgGain = 0;
@@ -34,17 +43,18 @@ public class RelativeStrengthIndex implements Indicator {
 				continue;
 			}
 			
-			double currChange = data.get(i + period).getClose() - data.get(i + period - 1).getClose();
-			
+			double currChange = data.get(i + period - 1).getClose() - data.get(i + period - 2).getClose();
+			System.out.println(i +") avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", currChange=" + currChange);
 													// smoothing technique similar to exponential moving average calculation
 			if (currChange < 0) {					// currently a loss
-				avgLoss = ((avgLoss * 13) + Math.abs(currChange)) / period;
-				avgGain = (avgGain * 13) / 14; 
+				avgLoss = ((avgLoss * (period - 1)) + Math.abs(currChange)) / period;
+				avgGain = (avgGain * (period - 1)) / period; 
 			} else {								// currently a gain
-				avgLoss = (avgLoss * 13) / 14;
-				avgGain = ((avgGain * 13) + currChange) / 14;
+				avgLoss = (avgLoss * (period - 1)) / period;
+				avgGain = ((avgGain * (period - 1)) + currChange) / period;
 			}
 			
+			System.out.println(i + ") NewAvgGain=" + avgGain + ", newAvgLoss=" + avgLoss);
 			rs = avgGain / avgLoss;
 			rsi = 100 - (100 / (1 + rs));
 			RSIPoints.add(new IndicatorDatum(data.get(i + period).getTime(), rsi));

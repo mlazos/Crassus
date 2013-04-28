@@ -15,7 +15,7 @@ public class StockListImpl implements StockList {
     private ArrayList<Stock> _stocks;
     
     public StockListImpl() {
-        
+        _stocks = new ArrayList<Stock>();
     }
     
 
@@ -52,6 +52,8 @@ public class StockListImpl implements StockList {
     
     @Override 
     public void refreshAll() {
-         
+        for(Stock s : _stocks) {
+            s.refresh();
+        }         
      }
 }

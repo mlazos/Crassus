@@ -4,7 +4,17 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -13,16 +23,21 @@ import java.util.ArrayList;
 public class StockImpl implements Stock {
 
     String _ticker;
+    String _companyName = null;
     StockHistData _daily = null;
     StockHistData _weekly = null;
     StockHistData _monthly = null;
+    StockRealTimeData _realTime = null;
     ArrayList<StockEvent> _events = null;
+    Double _week52Low = null;
+    Double _week52High = null;
 
     public StockImpl(String ticker) {
         _ticker = ticker;
         _daily = new StockHistDataDaily(_ticker);
         _weekly = new StockHistDataWeekly(_ticker);
         _monthly = new StockHistDataMonthly(_ticker);
+        _realTime = new StockRealTimeDataImpl(_ticker);
         _events = new ArrayList<StockEvent>();
     }
 
@@ -31,8 +46,9 @@ public class StockImpl implements Stock {
         boolean init1 = _daily.Init();
         boolean init2 = _weekly.Init();
         boolean init3 = _monthly.Init();
+        boolean init4 = _realTime.Init();
 
-        if (init1 && init2 && init3) {
+        if (init1 && init2 && init3 && init4) {
             return true;
         } else {
             return false;
@@ -54,12 +70,57 @@ public class StockImpl implements Stock {
 
     @Override
     public String getTicker() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this._ticker;
     }
 
-    @Override
+    // http://stackoverflow.com/questions/885456/stock-ticker-symbol-lookup-api
     public String getCompanyName() {
-        return "";
+        if (_companyName != null) {
+            return _companyName;
+        }
+        //http://finance.yahoo.com/d/quotes.csv?s=MSFT&f=sn
+        String urlString = "http://finance.yahoo.com/d/quotes.csv?s=" + _ticker + "&f=sn";
+
+        HttpURLConnection connection = null;
+        URL serverAddress = null;
+        //OutputStreamWriter wr = null;
+        BufferedReader reader = null;
+        //StringBuilder sb = null;
+        String line = null;
+
+        try {
+            serverAddress = new URL(urlString);
+            //set up out communications stuff
+            connection = null;
+
+            //Set up the initial connection
+            connection = (HttpURLConnection) serverAddress.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoOutput(true);
+            connection.setReadTimeout(10000);
+
+            connection.connect();
+            //read the result from the server
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            line = reader.readLine();  // skip the header line
+            String[] splitted = line.split(",");
+            if (splitted.length == 2) {
+                _companyName = splitted[1];
+            } else {
+                _companyName = "";
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            _companyName = "";
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            _companyName = "";
+        } catch (IOException e) {
+            e.printStackTrace();
+            _companyName = "";
+        }
+        return _companyName;
     }
 
     @Override
@@ -78,7 +139,7 @@ public class StockImpl implements Stock {
 
     @Override
     public StockRealTimeData getStockRealTimeData() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return _realTime;
     }
 
     @Override
@@ -89,14 +150,73 @@ public class StockImpl implements Stock {
     @Override
     public StockEvent getEvent(String eventName) {
         for (StockEvent e : _events) {
-//            if (s.getEventname().equalsIgnoreCase(eventName)) {
-//                return s;
-//            }
+            if (e.getEventname().equalsIgnoreCase(eventName)) {
+                return e;
+            }
         }
         return null;
     }
 
     @Override
     public void refresh() {
+        this.initialize();
+        _week52Low = null;
+        getWeek52Low();
+        _week52High = null;
+        getWeek52High();
+    }
+
+    @Override
+    public double getWeek52Low() {
+        if(_week52Low != null) {
+            return _week52Low;
+        }
+        if(_weekly == null || _weekly.getHistData().size() == 0) {
+            return 0.0;
+        }
+        double low = Double.MAX_VALUE;
+        List<StockTimeFrameData> weeklyData = _weekly.getHistData();
+        int end = weeklyData.size();
+        int begin;
+        if(weeklyData.size() < 52 )  {
+            begin = 0;
+        } else {
+            begin = end - 52;
+        }
+        for(int i = begin; i < end; i++) {
+            double tmp = weeklyData.get(i).getLow();
+            if(tmp < low) {
+                low = tmp;
+            }
+        }
+        _week52Low = low;
+        return _week52Low;
+    }
+
+    @Override
+    public double getWeek52High() {
+        if(_week52High != null) {
+            return _week52High;
+        }
+        if(_weekly == null || _weekly.getHistData().size() == 0) {
+            return 0.0;
+        }
+        double high = 0.0;
+        List<StockTimeFrameData> weeklyData = _weekly.getHistData();
+        int end = weeklyData.size();
+        int begin;
+        if(weeklyData.size() < 52 )  {
+            begin = 0;
+        } else {
+            begin = end - 52;
+        }
+        for(int i = begin; i < end; i++) {
+            double tmp = weeklyData.get(i).getLow();
+            if(tmp > high) {
+                high = tmp;
+            }
+        }
+        _week52High = high;
+        return _week52High;        
     }
 }
