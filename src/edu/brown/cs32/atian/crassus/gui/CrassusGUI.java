@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.plaf.ColorUIResource;
 
 /**
  * @author Matthew
@@ -21,6 +22,12 @@ public class CrassusGUI implements GUI {
 	 */
 	public static void main(String[] args){
 		UIManager.getDefaults().put("Button.background",new Color(0xFFFFFF));//make JButtons less ugly
+		//UIManager.getDefaults().put("ScrollBar.thumb", new Color(0xFFFFFF));
+		//UIManager.getDefaults().put("Slider.thumb",new Color(0xFFFFFF));
+//		UIManager.put("ScrollBar.thumbHighlight", new ColorUIResource(0,0,0));
+//		UIManager.put("ScrollBar.thumbDarkShadow", new ColorUIResource(0,0,0));
+//		UIManager.put("ScrollBar.highlight", new ColorUIResource(0,0,0));
+//		UIManager.put("ScrollBar.trackHighlight", new ColorUIResource(0,0,0));
 		GUI gui = new CrassusGUI();
 		gui.launch();
 	}
