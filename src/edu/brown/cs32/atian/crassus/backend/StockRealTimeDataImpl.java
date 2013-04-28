@@ -84,16 +84,13 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
                 if(splitted[5].equals("volume")) {
                     continue;
                 }
-               //Double tmp = (Double.parseDouble(splitted[0])) * 1000;   // to milliseconds
-               
-               //splitted[0] = tmp.toString();
-                long tmp = (Long.parseLong(splitted[0]));
-                tmp = tmp*1000;
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(tmp);
-                String timeStamp = calendar.getTime().toString();
+//                long tmp = (Long.parseLong(splitted[0]));
+//                tmp = tmp*1000;
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTimeInMillis(tmp);
+//                String timeStamp = calendar.getTime().toString();
                 
-                StockTimeFrameData newTFData = new StockTimeFrameData(timeStamp, //Time
+                StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0], //Time
                         Double.parseDouble(splitted[4]),   //Open				
                         Double.parseDouble(splitted[2]),   //High				
                         Double.parseDouble(splitted[3]),   //Low
