@@ -5,7 +5,6 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -16,7 +15,7 @@ public interface Stock {
 
     boolean initialize();   // false mean it fails to get data from data source
 
-    void addEvent(StockEvent event);
+    void addEvent(Indicator event);
 
     void deleteEvent(String eventName);
 
@@ -24,14 +23,13 @@ public interface Stock {
 
     String getCompanyName();
 
-//    StockHistData getStockHistData(String freq);   // freq = "daily" or "monthly" or "weekly"
-//
-//    StockRealTimeData getStockRealTimeData();
-    List<StockTimeFrameData> getStockPriceData(String freq);  // freq = "minutely", or "daily" or "monthly" or "weekly"
-    
-    ArrayList<StockEvent> getEventList();
+    StockHistData getStockHistData(String freq);   // freq = "daily" or "monthly" or "weekly"
 
-    StockEvent getEvent(String eventName);
+    StockRealTimeData getStockRealTimeData();
+
+    ArrayList<Indicator> getEventList();
+
+    Indicator getEvent(String eventName);
 
     double getWeek52Low();
     double getWeek52High();    

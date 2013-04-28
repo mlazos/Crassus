@@ -34,7 +34,7 @@ public class RSI implements Indicator {
 		for (int i = 0; i + period < data.size(); i++) {
 
 			if (i == 0) {
-				double[] avgGainLoss = calculateAvgGainLoss(0, period - 1);			// first average (simple period average)
+				double[] avgGainLoss = calculateAvgGainLoss(0, period - 1);				// first average (simple period average)
 				avgGain = avgGainLoss[0];
 				avgLoss = avgGainLoss[1];
 				rs = avgGain / avgLoss;
@@ -44,17 +44,15 @@ public class RSI implements Indicator {
 			}
 			
 			double currChange = data.get(i + period - 1).getClose() - data.get(i + period - 2).getClose();
-			System.out.println(i +") avgGain=" + avgGain + ", avgLoss=" + avgLoss + ", currChange=" + currChange);
-													// smoothing technique similar to exponential moving average calculation
-			if (currChange < 0) {					// currently a loss
+																						// smoothing technique similar to exponential moving average calculation
+			if (currChange < 0) {														// currently a loss
 				avgLoss = ((avgLoss * (period - 1)) + Math.abs(currChange)) / period;
 				avgGain = (avgGain * (period - 1)) / period; 
-			} else {								// currently a gain
+			} else {																	// currently a gain
 				avgLoss = (avgLoss * (period - 1)) / period;
 				avgGain = ((avgGain * (period - 1)) + currChange) / period;
 			}
-			
-			System.out.println(i + ") NewAvgGain=" + avgGain + ", newAvgLoss=" + avgLoss);
+
 			rs = avgGain / avgLoss;
 			rsi = 100 - (100 / (1 + rs));
 			RSIPoints.add(new IndicatorDatum(data.get(i + period).getTime(), rsi));

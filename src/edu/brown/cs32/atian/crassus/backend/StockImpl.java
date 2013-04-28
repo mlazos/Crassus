@@ -34,7 +34,7 @@ public class StockImpl implements Stock {
     StockHistData _weekly = null;
     StockHistData _monthly = null;
     StockRealTimeData _realTime = null;
-    ArrayList<StockEvent> _events = null;
+    ArrayList<Indicator> _events = null;
     Double _week52Low = null;
     Double _week52High = null;
 
@@ -44,7 +44,7 @@ public class StockImpl implements Stock {
         _weekly = new StockHistDataWeekly(_ticker);
         _monthly = new StockHistDataMonthly(_ticker);
         _realTime = new StockRealTimeDataImpl(_ticker);
-        _events = new ArrayList<StockEvent>();
+        _events = new ArrayList<Indicator>();
     }
 
     @Override
@@ -62,13 +62,13 @@ public class StockImpl implements Stock {
     }
 
     @Override
-    public void addEvent(StockEvent event) {
+    public void addEvent(Indicator event) {
         _events.add(event);
     }
 
     @Override
     public void deleteEvent(String eventName) {
-        StockEvent e = this.getEvent(eventName);
+        Indicator e = this.getEvent(eventName);
         if (e != null) {
             this._events.remove(e);
         }
@@ -184,13 +184,13 @@ public class StockImpl implements Stock {
 //        return _realTime;
 //    }
     @Override
-    public ArrayList<StockEvent> getEventList() {
+    public ArrayList<Indicator> getEventList() {
         return _events;
     }
 
     @Override
-    public StockEvent getEvent(String eventName) {
-        for (StockEvent e : _events) {
+    public Indicator getEvent(String eventName) {
+        for (Indicator e : _events) {
             if (e.getEventname().equalsIgnoreCase(eventName)) {
                 return e;
             }
