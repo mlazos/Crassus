@@ -67,11 +67,8 @@ public class StockImpl implements Stock {
     }
 
     @Override
-    public void deleteEvent(String eventName) {
-        Indicator e = this.getEvent(eventName);
-        if (e != null) {
-            this._events.remove(e);
-        }
+    public void deleteEvent(Indicator event) {
+    	_events.remove(event);
     }
 
     @Override
@@ -180,9 +177,9 @@ public class StockImpl implements Stock {
 //            throw new IllegalArgumentException("freq can only be daily, weekly or monthly");
 //        }
 //    }
-//    public StockRealTimeData getStockRealTimeData() {
-//        return _realTime;
-//    }
+    public StockRealTimeData getStockRealTimeData() {
+        return _realTime;
+    }
     @Override
     public ArrayList<Indicator> getEventList() {
         return _events;
@@ -196,7 +193,7 @@ public class StockImpl implements Stock {
 //            }
 //        }
 //        return null;
-    }
+//    }
 
     @Override
     public void refresh() {
