@@ -33,6 +33,10 @@ class StockTimeFrameData {
     public String getTime() {
         return _time;
     }
+    
+    public void setTime(String time) {
+        _time = time;
+    }    
 
     public double getOpen() {
         return _open;

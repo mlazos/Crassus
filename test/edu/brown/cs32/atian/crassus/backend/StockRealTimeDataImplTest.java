@@ -49,18 +49,27 @@ public class StockRealTimeDataImplTest {
         //System.out.println(System.currentTimeMillis());
         StockRealTimeDataImpl instance = new StockRealTimeDataImpl("msft");
         instance.Init();
+        
         long now = System.currentTimeMillis();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(now);
-              String timeStampNow = calendar.getTime().toString();
+        String timeStampNow = calendar.getTime().toString();
         System.out.println("Current time: " + timeStampNow);
-        
-        List<StockTimeFrameData> allRealTimeData = instance.getRealTimeData();          
+
+        List<StockTimeFrameData> allRealTimeData = instance.getRealTimeData();
 
         StockTimeFrameData firstData = allRealTimeData.get(0);
-        System.out.println("First data timestamp: " + firstData.getTime());
+        long tmp = (Long.parseLong(firstData.getTime()));
+        tmp = tmp * 1000;
+        calendar.setTimeInMillis(tmp);
+        String timeStamp = calendar.getTime().toString();
+        System.out.println("First data timestamp: " + timeStamp);
 
         StockTimeFrameData lastData = allRealTimeData.get(allRealTimeData.size() - 1);
-        System.out.println("Latest data timestamp: " + lastData.getTime());
+        tmp = (Long.parseLong(lastData.getTime()));
+        tmp = tmp * 1000;
+        calendar.setTimeInMillis(tmp);
+        timeStamp = calendar.getTime().toString();
+        System.out.println("Latest data timestamp: " +  timeStamp);
     }
 }
