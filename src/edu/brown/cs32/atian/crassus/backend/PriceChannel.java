@@ -17,7 +17,7 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  * Price channels are based on prior data and do not use current period.
  * 
  * Typical is 20-day lookback period. Lowering this value produces
- * tighter channel lines.
+ * tighter channel lines. Does not include current day in the lookback.
  * 
  * Upper Channel Line: lockBackPeriod high
  * Lower Channel Line: lockBackPeriod low
@@ -42,6 +42,18 @@ public class PriceChannel implements Indicator {
 		lowerChannel = new ArrayList<IndicatorDatum>();
 		centreLine = new ArrayList<IndicatorDatum>();
 		refresh(data);
+	}
+	
+	List<IndicatorDatum> getUpperChannel() {
+		return upperChannel;
+	}
+	
+	List<IndicatorDatum> getLowerChannel() {
+		return lowerChannel;
+	}
+	
+	List<IndicatorDatum> getCentreLine() {
+		return centreLine;
 	}
 	
 	/**

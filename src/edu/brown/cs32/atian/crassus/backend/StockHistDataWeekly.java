@@ -22,15 +22,15 @@ import java.util.List;
 public class StockHistDataWeekly implements StockHistData {
 
     private String _ticker;
-    private List<StockTimeFrameData> histData;
+    private List<StockTimeFrameData> _histData;
 
     public StockHistDataWeekly(String ticker) {
         _ticker = ticker;
-        histData = new ArrayList<StockTimeFrameData>();
+        _histData = new ArrayList<StockTimeFrameData>();
     }
 
-    @Override
     public boolean Init() {
+        _histData.clear();
         String begYear = "1900";
         String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear + "&g=w&ignore=.csv";
 
@@ -72,7 +72,7 @@ public class StockHistDataWeekly implements StockHistData {
       					 Integer.parseInt(splitted[5]), 							// volume
       					 Double.parseDouble(splitted[6]));							// adjusted close
 
-                histData.add(0, newTFData);   // latest last
+                _histData.add(0, newTFData);   // latest last
             }
             return true;
         } catch (MalformedURLException e) {
@@ -94,22 +94,11 @@ public class StockHistDataWeekly implements StockHistData {
         }
     }
 
-    @Override
+
     public List<StockTimeFrameData> getHistData() {
-        return histData;
+        return _histData;
     }
-
-    @Override
-    public double getWeek52Low() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public double getWeek52High() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
+    
     public String getFreq() {
         return "Weekly";
     }

@@ -17,6 +17,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
 
 
 public class PlotWrapper implements StockPlot 
@@ -137,9 +138,16 @@ public class PlotWrapper implements StockPlot
 	}
 
 	@Override
-	public void setRS(boolean isRsOn) 
+	public void setRS(boolean isRsOn) throws CantTurnRsOnAfterChartsRetreivedException
 	{
-		this.isRsOn = isRsOn;
+		if(!primaryChartGenerated)
+		{
+			this.isRsOn = isRsOn;
+		}
+		else
+		{
+			throw new CantTurnRsOnAfterChartsRetreivedException();
+		}
 	}
 	
 	private JFreeChart generateChart(String title, XYSeriesCollection series, List<Color> colors)

@@ -5,6 +5,7 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,9 +48,9 @@ public class StockHistDataMonthlyTest {
         StockHistDataMonthly instance = new StockHistDataMonthly("msft");
         instance.Init();
 
-        ArrayList<StockTimeFrameData> allHistData = instance.getHistData();
+        List<StockTimeFrameData> allHistData = instance.getHistData();
         StockTimeFrameData firstDay = allHistData.get(0);
-        assert(firstDay.time.equals("1986-03-13"));      
+        assert(firstDay.getTime().equals("1986-03-13"));      
        
    
     }

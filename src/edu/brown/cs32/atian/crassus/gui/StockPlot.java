@@ -43,7 +43,7 @@ public interface StockPlot {
 	/**
 	 * Turn RS on or off
 	 */
-	public void setRS(boolean isRsOn);
+	public void setRS(boolean isRsOn) throws CantTurnRsOnAfterChartsRetreivedException;
 	
 	/**
 	 * 

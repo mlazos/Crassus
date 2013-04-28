@@ -19,6 +19,9 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  * the pivot point calculated for one day based on the previous day
  * remains active for the duration of that day.
  *
+ * Note: demark has pivot point, support 1 and resistance 1 only
+ *       fib has up to 3 support and resistance lines
+ *       standard has up to 3 as well
  */
 public class PivotPoints implements Indicator {
 	
@@ -41,22 +44,15 @@ public class PivotPoints implements Indicator {
 		resistance1 = new ArrayList<IndicatorDatum>();
 		resistance2 = new ArrayList<IndicatorDatum>();
 		resistance3 = new ArrayList<IndicatorDatum>();
-		
-		switch (pivotOption) {
-		case "standard": 
-			pivotType = 0;
-			break;
-		case "fibonacci":
-			pivotType = 1;
-			break;
-		case "demark":
-			pivotType = 2;
-			break;
-		default:
-			pivotType = 0;
-			break;
-		}
-		
+		if(pivotOption.equals("standard")) {
+                    pivotType = 0;
+                } else if(pivotOption.equals("fibonacci")) {
+                    pivotType = 1;
+                } else if(pivotOption.equals("demark")) {
+                    pivotType = 2;
+                } else  {
+                    pivotType = 0;
+                }
 		refresh(data);
 	}
 
@@ -64,6 +60,38 @@ public class PivotPoints implements Indicator {
 	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
 	}
+	
+	List<IndicatorDatum> getPivotPoints() {
+		return pivotPoints;
+	}
+	
+	List<IndicatorDatum> getResistance1() {
+		return resistance1;
+	}
+	
+	List<IndicatorDatum> getResistance2() {
+		return resistance2;
+	}
+	
+	List<IndicatorDatum> getResistance3() {
+		return resistance3;
+	}
+	
+	List<IndicatorDatum> getSupport1() {
+		return support1;
+	}
+	
+	List<IndicatorDatum> getSupport2() {
+		return support2;
+	}
+	
+	List<IndicatorDatum> getSupport3() {
+		return support3;
+	}
+	
+	
+	
+	
 	
 	/**
 	 * Updates the standard pivot points and resistance and support lines. 
@@ -74,19 +102,16 @@ public class PivotPoints implements Indicator {
 		for (int i = 1; i < data.size(); i++) {
 			StockTimeFrameData previous = data.get(i - 1);
 			String currTimeLabel = data.get(i).getTime();
-			
 			double pivot = (previous.getHigh() + previous.getClose() + previous.getLow()) / 3;
 			double high = previous.getHigh();
 			double low = previous.getLow();
 			
-			
-			double s1, s2, s3, r1, r2, r3;
+			double s1, s2, s3, r1 = 0, r2, r3;
 			if (pivotType == 1) {								// fibonacci
-				
-				s1 = pivot - (0.832 * (high - low));
+				s1 = pivot - (0.382 * (high - low));
 				s2 = pivot - (0.618 * (high - low));
 				s3 = pivot - (high - low);
-				r1 = pivot - (0.382 * (high - low));
+				r1 = pivot + (0.382 * (high - low));
 				r2 = pivot + (0.618 * (high - low));
 				r3 = pivot + (high - low);
 			

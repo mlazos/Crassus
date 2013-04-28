@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -30,6 +31,7 @@ public class StockHistDataDaily implements StockHistData {
 
     @Override
     public boolean Init() {
+        _histData.clear();
         String begYear = "1900";
         String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear;
         HttpURLConnection connection = null;
@@ -96,18 +98,8 @@ public class StockHistDataDaily implements StockHistData {
     }
 
     @Override
-    public ArrayList<StockTimeFrameData> getHistData() {
+    public List<StockTimeFrameData> getHistData() {
         return _histData;
-    }
-
-    @Override
-    public double getWeek52Low() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public double getWeek52High() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

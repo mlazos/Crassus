@@ -5,6 +5,7 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,13 +24,17 @@ public interface Stock {
 
     String getCompanyName();
 
-    StockHistData getStockHistData(String freq);   // freq = "daily" or "monthly" or "weekly"
-
-    StockRealTimeData getStockRealTimeData();
-
+//    StockHistData getStockHistData(String freq);   // freq = "daily" or "monthly" or "weekly"
+//
+//    StockRealTimeData getStockRealTimeData();
+    List<StockTimeFrameData> getStockPriceData(String freq);  // freq = "minutely", or "daily" or "monthly" or "weekly"
+    
     ArrayList<StockEvent> getEventList();
 
     StockEvent getEvent(String eventName);
 
+    double getWeek52Low();
+    double getWeek52High();    
+    
     void refresh();
 }

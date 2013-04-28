@@ -20,9 +20,7 @@ public interface StockHistData {
     // see example of historial data: (we will make lastest data last)
     // http://ichart.finance.yahoo.com/table.csv?s=AAPL&c=1962
 
-    double getWeek52Low();
 
-    double getWeek52High();
 
     String getFreq();
 }
