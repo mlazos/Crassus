@@ -188,14 +188,14 @@ public class StockImpl implements Stock {
         return _events;
     }
 
-    @Override
-    public Indicator getEvent(String eventName) {
-        for (Indicator e : _events) {
-            if (e.getEventname().equalsIgnoreCase(eventName)) {
-                return e;
-            }
-        }
-        return null;
+//    @Override
+//    public Indicator getEvent(String eventName) {
+//        for (Indicator e : _events) {
+//            if (e.getEventname().equalsIgnoreCase(eventName)) {
+//                return e;
+//            }
+//        }
+//        return null;
     }
 
     @Override

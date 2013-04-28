@@ -29,7 +29,7 @@ public interface Stock {
 
     ArrayList<Indicator> getEventList();
 
-    Indicator getEvent(String eventName);
+//    Indicator getEvent(String eventName);
 
     double getWeek52Low();
     double getWeek52High();    
