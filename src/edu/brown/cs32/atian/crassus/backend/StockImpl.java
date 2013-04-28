@@ -45,6 +45,12 @@ public class StockImpl implements Stock {
         _monthly = new StockHistDataMonthly(_ticker);
         _realTime = new StockRealTimeDataImpl(_ticker);
         _events = new ArrayList<Indicator>();
+        
+        // if getCompanyName() return same string as ticker that the ticker is invalid
+        _companyName = getCompanyName();        
+        if(_companyName.equalsIgnoreCase(_ticker)) {
+            throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!" );
+        }        
     }
 
     @Override
@@ -76,6 +82,7 @@ public class StockImpl implements Stock {
         return this._ticker;
     }
 
+    @Override    
     // http://stackoverflow.com/questions/885456/stock-ticker-symbol-lookup-api
     public String getCompanyName() {
         if (_companyName != null) {
@@ -125,7 +132,8 @@ public class StockImpl implements Stock {
         }
         return _companyName;
     }
-
+    
+    @Override
     public List<StockTimeFrameData> getStockPriceData(String freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
 
         List<StockTimeFrameData> realTime = this._realTime.getRealTimeData();
@@ -164,36 +172,10 @@ public class StockImpl implements Stock {
         return result;
     }
 
-//    @Override
-//    public StockHistData getStockHistData(String freq) {
-//
-//        if (freq.equalsIgnoreCase("daily")) {
-//            return _daily;
-//        } else if (freq.equalsIgnoreCase("weekly")) {
-//            return _weekly;
-//        } else if (freq.equalsIgnoreCase("monthly")) {
-//            return _weekly;
-//        } else {
-//            throw new IllegalArgumentException("freq can only be daily, weekly or monthly");
-//        }
-//    }
-    public StockRealTimeData getStockRealTimeData() {
-        return _realTime;
-    }
     @Override
     public ArrayList<Indicator> getEventList() {
         return _events;
     }
-
-//    @Override
-//    public Indicator getEvent(String eventName) {
-//        for (Indicator e : _events) {
-//            if (e.getEventname().equalsIgnoreCase(eventName)) {
-//                return e;
-//            }
-//        }
-//        return null;
-//    }
 
     @Override
     public void refresh() {
