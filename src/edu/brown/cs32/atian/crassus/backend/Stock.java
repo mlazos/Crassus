@@ -26,12 +26,15 @@ public interface Stock {
     List<StockTimeFrameData> getStockPriceData(String freq);
     
     ArrayList<Indicator> getEventList();
-
+    void removeEventList();
+    
 //    Indicator getEvent(String eventName);
 
     double getWeek52Low();
     double getWeek52High();    
     
-    void refresh();
+    void refreshStockPrice();
+    void refreshIndicator(List<StockTimeFrameData> stockPriceData);    
+    
     void deleteEvent(Indicator event);
 }

@@ -35,6 +35,7 @@ public class StockImpl implements Stock {
     StockHistData _monthly = null;
     StockRealTimeData _realTime = null;
     ArrayList<Indicator> _events = null;
+    
     Double _week52Low = null;
     Double _week52High = null;
 
@@ -178,14 +179,27 @@ public class StockImpl implements Stock {
     }
 
     @Override
-    public void refresh() {
+    public void removeEventList() {
+        _events.clear();
+    }
+    
+    @Override
+    public void refreshStockPrice() {
         this.initialize();
         _week52Low = null;
         getWeek52Low();
         _week52High = null;
-        getWeek52High();
-    }
+        getWeek52High();    
 
+    }
+    
+    @Override
+    public void refreshIndicator(List<StockTimeFrameData> stockPriceData) {
+       for(Indicator ind : _events) {
+            ind.refresh(stockPriceData);
+        }        
+    }   
+    
     @Override
     public double getWeek52Low() {
         if (_week52Low != null) {
