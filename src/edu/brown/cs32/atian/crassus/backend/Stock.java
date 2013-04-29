@@ -4,6 +4,7 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
+import edu.brown.cs32.atian.crassus.gui.StockPlot;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,4 +37,6 @@ public interface Stock {
     double getWeek52High();    
     
     void refresh();
+    
+    void addToPlot(StockPlot stockPlot);    
 }

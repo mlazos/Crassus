@@ -70,6 +70,7 @@ public class StockRealTimeDataImplTest {
         tmp = tmp * 1000;
         calendar.setTimeInMillis(tmp);
         timeStamp = calendar.getTime().toString();
+        System.out.println("Latest data timestamp: " +  tmp);
         System.out.println("Latest data timestamp: " +  timeStamp);
     }
 }

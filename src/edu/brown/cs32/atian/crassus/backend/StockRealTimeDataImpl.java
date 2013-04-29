@@ -96,7 +96,8 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
                         Double.parseDouble(splitted[3]),   //Low
                         Double.parseDouble(splitted[1]),   //Close	
                         Integer.parseInt(splitted[5]),     //Volume
-                        Double.parseDouble(splitted[1]));  // adjusted close we set it equal to Close
+                        Double.parseDouble(splitted[1]),  // realtime data from yahoo has not adjusted close, we set it equal to Close
+                        false);  
                     
                 _realtimeData.add(newTFData);   // from the earliest to the latest
             }

@@ -4,6 +4,9 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
+import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
+import edu.brown.cs32.atian.crassus.gui.StockPlot;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.jfree.data.xy.XYSeries;
 
 /**
  *
@@ -139,9 +143,18 @@ public class StockImpl implements Stock {
         if (freq.equals("minutely")) {
             return realTime;
         }
-        StockTimeFrameData latestRealTime = null;
+        
+        if (freq.equals("daily")) {
+            result = _daily.getHistData();
+        } else if (freq.equals("weekly")) {
+            result = _weekly.getHistData();
+        } else if (freq.equals("monthly")) {
+            result = _monthly.getHistData();
+        }
+        
+        StockTimeFrameData latestRealTime = new StockTimeFrameData(realTime.get(realTime.size() - 1));
         if (realTime.size() >= 1) {
-            latestRealTime = realTime.get(realTime.size() - 1);
+            //latestRealTime = realTime.get(realTime.size() - 1);
             long tmp = (Long.parseLong(latestRealTime.getTime()));
             tmp = tmp * 1000;
             Calendar calendar = Calendar.getInstance();
@@ -153,17 +166,12 @@ public class StockImpl implements Stock {
             //Date latestDate =  df.parse(latestRealTime.getTime());
             String date = df.format(calendar.getTime());
             latestRealTime.setTime(date);
+            latestRealTime.setIsHist(true);
         }
 
-        if (freq.equals("daily")) {
-            result = _daily.getHistData();
-        } else if (freq.equals("weekly")) {
-            result = _weekly.getHistData();
-        } else if (freq.equals("monthly")) {
-            result = _monthly.getHistData();
-        }
+
         if (result.size() > 0) {
-            if (!result.get(result.size() - 1).getTime().equalsIgnoreCase(latestRealTime.getTime())) {
+            if (! result.get(result.size() - 1).getTime().equalsIgnoreCase(latestRealTime.getTime())) {
                 result.add(latestRealTime);
             }
         }
@@ -243,19 +251,32 @@ public class StockImpl implements Stock {
         _week52High = high;
         return _week52High;
     }
-
+    
+    @Override
     public void refresh() {
         refreshStockPrice();
         refreshIndicator();
+    }
+    
+    @Override
+    public void addToPlot(StockPlot stockPlot) {
+        XYSeries series = new XYSeries(_ticker);
+        List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
+        
+        for(StockTimeFrameData tf : stockPriceData) {
+            series.add(tf.getTimeInNumber(), tf.getAdjustedClose());
+        }
+        
+        SeriesWrapper sw = new SeriesWrapper(series, Color.BLACK);
+        stockPlot.addSeries(sw);
     }
     
     private void refreshStockPrice() {        
         // refresh stock price
         this.initialize();
         _week52Low = null;
-        getWeek52Low();
         _week52High = null;
-        getWeek52High();
+
     }
 
     private void refreshIndicator() {
@@ -265,4 +286,6 @@ public class StockImpl implements Stock {
             ind.refresh(stockPriceData);
         }        
     }
+    
+    
 }

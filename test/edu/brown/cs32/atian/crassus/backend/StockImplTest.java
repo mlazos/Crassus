@@ -63,21 +63,26 @@ public class StockImplTest {
         List<StockTimeFrameData> stockPriceData = s.getStockPriceData("daily");
         if(stockPriceData.size() > 0) {
             // print the first timeStamp
-            System.out.println(stockPriceData.get(0).getTime());            
+            System.out.println(stockPriceData.get(0).getTime());       
+            System.out.println(stockPriceData.get(0).getTimeInNumber());    
             // print the second timeStamp
             if(stockPriceData.size() > 1) {
                 System.out.println(stockPriceData.get(1).getTime());
+                System.out.println(stockPriceData.get(1).getTimeInNumber());                   
             }
             // print the third timeStamp
             if(stockPriceData.size() > 2) {
                 System.out.println(stockPriceData.get(2).getTime());
+                System.out.println(stockPriceData.get(2).getTimeInNumber());                   
             }            
             // print the fourth timeStamp
             if(stockPriceData.size() > 3) {
                 System.out.println(stockPriceData.get(3).getTime());
+                System.out.println(stockPriceData.get(3).getTimeInNumber());                   
             }             
             // print the last timeStamp
             System.out.println(stockPriceData.get(stockPriceData.size()-1).getTime());
+            System.out.println(stockPriceData.get(stockPriceData.size()-1).getTimeInNumber());        
         }
     }
     
