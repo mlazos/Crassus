@@ -141,9 +141,11 @@ public class StockImpl implements Stock {
 
         List<StockTimeFrameData> realTime = this._realTime.getRealTimeData();
         List<StockTimeFrameData> result = null;
-        if (freq.equals("minutely")) {
-            return realTime;
+        if (freq.equals("minutely")) {   
+            return realTime;   // just return realtime data, which includes most recent 15 days' minute by minute data including most recent minute
         }
+        
+        // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
         
         if (freq.equals("daily")) {
             result = _daily.getHistData();
@@ -153,18 +155,18 @@ public class StockImpl implements Stock {
             result = _monthly.getHistData();
         }
         
+        // latestRealTime is most recent data in realtime
         StockTimeFrameData latestRealTime = new StockTimeFrameData(realTime.get(realTime.size() - 1));
         if (realTime.size() >= 1) {
-            //latestRealTime = realTime.get(realTime.size() - 1);
+
             long tmp = (Long.parseLong(latestRealTime.getTime()));
             tmp = tmp * 1000;
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(tmp);
 
-            //String timeStamp = calendar.getTime().toString();
-            //DateFormat df = DateFormat.getDateInstance();
+            // time in history data has format "yyyy-MM-dd" while time in realtime data has format 1367006400
+            // here we realtime Data format to "yyyy-MM-dd"
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            //Date latestDate =  df.parse(latestRealTime.getTime());
             String date = df.format(calendar.getTime());
             latestRealTime.setTime(date);
             latestRealTime.setIsHist(true);
@@ -172,6 +174,7 @@ public class StockImpl implements Stock {
 
 
         if (result.size() > 0) {
+            // after 4PM of each trading day, the history data will already include today's data, and we don't need to add today's data to history data
             if (! result.get(result.size() - 1).getTime().equalsIgnoreCase(latestRealTime.getTime())) {
                 // append today's latest price info at the end of history data and return.
                 result.add(latestRealTime);
