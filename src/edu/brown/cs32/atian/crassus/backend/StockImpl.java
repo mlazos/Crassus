@@ -135,6 +135,7 @@ public class StockImpl implements Stock {
         refreshIndicator();
     }
     
+    
     @Override
     public List<StockTimeFrameData> getStockPriceData(String freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
 
@@ -178,6 +179,10 @@ public class StockImpl implements Stock {
         return result;
     }
 
+    public StockRealTimeData getStockRealTimeData() {
+        return _realTime;
+    }
+            
     @Override
     public ArrayList<Indicator> getEventList() {
         return _events;

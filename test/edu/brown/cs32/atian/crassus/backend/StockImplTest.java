@@ -4,6 +4,8 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
+import edu.brown.cs32.atian.crassus.gui.PlotWrapper;
+import edu.brown.cs32.atian.crassus.gui.StockPlot;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -148,4 +150,30 @@ public class StockImplTest {
             System.out.println(stockPriceData.get(stockPriceData.size()-1).getTime());
         }
     }    
+    
+
+    /**
+     * Test of getCompanyName method, of class StockImpl.
+     */
+    @Test
+    public void testGetPlotData() {
+        System.out.println("get stock price Plot Data");
+        
+        Stock s = new StockImpl("MSFT"); 
+        s.initialize();        
+        s.setCurrFreq("daily");
+        
+        StockPlot pw = new PlotWrapper("MSFT");        
+        s.addToPlot(pw);         
+        
+        // after 2 minutes
+        s.refresh();
+        
+        // clear series in pw here
+        
+        // re-add plot
+        s.addToPlot(pw);       
+
+        
+    } 
 }
