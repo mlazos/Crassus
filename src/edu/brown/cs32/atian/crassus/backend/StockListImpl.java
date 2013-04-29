@@ -53,7 +53,7 @@ public class StockListImpl implements StockList {
     @Override 
     public void refreshAll() {
         for(Stock s : _stocks) {
-            s.refreshStockPrice();
+            s.refresh();
         }         
     }
 }

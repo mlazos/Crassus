@@ -35,10 +35,11 @@ public class StockImpl implements Stock {
     StockHistData _monthly = null;
     StockRealTimeData _realTime = null;
     ArrayList<Indicator> _events = null;
-    
     Double _week52Low = null;
     Double _week52High = null;
-
+    
+    String _currFreq = "daily";    // be default se use daily
+    
     public StockImpl(String ticker) {
         _ticker = ticker;
         _daily = new StockHistDataDaily(_ticker);
@@ -46,12 +47,12 @@ public class StockImpl implements Stock {
         _monthly = new StockHistDataMonthly(_ticker);
         _realTime = new StockRealTimeDataImpl(_ticker);
         _events = new ArrayList<Indicator>();
-        
+
         // if getCompanyName() return same string as ticker that the ticker is invalid
-        _companyName = getCompanyName();        
-        if(_companyName.equalsIgnoreCase(_ticker)) {
-            throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!" );
-        }        
+        _companyName = getCompanyName();
+        if (_companyName.equalsIgnoreCase(_ticker)) {
+            throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!");
+        }
     }
 
     @Override
@@ -69,21 +70,11 @@ public class StockImpl implements Stock {
     }
 
     @Override
-    public void addEvent(Indicator event) {
-        _events.add(event);
-    }
-
-    @Override
-    public void deleteEvent(Indicator event) {
-    	_events.remove(event);
-    }
-
-    @Override
     public String getTicker() {
         return this._ticker;
     }
 
-    @Override    
+    @Override
     // http://stackoverflow.com/questions/885456/stock-ticker-symbol-lookup-api
     public String getCompanyName() {
         if (_companyName != null) {
@@ -133,6 +124,12 @@ public class StockImpl implements Stock {
         }
         return _companyName;
     }
+
+    @Override    
+    public void setCurrFreq(String currFreq) {
+        _currFreq = currFreq;
+        refreshIndicator();
+    }
     
     @Override
     public List<StockTimeFrameData> getStockPriceData(String freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
@@ -145,12 +142,12 @@ public class StockImpl implements Stock {
         StockTimeFrameData latestRealTime = null;
         if (realTime.size() >= 1) {
             latestRealTime = realTime.get(realTime.size() - 1);
-                long tmp = (Long.parseLong(latestRealTime.getTime()));
-                tmp = tmp*1000;
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(tmp);
-                
-                //String timeStamp = calendar.getTime().toString();
+            long tmp = (Long.parseLong(latestRealTime.getTime()));
+            tmp = tmp * 1000;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(tmp);
+
+            //String timeStamp = calendar.getTime().toString();
             //DateFormat df = DateFormat.getDateInstance();
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             //Date latestDate =  df.parse(latestRealTime.getTime());
@@ -182,24 +179,17 @@ public class StockImpl implements Stock {
     public void removeEventList() {
         _events.clear();
     }
-    
-    @Override
-    public void refreshStockPrice() {
-        this.initialize();
-        _week52Low = null;
-        getWeek52Low();
-        _week52High = null;
-        getWeek52High();    
 
-    }
-    
     @Override
-    public void refreshIndicator(List<StockTimeFrameData> stockPriceData) {
-       for(Indicator ind : _events) {
-            ind.refresh(stockPriceData);
-        }        
-    }   
-    
+    public void addEvent(Indicator event) {
+        _events.add(event);
+    }
+
+    @Override
+    public void deleteEvent(Indicator event) {
+        _events.remove(event);
+    }
+
     @Override
     public double getWeek52Low() {
         if (_week52Low != null) {
@@ -252,5 +242,27 @@ public class StockImpl implements Stock {
         }
         _week52High = high;
         return _week52High;
+    }
+
+    public void refresh() {
+        refreshStockPrice();
+        refreshIndicator();
+    }
+    
+    private void refreshStockPrice() {        
+        // refresh stock price
+        this.initialize();
+        _week52Low = null;
+        getWeek52Low();
+        _week52High = null;
+        getWeek52High();
+    }
+
+    private void refreshIndicator() {
+        List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
+         
+        for (Indicator ind : _events) {
+            ind.refresh(stockPriceData);
+        }        
     }
 }

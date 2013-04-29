@@ -16,25 +16,24 @@ public interface Stock {
 
     boolean initialize();   // false mean it fails to get data from data source
 
-    void addEvent(Indicator event);
-
     String getTicker();
 
     String getCompanyName();
+    
+    void setCurrFreq(String currFreq);   // "weekly", "daily", or "monthly" 
  
     // getStockHistData and  getStockRealTimeData are now combined into a single method getStockPriceData()
     List<StockTimeFrameData> getStockPriceData(String freq);
     
     ArrayList<Indicator> getEventList();
     void removeEventList();
+    void addEvent(Indicator event);
+    void deleteEvent(Indicator event);
     
 //    Indicator getEvent(String eventName);
 
     double getWeek52Low();
     double getWeek52High();    
     
-    void refreshStockPrice();
-    void refreshIndicator(List<StockTimeFrameData> stockPriceData);    
-    
-    void deleteEvent(Indicator event);
+    void refresh();
 }
