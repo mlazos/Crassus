@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.backend.StockListImpl;
+import edu.brown.cs32.atian.crassus.backend.StockRealTimeData;
 
 public class CrassusStockTableModel extends AbstractTableModel {
 	
@@ -54,9 +55,9 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		case 0://ticker
 			return stocks.getStockList().get(row).getTicker();
 		case 1://price
-			return 00.00;
+			return format(stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice());
 		case 2://open
-			return 00.00;
+			return format(stocks.getStockList().get(row).getStockRealTimeData().getOpenPrice());
 		case 3://high
 			return format(stocks.getStockList().get(row).getWeek52High());
 		case 4://low
