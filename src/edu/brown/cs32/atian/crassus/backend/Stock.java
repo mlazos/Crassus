@@ -21,9 +21,10 @@ public interface Stock {
 
     String getCompanyName();
     
-    void setCurrFreq(String currFreq);   // "weekly", "daily", or "monthly" 
+    void setCurrFreq(String currFreq);   // "weekly", "daily", or "monthly"  
  
-    // getStockHistData and  getStockRealTimeData are now combined into a single method getStockPriceData()
+    StockRealTimeData getStockRealTimeData();
+    
     List<StockTimeFrameData> getStockPriceData(String freq);
     
     ArrayList<Indicator> getEventList();

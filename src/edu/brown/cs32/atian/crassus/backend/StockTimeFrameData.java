@@ -14,7 +14,9 @@ import java.util.Date;
 class StockTimeFrameData {
 
     private String _time;
-    private boolean _isHist;   // is the data retrieved from stock historical data or realtime data?
+    private boolean _isHist;   // is the data retrieved from yahoo stock historical data or yahoo realtime data?
+                               // true means  _time has format like "2013-04-26" 
+                               // false means _time has format like "1367006400" (a second value  that is an offset from the Epoch, January 1, 1970 00:00:00.000 GMT)
     private double _open;
     private double _high;
     private double _low;
@@ -58,7 +60,7 @@ class StockTimeFrameData {
         return _time;
     }
     
-     // return time in long type, so it can be used in XYSeries
+    // change all the time format to real time format like "1367006400",  so it can be used in XYSeries
     public long getTimeInNumber() {  
         if(_isHist) {
             String[] splitted = _time.split("-");

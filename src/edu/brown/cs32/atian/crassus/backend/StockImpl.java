@@ -135,14 +135,17 @@ public class StockImpl implements Stock {
         refreshIndicator();
     }
     
+    // combine both the history data with today's data so the plot and indicator calculation don't need to combine the hist data with realtime data
     @Override
     public List<StockTimeFrameData> getStockPriceData(String freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
 
         List<StockTimeFrameData> realTime = this._realTime.getRealTimeData();
         List<StockTimeFrameData> result = null;
-        if (freq.equals("minutely")) {
-            return realTime;
+        if (freq.equals("minutely")) {   
+            return realTime;   // just return realtime data, which includes most recent 15 days' minute by minute data including most recent minute
         }
+        
+        // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
         
         if (freq.equals("daily")) {
             result = _daily.getHistData();
@@ -152,18 +155,18 @@ public class StockImpl implements Stock {
             result = _monthly.getHistData();
         }
         
+        // latestRealTime is most recent data in realtime
         StockTimeFrameData latestRealTime = new StockTimeFrameData(realTime.get(realTime.size() - 1));
         if (realTime.size() >= 1) {
-            //latestRealTime = realTime.get(realTime.size() - 1);
+
             long tmp = (Long.parseLong(latestRealTime.getTime()));
             tmp = tmp * 1000;
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(tmp);
 
-            //String timeStamp = calendar.getTime().toString();
-            //DateFormat df = DateFormat.getDateInstance();
+            // time in history data has format "yyyy-MM-dd" while time in realtime data has format 1367006400
+            // here we realtime Data format to "yyyy-MM-dd"
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            //Date latestDate =  df.parse(latestRealTime.getTime());
             String date = df.format(calendar.getTime());
             latestRealTime.setTime(date);
             latestRealTime.setIsHist(true);
@@ -171,13 +174,19 @@ public class StockImpl implements Stock {
 
 
         if (result.size() > 0) {
+            // after 4PM of each trading day, the history data will already include today's data, and we don't need to add today's data to history data
             if (! result.get(result.size() - 1).getTime().equalsIgnoreCase(latestRealTime.getTime())) {
+                // append today's latest price info at the end of history data and return.
                 result.add(latestRealTime);
             }
         }
         return result;
     }
 
+    public StockRealTimeData getStockRealTimeData() {
+        return _realTime;
+    }
+            
     @Override
     public ArrayList<Indicator> getEventList() {
         return _events;
@@ -264,7 +273,15 @@ public class StockImpl implements Stock {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
         
         for(StockTimeFrameData tf : stockPriceData) {
+            // because XY series need both X and y as double, here we represent time as a second value.
+            // tf.getTimeInNumber() return time represented by a second value 
             series.add(tf.getTimeInNumber(), tf.getAdjustedClose());
+            //  To convert the above time from the second value to the Date string timestamp, use the following codes:
+            // Calendar calendar = Calendar.getInstance();
+            // long tmp = tf.getTimeInNumber() * 1000;    // from second to Millisecond
+            // calendar.setTimeInMillis(tmp);
+            // String timeStamp = calendar.getTime().toString(); 
+
         }
         
         SeriesWrapper sw = new SeriesWrapper(series, Color.BLACK);
