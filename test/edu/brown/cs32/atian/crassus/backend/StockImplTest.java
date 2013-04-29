@@ -119,7 +119,36 @@ public class StockImplTest {
         }
     }
     
-    
+
+    /**
+     * Test of getCompanyName method, of class StockImpl.
+     */
+    @Test
+    public void testGetMinutelyStockData() {
+        System.out.println("get minutely stockData");
+        
+        Stock s = new StockImpl("GOOG");
+        s.initialize();
+        List<StockTimeFrameData> stockPriceData = s.getStockPriceData("minutely");
+        if(stockPriceData.size() > 0) {
+            // print the first timeStamp
+            System.out.println(stockPriceData.get(0).getTime());            
+            // print the second timeStamp
+            if(stockPriceData.size() > 1) {
+                System.out.println(stockPriceData.get(1).getTime());
+            }
+            // print the third timeStamp
+            if(stockPriceData.size() > 2) {
+                System.out.println(stockPriceData.get(2).getTime());
+            }     
+            // print the fourth timeStamp
+            if(stockPriceData.size() > 3) {
+                System.out.println(stockPriceData.get(3).getTime());
+            }            
+            // print the last timeStamp
+            System.out.println(stockPriceData.get(stockPriceData.size()-1).getTime());
+        }
+    }    
 
     /**
      * Test of getCompanyName method, of class StockImpl.
@@ -128,7 +157,7 @@ public class StockImplTest {
     public void testGetMonthlyStockData() {
         System.out.println("get monthly tockData");
         
-        Stock s = new StockImpl("MSFT");
+        Stock s = new StockImpl("GOOG");
         s.initialize();
         List<StockTimeFrameData> stockPriceData = s.getStockPriceData("monthly");
         if(stockPriceData.size() > 0) {

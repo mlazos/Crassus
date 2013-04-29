@@ -81,7 +81,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
                 if (splitted.length != 6) {
                     continue;
                 }
-                if(splitted[5].equals("volume")) {
+                if(splitted[5].equals("volume") || splitted[0].equals("labels")) {
                     continue;
                 }
 //                long tmp = (Long.parseLong(splitted[0]));

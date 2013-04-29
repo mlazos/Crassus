@@ -135,7 +135,7 @@ public class StockImpl implements Stock {
         refreshIndicator();
     }
     
-    // combine both the history data with today's data so the plot and indicator caluclation don't need to combine the hist data with realtime data
+    // combine both the history data with today's data so the plot and indicator calculation don't need to combine the hist data with realtime data
     @Override
     public List<StockTimeFrameData> getStockPriceData(String freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
 
@@ -278,7 +278,7 @@ public class StockImpl implements Stock {
             series.add(tf.getTimeInNumber(), tf.getAdjustedClose());
             //  To convert the above time from the second value to the Date string timestamp, use the following codes:
             // Calendar calendar = Calendar.getInstance();
-            // long tmp = tf.getTimeInNumber() * 1000;    // from second to minisecond
+            // long tmp = tf.getTimeInNumber() * 1000;    // from second to Millisecond
             // calendar.setTimeInMillis(tmp);
             // String timeStamp = calendar.getTime().toString(); 
 
