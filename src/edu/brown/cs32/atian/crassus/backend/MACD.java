@@ -36,6 +36,8 @@ public class MACD implements Indicator {
 	private List<IndicatorDatum> MACDLine;
 	private List<IndicatorDatum> signalLine;
 	private List<IndicatorDatum> MACDHistogram;
+	private boolean isActive;
+	private boolean isVisible;
 	
 	public MACD(List<StockTimeFrameData> data, int signalPeriod, int shorterPeriod, int longerPeriod) {
 		this.data = data;
@@ -48,6 +50,23 @@ public class MACD implements Indicator {
 		MACDHistogram = new ArrayList<IndicatorDatum>();
 		
 		refresh(data);
+	}
+	
+	@Override
+	public boolean getVisible() {
+		return isVisible;
+	}
+	@Override
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	@Override
+	public boolean getActive() {
+		return isActive;
+	}
+	@Override
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	/**

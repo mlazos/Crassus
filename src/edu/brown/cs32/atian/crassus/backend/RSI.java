@@ -5,11 +5,27 @@ import java.util.List;
 
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
+/** 
+ * @author atian
+ *
+ * RSI is a momentum oscillator that measures spped and change
+ * of price movements.
+ * 
+ * RSI oscillates between 0 and 100
+ * 
+ * RSI is considered overbought when above 70 and oversold when below 30.
+ * 
+ * Source: http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:relative_strength_index_rsi
+ * 
+ */
+
 public class RSI implements Indicator {
 
 	private List<StockTimeFrameData> data;
 	private List<IndicatorDatum> RSIPoints;
 	private int period;
+	private boolean isActive;
+	private boolean isVisible;
 	
 	public RSI(List<StockTimeFrameData> data, int period) {
 		this.data = data;
@@ -20,6 +36,23 @@ public class RSI implements Indicator {
 	
 	List<IndicatorDatum> getRSIPoints() {
 		return RSIPoints;
+	}
+	
+	@Override
+	public boolean getVisible() {
+		return isVisible;
+	}
+	@Override
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	@Override
+	public boolean getActive() {
+		return isActive;
+	}
+	@Override
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	/**

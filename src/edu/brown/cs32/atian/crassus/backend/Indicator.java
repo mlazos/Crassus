@@ -14,4 +14,18 @@ public interface Indicator {
 	 * Refreshes the indicator data values.
 	 */
 	void refresh(List<StockTimeFrameData> data);
+	
+	/*
+	 * Tests the indicator against data which should have been
+	 * passed into the Indicator's constructor.
+	 */
+	//void test();
+	
+	boolean getVisible();
+	
+	void setVisible(boolean isVisible);
+	
+	boolean getActive();
+	
+	void setActive(boolean isActive);
 }

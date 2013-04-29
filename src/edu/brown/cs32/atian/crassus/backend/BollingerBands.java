@@ -1,6 +1,7 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import java.util.*;
+import org.jfree.data.xy.*;
 
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
@@ -25,6 +26,8 @@ public class BollingerBands implements Indicator {
 	private int period;
 	private List<StockTimeFrameData> data;
 	private int bandWidth;
+	private boolean isActive;
+	private boolean isVisible;
 	
 	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) {
 		this.data = data;
@@ -49,6 +52,23 @@ public class BollingerBands implements Indicator {
 		this.upperBand = new ArrayList<IndicatorDatum>();
 		this.bandWidth = bandWidth;
 		updateBollingerBands();
+	}
+	
+	@Override
+	public boolean getVisible() {
+		return isVisible;
+	}
+	@Override
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	@Override
+	public boolean getActive() {
+		return isActive;
+	}
+	@Override
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	/**
@@ -95,7 +115,7 @@ public class BollingerBands implements Indicator {
 
 	@Override
 	public void addToPlot(StockPlot stockPlot) {
-		// TODO Auto-generated method stub
+		//XYSeries xyseries = new XYSeries();
 		
 	}
 	

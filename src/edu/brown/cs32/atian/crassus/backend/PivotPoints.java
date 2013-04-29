@@ -34,7 +34,10 @@ public class PivotPoints implements Indicator {
 	private List<IndicatorDatum> resistance3;
 	private List<StockTimeFrameData> data;
 	private int pivotType;
-
+	private boolean isVisible;
+	private boolean isActive;
+	
+	
 	public PivotPoints(List<StockTimeFrameData> data, String pivotOption) {
 		this.data = data;
 		pivotPoints = new ArrayList<IndicatorDatum>();
@@ -181,4 +184,23 @@ public class PivotPoints implements Indicator {
 		if (pivotType == 2) updateDemark();
 		else updatePivot();
 	}
+	
+	@Override
+	public boolean getVisible() {
+		return isVisible;
+	}
+	@Override
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	@Override
+	public boolean getActive() {
+		return isActive;
+	}
+	@Override
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+
 }

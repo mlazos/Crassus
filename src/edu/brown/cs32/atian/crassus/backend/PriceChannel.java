@@ -33,7 +33,8 @@ public class PriceChannel implements Indicator {
 	private List<IndicatorDatum> centreLine;
 	private List<StockTimeFrameData> data;
 	private int lookBackPeriod;
-	
+	private boolean isActive;
+	private boolean isVisible;
 	
 	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
 		this.data = data;
@@ -54,6 +55,23 @@ public class PriceChannel implements Indicator {
 	
 	List<IndicatorDatum> getCentreLine() {
 		return centreLine;
+	}
+	
+	@Override
+	public boolean getVisible() {
+		return isVisible;
+	}
+	@Override
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	@Override
+	public boolean getActive() {
+		return isActive;
+	}
+	@Override
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	/**

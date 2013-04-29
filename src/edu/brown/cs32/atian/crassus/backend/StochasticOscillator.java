@@ -32,8 +32,8 @@ public class StochasticOscillator implements Indicator {
 	private int SMAPeriod;
 	private List<IndicatorDatum> stocOscillator;
 	private List<IndicatorDatum> signalLine;
-
-	 
+    private boolean isActive;
+    private boolean isVisible;
 	
 	public StochasticOscillator(List<StockTimeFrameData> data, int period) {
 		this.data = data;
@@ -41,6 +41,23 @@ public class StochasticOscillator implements Indicator {
 		this.SMAPeriod = 3;
 		
 		refresh(data);
+	}
+	
+	@Override
+	public boolean getVisible() {
+		return isVisible;
+	}
+	@Override
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	@Override
+	public boolean getActive() {
+		return isActive;
+	}
+	@Override
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	/**
