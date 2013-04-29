@@ -35,8 +35,8 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
     public boolean Init() {
         _realtimeData.clear();
 
-        String urlString = "http://chartapi.finance.yahoo.com/instrument/1.0/" + _ticker + "/chartdata;type=quote;range=1d/csv/";
-        // http://chartapi.finance.yahoo.com/instrument/1.0/msft/chartdata;type=quote;range=1d/csv/        
+        String urlString = "http://chartapi.finance.yahoo.com/instrument/1.0/" + _ticker + "/chartdata;type=quote;range=15d/csv/";
+        // http://chartapi.finance.yahoo.com/instrument/1.0/msft/chartdata;type=quote;range=15d/csv/        
         HttpURLConnection connection = null;
         URL serverAddress = null;
         BufferedReader reader = null;
