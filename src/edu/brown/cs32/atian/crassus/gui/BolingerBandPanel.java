@@ -26,11 +26,11 @@ public class BolingerBandPanel extends JPanel
 		JLabel periodsLabel = new JLabel("Number of Periods:");
 		JLabel bandWidthLabel = new JLabel("Bandwidth:");
 		JTextField periods = new JTextField();
-		periods.setInputVerifier(new NumberVerifier());
+		periods.setInputVerifier(new NumberVerifier(periodsLabel));
 		periods.setSize(50, 20);
 		periods.setPreferredSize(new Dimension(50, 20));
 		JTextField bandWidth = new JTextField();
-		bandWidth.setInputVerifier(new NumberVerifier());
+		bandWidth.setInputVerifier(new NumberVerifier(bandWidthLabel));
 		bandWidth.setSize(50, 20);
 		bandWidth.setPreferredSize(new Dimension(50,20));
 		
