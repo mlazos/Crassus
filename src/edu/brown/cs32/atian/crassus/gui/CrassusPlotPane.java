@@ -35,7 +35,6 @@ public class CrassusPlotPane extends JPanel {
 	}
 	
 	public void changeToStock(Stock stock){
-		System.out.println("stock-change called: "+stock.getCompanyName());
 		this.stock = stock;
 		refresh();
 	}
@@ -46,6 +45,11 @@ public class CrassusPlotPane extends JPanel {
 			stock.addToPlot(plot);
 			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
 			imageDisplayer.setImage(image);
+			imageDisplayer.revalidate();
+			imageDisplayer.repaint();
+		}
+		else{
+			imageDisplayer.setImage(null);
 			imageDisplayer.revalidate();
 			imageDisplayer.repaint();
 		}

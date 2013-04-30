@@ -24,8 +24,11 @@ public class CrassusStockTablePane extends JPanel {
 
 	public class ChangeStockListenerForwarder implements ListSelectionListener {
 		@Override public void valueChanged(ListSelectionEvent e) {
-			if(_listener!=null)
-				_listener.changeToStock(model.getStock(table.getSelectedRow()));
+			if(_listener!=null){
+				int index = table.getSelectedRow();
+				if(index!=-1)
+					_listener.changeToStock(model.getStock(table.getSelectedRow()));
+			}
 		}
 	}
 
@@ -34,6 +37,7 @@ public class CrassusStockTablePane extends JPanel {
 			Stock stock = new StockImpl(symbol);
 			stock.refresh();
 			model.addStock(stock);
+			table.setRowSelectionInterval(model.getRowCount()-1, model.getRowCount()-1);
 		}
 	}
 
@@ -47,7 +51,20 @@ public class CrassusStockTablePane extends JPanel {
 	
 	public class RemoveStockListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			model.removeStock(table.getSelectedRow());
+			int index = table.getSelectedRow();
+			if(table.getRowCount()>1){
+				if(index == table.getRowCount()-1)
+					table.setRowSelectionInterval(index-1,index-1);
+				else
+					table.setRowSelectionInterval(index+1,index+1);
+				
+				_listener.changeToStock(model.getStock(table.getSelectedRow()));
+			}
+			else{
+				_listener.changeToStock(null);
+			}
+			
+			model.removeStock(index);
 		}
 	}
 
