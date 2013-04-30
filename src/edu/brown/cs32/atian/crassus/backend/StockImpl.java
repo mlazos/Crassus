@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.Minute;
+import org.jfree.data.time.TimeSeries;
 import org.jfree.data.xy.XYSeries;
 
 /**
@@ -269,19 +272,16 @@ public class StockImpl implements Stock {
     
     @Override
     public void addToPlot(StockPlot stockPlot) {
-        XYSeries series = new XYSeries(_ticker);
+        TimeSeries series = new TimeSeries(_ticker);
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
         
         for(StockTimeFrameData tf : stockPriceData) {
-            // because XY series need both X and y as double, here we represent time as a second value.
-            // tf.getTimeInNumber() return time represented by a second value 
-            series.add(tf.getTimeInNumber(), tf.getAdjustedClose());
-            //  To convert the above time from the second value to the Date string timestamp, use the following codes:
-            // Calendar calendar = Calendar.getInstance();
-            // long tmp = tf.getTimeInNumber() * 1000;    // from second to Millisecond
-            // calendar.setTimeInMillis(tmp);
-            // String timeStamp = calendar.getTime().toString(); 
-
+             // tf.getTimeInNumber() return time represented by a second value 
+             long tmp = tf.getTimeInNumber() * 1000;    // from second to Millisecond
+             Calendar calendar = Calendar.getInstance();
+             calendar.setTimeInMillis(tmp);
+             Date date = calendar.getTime();         
+             series.add(new Minute(date) , tf.getAdjustedClose());
         }
         
         SeriesWrapper sw = new SeriesWrapper(series, Color.BLACK);
