@@ -25,7 +25,7 @@ public class CrassusStockTablePane extends JPanel {
 	public class ChangeStockListenerForwarder implements ListSelectionListener {
 		@Override public void valueChanged(ListSelectionEvent e) {
 			if(_listener!=null)
-				_listener.changeToStock(model.getStock(e.getFirstIndex()));
+				_listener.changeToStock(model.getStock(table.getSelectedRow()));
 		}
 	}
 
