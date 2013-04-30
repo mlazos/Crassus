@@ -1,7 +1,6 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import java.util.*;
-import org.jfree.data.xy.*;
 
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 

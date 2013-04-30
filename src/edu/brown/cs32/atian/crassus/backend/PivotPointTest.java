@@ -20,12 +20,12 @@ public class PivotPointTest {
 	    //        double close, int volume, double adjustedClose)
 		
 		List<StockTimeFrameData> data = new ArrayList<>();
-		data.add(new StockTimeFrameData("a", 434.15, 434.15, 429.09, 429.8, 0, 0)); 
-		data.add(new StockTimeFrameData("b", 433.72, 437.99, 431.2, 434.33, 0, 0)); 
-		data.add(new StockTimeFrameData("c", 428.1, 437.06, 426.01, 435.69, 0, 0)); 
-		data.add(new StockTimeFrameData("d", 426.36, 428.5, 422.75, 426.98, 0, 0));	
-		data.add(new StockTimeFrameData("e", 424.85, 427.95, 422.49, 426.21, 0, 0)); 
-		data.add(new StockTimeFrameData("f", 424.5, 424.95, 419.68, 423.2, 0, 0)); 
+		data.add(new StockTimeFrameData("a", 434.15, 434.15, 429.09, 429.8, 0, 0, false)); 
+		data.add(new StockTimeFrameData("b", 433.72, 437.99, 431.2, 434.33, 0, 0, false)); 
+		data.add(new StockTimeFrameData("c", 428.1, 437.06, 426.01, 435.69, 0, 0, false)); 
+		data.add(new StockTimeFrameData("d", 426.36, 428.5, 422.75, 426.98, 0, 0, false));	
+		data.add(new StockTimeFrameData("e", 424.85, 427.95, 422.49, 426.21, 0, 0, false)); 
+		data.add(new StockTimeFrameData("f", 424.5, 424.95, 419.68, 423.2, 0, 0, false)); 
 
 		
 		ppStandard = new PivotPoints(data, "standard");
