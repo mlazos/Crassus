@@ -39,5 +39,7 @@ public interface Stock {
     
     void refresh();
     
-    void addToPlot(StockPlot stockPlot);    
+    void addToPlot(StockPlot stockPlot);   
+    
+    StockEventType isTriggered();
 }
