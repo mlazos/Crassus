@@ -131,4 +131,10 @@ public class PriceChannel implements Indicator {
 		this.data = data;
 		updatePriceChannel();
 	}
+
+	@Override
+	public StockEventType isTriggered() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

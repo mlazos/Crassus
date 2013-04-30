@@ -1,0 +1,22 @@
+package edu.brown.cs32.atian.crassus.backend;
+
+/**
+ * @author atian
+ *
+ * Each Indicator will implement isTriggered() method which 
+ * will return this type.
+ */
+public enum StockEventType {
+	BUY, SELL, NONE;
+	
+	@Override
+	public String toString() {
+		String toReturn = "";
+		switch (this) {
+			case BUY: toReturn = "BUY"; break;
+			case SELL: toReturn = "SELL"; break;
+			case NONE: toReturn = "NONE"; break;
+		}
+		return toReturn;
+	}
+}

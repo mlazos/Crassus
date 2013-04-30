@@ -157,4 +157,10 @@ public class BollingerBands implements Indicator {
 		this.data = data;
 		updateBollingerBands();
 	}
+
+	@Override
+	public StockEventType isTriggered() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

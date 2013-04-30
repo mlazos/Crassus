@@ -21,11 +21,32 @@ public interface Indicator {
 	 */
 	//void test();
 	
+	/**
+	 * Returns boolean whether Indicator is visible
+	 */
 	boolean getVisible();
 	
+	/**
+	 * Sets whether Indicator is visible on the stock graph.
+	 */
 	void setVisible(boolean isVisible);
 	
+	/**
+	 * Returns boolean whether Indicator is active.
+	 */
 	boolean getActive();
 	
+	/*
+	 * Sets whether the current Indicator is active meaning user
+	 * will be alerted to triggered events.
+	 */
 	void setActive(boolean isActive);
+	
+	/**
+	 * Checks whether the indicator is triggered.
+	 * 
+	 * @return	StockEventType which is either BUY, SELL, or NONE
+	 */
+	StockEventType isTriggered();
+	
 }
