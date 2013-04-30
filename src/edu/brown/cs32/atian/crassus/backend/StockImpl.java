@@ -304,5 +304,17 @@ public class StockImpl implements Stock {
         }        
     }
     
+    public StockEventType isTriggered() {
+        StockEventType stType = StockEventType.NONE;
+        
+        for (Indicator ind : _events) {
+            stType = ind.isTriggered();
+            if(stType != StockEventType.NONE) {
+                return stType;
+            }
+        } 
+        
+        return stType;
+    }
     
 }
