@@ -22,6 +22,7 @@ public class StochOscillPanel extends JPanel {
 		JLabel periodLabel = new JLabel("Period:");
 		
 		JTextField period = new JTextField();
+		period.setInputVerifier(new NumberVerifier());
 		period.setSize(50, 20);
 		period.setPreferredSize(new Dimension(50, 20));
 		
@@ -51,18 +52,7 @@ public class StochOscillPanel extends JPanel {
 
 		
 	}
-	/*
-	class OkListener implements ActionListener
-	{
-		
-	}
-	
-	class TestListener implements ActionListener
-	{
-		
-	}
-	*/
-	
+
 	public String toString()
 	{
 		return "Stochastic Oscillator Event";

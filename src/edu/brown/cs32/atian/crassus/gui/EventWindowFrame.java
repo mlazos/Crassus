@@ -16,8 +16,8 @@ import javax.swing.border.EmptyBorder;
 public class EventWindowFrame implements EventWindow {
 
 	private JPanel currentPanel;
-	
 	private JDialog frame;
+	private WindowCloseListener closeListener;
 	/**
 	 * @param args
 	 */

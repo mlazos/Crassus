@@ -9,7 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class RSIPanel extends JPanel {
+public class RSIPanel extends JPanel 
+{
 
 	public RSIPanel()
 	{
@@ -17,6 +18,7 @@ public class RSIPanel extends JPanel {
 		JLabel periodLabel = new JLabel("Period:");
 		
 		JTextField period = new JTextField();
+		period.setInputVerifier(new NumberVerifier());
 		period.setSize(50, 20);
 		period.setPreferredSize(new Dimension(50, 20));
 		
@@ -43,20 +45,8 @@ public class RSIPanel extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
-
 		
 	}
-	/*
-	class OkListener implements ActionListener
-	{
-		
-	}
-	
-	class TestListener implements ActionListener
-	{
-		
-	}
-	*/
 	
 	public String toString()
 	{

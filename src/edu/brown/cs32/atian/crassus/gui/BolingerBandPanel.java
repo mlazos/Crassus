@@ -2,6 +2,7 @@ package edu.brown.cs32.atian.crassus.gui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
@@ -25,9 +26,11 @@ public class BolingerBandPanel extends JPanel
 		JLabel periodsLabel = new JLabel("Number of Periods:");
 		JLabel bandWidthLabel = new JLabel("Bandwidth:");
 		JTextField periods = new JTextField();
+		periods.setInputVerifier(new NumberVerifier());
 		periods.setSize(50, 20);
 		periods.setPreferredSize(new Dimension(50, 20));
 		JTextField bandWidth = new JTextField();
+		bandWidth.setInputVerifier(new NumberVerifier());
 		bandWidth.setSize(50, 20);
 		bandWidth.setPreferredSize(new Dimension(50,20));
 		
@@ -63,17 +66,29 @@ public class BolingerBandPanel extends JPanel
 
 		
 	}
-	/*
+	
 	class OkListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			
+			
+		}
 		
 	}
 	
 	class TestListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
-	*/
 	
 	public String toString()
 	{
