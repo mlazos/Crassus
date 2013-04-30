@@ -35,7 +35,7 @@ public class CrassusGUI implements GUI {
 
 		stockBox = new CrassusStockTablePane(frame,stocks);
 
-		eventBox = new CrassusEventTablePane();
+		eventBox = new CrassusEventTablePane(frame);
 		
 		//make plot pane
 		plotPane = new CrassusPlotPane();

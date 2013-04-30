@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,14 +37,17 @@ public class CrassusEventTablePane extends JPanel {
 
 	public class NewEventListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			EventWindow eventWindow = new EventWindowFrame();
+			EventWindow eventWindow = new EventWindowFrame(_frame);
 			eventWindow.setWindowCloseListener(new NewIndicatorListener());
 		}
 	}
 	
 	CrassusEventTableModel model;
+	JFrame _frame;
 
-	public CrassusEventTablePane(){
+	public CrassusEventTablePane(JFrame frame){
+		_frame = frame;
+		
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		
