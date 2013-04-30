@@ -201,6 +201,12 @@ public class PivotPoints implements Indicator {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+
+	@Override
+	public StockEventType isTriggered() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }

@@ -9,7 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class PriceChannelPanel extends JPanel {
+public class PriceChannelPanel extends JPanel 
+{
 
 	public PriceChannelPanel()
 	{
@@ -17,6 +18,7 @@ public class PriceChannelPanel extends JPanel {
 		JLabel lookBackLabel = new JLabel("Look Back Period:");
 		
 		JTextField lookBack = new JTextField();
+		lookBack.setInputVerifier(new NumberVerifier());
 		lookBack.setSize(50, 20);
 		lookBack.setPreferredSize(new Dimension(50, 20));
 		

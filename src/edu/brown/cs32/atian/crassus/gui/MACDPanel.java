@@ -19,16 +19,19 @@ public class MACDPanel extends JPanel {
 		JLabel longLabel = new JLabel("Longer Period:");
 		
 		JTextField signalP = new JTextField();
+		signalP.setInputVerifier(new NumberVerifier());
 		signalP.setSize(50, 20);
 		signalP.setPreferredSize(new Dimension(50, 20));
 		
 		JTextField shortP = new JTextField();
+		shortP.setInputVerifier(new NumberVerifier());
 		shortP.setSize(50, 20);
 		shortP.setPreferredSize(new Dimension(50,20));
 		
-		JTextField LongP = new JTextField();
-		LongP.setSize(50, 20);
-		LongP.setPreferredSize(new Dimension(50,20));
+		JTextField longP = new JTextField();
+		longP.setInputVerifier(new NumberVerifier());
+		longP.setSize(50, 20);
+		longP.setPreferredSize(new Dimension(50,20));
 		
 		JPanel signalInput = new JPanel();
 		signalInput.setLayout(new FlowLayout());
@@ -43,7 +46,7 @@ public class MACDPanel extends JPanel {
 		JPanel longerInput = new JPanel();
 		longerInput.setLayout(new FlowLayout());
 		longerInput.add(longLabel);
-		longerInput.add(LongP);
+		longerInput.add(longP);
 		
 		JPanel parameters = new JPanel();
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));

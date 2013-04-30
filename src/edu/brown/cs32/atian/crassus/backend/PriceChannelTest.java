@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,29 +18,29 @@ public class PriceChannelTest {
 	    //        double close, int volume, double adjustedClose)
 		
 		List<StockTimeFrameData> data = new ArrayList<>();
-		data.add(new StockTimeFrameData("a", 0, 1, 3, 88.71, 0, 0)); 
-		data.add(new StockTimeFrameData("b", 0, 2, 32, 89.05, 0, 0)); 
-		data.add(new StockTimeFrameData("c", 0, 3, 5, 89.24, 0, 0)); 
-		data.add(new StockTimeFrameData("d", 0, 4, 2, 89.39, 0, 0));	
-		data.add(new StockTimeFrameData("e", 0, 5, 56, 89.51, 0, 0)); 
-		data.add(new StockTimeFrameData("f", 0, 6, 4, 89.69, 0, 0)); 
-		data.add(new StockTimeFrameData("g", 0, 7, 1, 89.75, 0, 0)); 	
-		data.add(new StockTimeFrameData("h", 0, 8, 1, 89.91, 0, 0)); 
-		data.add(new StockTimeFrameData("i", 0, 9, 1, 90.08, 0, 0)); 
-		data.add(new StockTimeFrameData("j", 0, 10, 6, 90.38, 0, 0)); 
-		data.add(new StockTimeFrameData("k", 0, 15, 4, 90.66, 0, 0)); 
-		data.add(new StockTimeFrameData("l", 0, 52, 36, 90.86, 0, 0)); 
-		data.add(new StockTimeFrameData("m", 0, 8, 3, 90.88, 0, 0)); 
-		data.add(new StockTimeFrameData("n", 0, 2, 2, 90.91, 0, 0)); 
-		data.add(new StockTimeFrameData("o", 0, 92, 5, 90.99, 0, 0)); 
-		data.add(new StockTimeFrameData("p", 0, 3, 1, 91.15, 0, 0));
-		data.add(new StockTimeFrameData("q", 0, 2, 6, 91.19, 0, 0)); 
-		data.add(new StockTimeFrameData("r", 0, 5, 1, 91.12, 0, 0)); 
-		data.add(new StockTimeFrameData("s", 0, 99, 9, 91.17, 0, 0)); 
-		data.add(new StockTimeFrameData("t", 0, 1, 1, 91.25, 0, 0)); 
-		data.add(new StockTimeFrameData("u", 0, 673, 0.5, 91.24, 0, 0)); // 0
-		data.add(new StockTimeFrameData("v", 0, 6, 0.2, 91.17, 0, 0)); 
-		data.add(new StockTimeFrameData("x", 0, 2, 2, 91.05, 0, 0)); 
+		data.add(new StockTimeFrameData("a", 0, 1, 3, 88.71, 0, 0, false)); 
+		data.add(new StockTimeFrameData("b", 0, 2, 32, 89.05, 0, 0, false)); 
+		data.add(new StockTimeFrameData("c", 0, 3, 5, 89.24, 0, 0, false)); 
+		data.add(new StockTimeFrameData("d", 0, 4, 2, 89.39, 0, 0, false));	
+		data.add(new StockTimeFrameData("e", 0, 5, 56, 89.51, 0, 0, false)); 
+		data.add(new StockTimeFrameData("f", 0, 6, 4, 89.69, 0, 0, false)); 
+		data.add(new StockTimeFrameData("g", 0, 7, 1, 89.75, 0, 0, false)); 	
+		data.add(new StockTimeFrameData("h", 0, 8, 1, 89.91, 0, 0, false)); 
+		data.add(new StockTimeFrameData("i", 0, 9, 1, 90.08, 0, 0, false)); 
+		data.add(new StockTimeFrameData("j", 0, 10, 6, 90.38, 0, 0, false)); 
+		data.add(new StockTimeFrameData("k", 0, 15, 4, 90.66, 0, 0, false)); 
+		data.add(new StockTimeFrameData("l", 0, 52, 36, 90.86, 0, 0, false)); 
+		data.add(new StockTimeFrameData("m", 0, 8, 3, 90.88, 0, 0, false)); 
+		data.add(new StockTimeFrameData("n", 0, 2, 2, 90.91, 0, 0, false)); 
+		data.add(new StockTimeFrameData("o", 0, 92, 5, 90.99, 0, 0, false)); 
+		data.add(new StockTimeFrameData("p", 0, 3, 1, 91.15, 0, 0, false));
+		data.add(new StockTimeFrameData("q", 0, 2, 6, 91.19, 0, 0, false)); 
+		data.add(new StockTimeFrameData("r", 0, 5, 1, 91.12, 0, 0, false)); 
+		data.add(new StockTimeFrameData("s", 0, 99, 9, 91.17, 0, 0, false)); 
+		data.add(new StockTimeFrameData("t", 0, 1, 1, 91.25, 0, 0, false)); 
+		data.add(new StockTimeFrameData("u", 0, 673, 0.5, 91.24, 0, 0, false)); // 0
+		data.add(new StockTimeFrameData("v", 0, 6, 0.2, 91.17, 0, 0, false)); 
+		data.add(new StockTimeFrameData("x", 0, 2, 2, 91.05, 0, 0, false)); 
 		pc = new PriceChannel(data, 20);
 	}
 

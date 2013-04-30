@@ -172,4 +172,10 @@ public class MACD implements Indicator {
 		this.data = data;
 		updateMACD();
 	}
+
+	@Override
+	public StockEventType isTriggered() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

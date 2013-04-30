@@ -1,7 +1,6 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import java.util.*;
-import org.jfree.data.xy.*;
 
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
@@ -156,5 +155,11 @@ public class BollingerBands implements Indicator {
 	public void refresh(List<StockTimeFrameData> data) {
 		this.data = data;
 		updateBollingerBands();
+	}
+
+	@Override
+	public StockEventType isTriggered() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

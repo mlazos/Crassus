@@ -136,4 +136,10 @@ public class RSI implements Indicator {
 		this.data = data;
 		updateRSI();
 	}
+
+	@Override
+	public StockEventType isTriggered() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

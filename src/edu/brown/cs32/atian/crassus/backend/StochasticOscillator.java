@@ -135,4 +135,10 @@ public class StochasticOscillator implements Indicator {
 		this.data = data;
 		updateStochasticOscillator();
 	}
+
+	@Override
+	public StockEventType isTriggered() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
