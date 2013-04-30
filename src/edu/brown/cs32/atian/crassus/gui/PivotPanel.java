@@ -3,11 +3,14 @@ package edu.brown.cs32.atian.crassus.gui;
 import java.awt.Checkbox;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -47,6 +50,7 @@ public class PivotPanel extends JPanel {
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
 		JButton ok = new JButton("Ok");
+		ok.addActionListener(new OkListener());
 		JButton test = new JButton("Test");
 		JButton cancel = new JButton("Cancel");
 		buttons.add(ok);
@@ -60,12 +64,18 @@ public class PivotPanel extends JPanel {
 
 		
 	}
-	/*
+	
 	class OkListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			JOptionPane.showMessageDialog(null, "Please");
+		}
 		
 	}
-	
+	/*
 	class TestListener implements ActionListener
 	{
 		

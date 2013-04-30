@@ -15,22 +15,23 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.time.TimeSeriesCollection;
 import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
 
 
 public class PlotWrapper implements StockPlot 
 {
 	private String stockName;
-	private XYSeriesCollection series = new XYSeriesCollection();
-	private XYSeriesCollection rsSeries = new XYSeriesCollection();
+	private TimeSeriesCollection series = new TimeSeriesCollection();
+	private TimeSeriesCollection rsSeries = new TimeSeriesCollection();
 	private List<Color> seriesColors = new ArrayList<Color>();
 	private List<Color> rsSeriesColors = new ArrayList<Color>();
 	private boolean isRsOn = false;
 	private boolean isRsOnSameChart = false;
 	private boolean primaryChartGenerated = false;
 	private boolean rsChartGenerated = false;
+	private String xAxisTitle = "X";
+	private String yAxisTitle = "Y";
 	private JFreeChart primaryChart;
 	private JFreeChart rsChart;
 	
@@ -87,7 +88,7 @@ public class PlotWrapper implements StockPlot
 			List<Color> chartColors = new ArrayList<Color>(seriesColors);
 			chartColors.addAll(rsSeriesColors);
 			
-			XYSeriesCollection chartSeries = new XYSeriesCollection();
+			TimeSeriesCollection chartSeries = new TimeSeriesCollection();
 			
 			//fill chartSeries with all neccessary series
 			for(int i = 0; i < series.getSeriesCount(); i++)
@@ -150,9 +151,9 @@ public class PlotWrapper implements StockPlot
 		}
 	}
 	
-	private JFreeChart generateChart(String title, XYSeriesCollection series, List<Color> colors)
+	private JFreeChart generateChart(String title, TimeSeriesCollection series, List<Color> colors)
 	{
-		JFreeChart chart = ChartFactory.createXYLineChart(title, "X", "Y", series, PlotOrientation.VERTICAL, false, false, false);
+		JFreeChart chart = ChartFactory.createXYLineChart(title, xAxisTitle, yAxisTitle, series, PlotOrientation.VERTICAL, false, false, false);
 		XYPlot plot  = (XYPlot)chart.getPlot();
 		XYItemRenderer ren = plot.getRenderer();
 		
@@ -164,12 +165,19 @@ public class PlotWrapper implements StockPlot
 		return chart;
 	}
 	
+	public void setAxesTitles(String xAxisTitle, String yAxisTitle)
+	{
+		this.xAxisTitle = xAxisTitle;
+		this.yAxisTitle = yAxisTitle;
+	}
+	
+	/*
 	public static void main(String[] args)
 	{
 		PlotWrapper pw = new PlotWrapper("Mike");
 		
-		XYSeries series1 = new XYSeries(Math.random());
-		XYSeries series2 = new XYSeries(Math.random());
+		TimeSeries series1 = new TimeSeries(Math.random());
+		TimeSeries series2 = new TimeSeries(Math.random());
 		
 		for(int i = 0; i < 100; i++)
 		{
@@ -213,7 +221,7 @@ public class PlotWrapper implements StockPlot
 	}
 
 	
-	
+	*/
 	
 
 }

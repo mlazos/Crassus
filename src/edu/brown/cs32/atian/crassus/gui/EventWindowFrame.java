@@ -73,9 +73,10 @@ public class EventWindowFrame implements EventWindow {
 			Dimension panelDim = newPanel.getSize();
 			frame.remove(currentPanel);
 			currentPanel = newPanel;
+			frame.setTitle(newPanel.toString());
 			frame.add(currentPanel, BorderLayout.CENTER);
-			frame.setSize(325, 60 + panelDim.height);
-			frame.setMinimumSize(new Dimension(325, 60 + panelDim.height));
+			frame.setSize(330, 70 + panelDim.height);
+			frame.setMinimumSize(new Dimension(330, 70 + panelDim.height));
 			frame.pack();
 			frame.setVisible(true);
 			
