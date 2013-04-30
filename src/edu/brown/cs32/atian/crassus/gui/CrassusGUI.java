@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 
 /**
@@ -20,6 +21,12 @@ import edu.brown.cs32.atian.crassus.backend.StockList;
  */
 public class CrassusGUI implements GUI {
 	
+	public class CompoundChangeStockListener implements CrassusChangeStockListener {
+		@Override public void changeToStock(Stock stock) {
+			plotPane.changeToStock(stock);
+		}
+	}
+
 	private JFrame frame;
 	
 	private CrassusPlotPane plotPane;
@@ -34,6 +41,7 @@ public class CrassusGUI implements GUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		stockBox = new CrassusStockTablePane(frame,stocks);
+		stockBox.setChangeStockListener(new CompoundChangeStockListener());
 
 		eventBox = new CrassusEventTablePane(frame);
 		
@@ -67,6 +75,7 @@ public class CrassusGUI implements GUI {
 	@Override
 	public void update() {
 		stockBox.refresh();
+		plotPane.refresh();
 	}
 
 }

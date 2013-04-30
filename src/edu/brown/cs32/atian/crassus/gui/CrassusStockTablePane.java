@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -19,6 +21,13 @@ import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 
 public class CrassusStockTablePane extends JPanel {
+
+	public class ChangeStockListenerForwarder implements ListSelectionListener {
+		@Override public void valueChanged(ListSelectionEvent e) {
+			if(_listener!=null)
+				_listener.changeToStock(model.getStock(e.getFirstIndex()));
+		}
+	}
 
 	public class NewTickerListener implements TickerDialogCloseListener {
 		@Override public void tickerDialogClosedWithTicker(String symbol) {
@@ -45,6 +54,7 @@ public class CrassusStockTablePane extends JPanel {
 	private JFrame _frame;
 	private JTable table;
 	private CrassusStockTableModel model;
+	private CrassusChangeStockListener _listener;
 	
 	public CrassusStockTablePane(JFrame frame, StockList stocks){
 		_frame = frame;
@@ -83,6 +93,8 @@ public class CrassusStockTablePane extends JPanel {
 			}
 		}
 		
+		table.getSelectionModel().addListSelectionListener(new ChangeStockListenerForwarder());
+		
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
@@ -120,6 +132,10 @@ public class CrassusStockTablePane extends JPanel {
 		buttonAndLine.add(buttonHolder);
 		
 		this.add(buttonAndLine, BorderLayout.SOUTH);
+	}
+	
+	public void setChangeStockListener(CrassusChangeStockListener listener){
+		_listener = listener;
 	}
 
 	public void refresh() {

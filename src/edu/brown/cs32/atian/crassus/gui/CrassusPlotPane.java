@@ -13,9 +13,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+
 public class CrassusPlotPane extends JPanel {
 
 	CrassusImageDisplayer imageDisplayer;
+	Stock stock;
 	
 	public CrassusPlotPane(){
 		this.setBackground(Color.WHITE);
@@ -27,18 +30,24 @@ public class CrassusPlotPane extends JPanel {
 						BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)),
 				BorderFactory.createEmptyBorder(5,5,5,5)));
 		
-		BufferedImage image = null;
-		try{
-			image = ImageIO.read(new File("chart.png"));
-		}
-		catch(IOException e){
-			System.out.println("sample image failed");
-		}
-		
 		imageDisplayer = new CrassusImageDisplayer();
-		imageDisplayer.setImage(image);
 		this.add(imageDisplayer, BorderLayout.CENTER);
-		//TODO make this class use images from actual stock data
+	}
+	
+	public void changeToStock(Stock stock){
+		System.out.println("stock-change called");
+		this.stock = stock;
+		refresh();
+	}
+	
+	public void refresh(){
+		if(stock!=null){
+			StockPlot plot = new PlotWrapper(stock.getCompanyName());
+			stock.addToPlot(plot);
+			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
+			imageDisplayer.setImage(image);
+			imageDisplayer.revalidate();
+		}
 	}
 	
 }

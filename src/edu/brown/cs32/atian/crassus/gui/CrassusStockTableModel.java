@@ -81,8 +81,11 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	}
 
 	public void refresh() {
-		//System.out.println("refresh called");
 		this.fireTableRowsUpdated(0,_stocks.getStockList().size()-1);
+	}
+
+	public Stock getStock(int index) {
+		return _stocks.getStockList().get(index);
 	}
 
 }
