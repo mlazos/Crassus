@@ -15,6 +15,9 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.Minute;
+import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
 
@@ -153,7 +156,7 @@ public class PlotWrapper implements StockPlot
 	
 	private JFreeChart generateChart(String title, TimeSeriesCollection series, List<Color> colors)
 	{
-		JFreeChart chart = ChartFactory.createXYLineChart(title, xAxisTitle, yAxisTitle, series, PlotOrientation.VERTICAL, false, false, false);
+		JFreeChart chart = ChartFactory.createTimeSeriesChart(title, xAxisTitle, yAxisTitle, series, false, false, false);
 		XYPlot plot  = (XYPlot)chart.getPlot();
 		XYItemRenderer ren = plot.getRenderer();
 		
@@ -171,7 +174,7 @@ public class PlotWrapper implements StockPlot
 		this.yAxisTitle = yAxisTitle;
 	}
 	
-	/*
+	
 	public static void main(String[] args)
 	{
 		PlotWrapper pw = new PlotWrapper("Mike");
@@ -181,12 +184,12 @@ public class PlotWrapper implements StockPlot
 		
 		for(int i = 0; i < 100; i++)
 		{
-			series1.add(Math.random()*1000.0, Math.random()*1000.0);
+			series1.addOrUpdate(new Day((int)(Math.random()*20+1), (int)(Math.random()*11 + 1),2013), Math.random()*1000.0);
 		}
 		
 		for(int i = 0; i < 100; i++)
 		{
-			series2.add(Math.random()*1000.0, Math.random()*1000.0);
+			series2.addOrUpdate(new Day((int)(Math.random()*20+1), (int)(Math.random()*11 + 1),2013), Math.random()*1000.0);
 		}
 		
 		SeriesWrapper s1 = new SeriesWrapper(series1, Color.RED);
@@ -207,7 +210,7 @@ public class PlotWrapper implements StockPlot
 	    
 	    System.out.println(end - start);
 		
-	    File outputfile = new File("chart" + ".png");
+	    File outputfile = new File("chart2" + ".png");
 	    try
 	    {	
 
@@ -221,7 +224,7 @@ public class PlotWrapper implements StockPlot
 	}
 
 	
-	*/
+	
 	
 
 }

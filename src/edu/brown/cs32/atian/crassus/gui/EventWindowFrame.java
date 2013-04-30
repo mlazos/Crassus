@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -16,13 +17,15 @@ public class EventWindowFrame implements EventWindow {
 
 	private JPanel currentPanel;
 	
-	private JFrame frame;
+	private JDialog frame;
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) 
 	{
-		EventWindowFrame w = new EventWindowFrame();
+		JFrame p = new JFrame("this");
+		p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		EventWindowFrame w = new EventWindowFrame(p);
 		w.display();
 	}
 	
@@ -32,7 +35,7 @@ public class EventWindowFrame implements EventWindow {
 		frame.setVisible(true);
 	}
 
-	public EventWindowFrame()
+	public EventWindowFrame(JFrame parent)
 	{
 		currentPanel = new BolingerBandPanel();
 		
@@ -46,7 +49,7 @@ public class EventWindowFrame implements EventWindow {
 		dropDownPanel.add(selectEvent);
 		dropDownPanel.setBorder(new EmptyBorder(20,20,20,20));
 		
-		frame = new JFrame("Bolinger Band Event");
+		frame = new JDialog(parent,"Bolinger Band Event");
 		frame.setResizable(false);
 		frame.setSize(325, 450);
 		frame.setMinimumSize(new Dimension(325, 450));
@@ -54,7 +57,7 @@ public class EventWindowFrame implements EventWindow {
 		frame.setLayout(new BorderLayout());
 		frame.add(dropDownPanel, BorderLayout.NORTH);
 		frame.add(currentPanel, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		
 		selectEvent.setSelectedIndex(0); 
 	}
@@ -89,5 +92,4 @@ public class EventWindowFrame implements EventWindow {
 	{
 		
 	}
-
 }
