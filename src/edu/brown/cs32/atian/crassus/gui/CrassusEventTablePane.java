@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -21,7 +23,25 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import edu.brown.cs32.atian.crassus.backend.Indicator;
+
 public class CrassusEventTablePane extends JPanel {
+
+	public class NewIndicatorListener implements WindowCloseListener {
+		@Override public void windowClosedWithEvent(Indicator ind) {
+			model.addIndicator(ind);
+		}
+		@Override public void windowClosedWithCancel() {}
+	}
+
+	public class NewEventListener implements ActionListener {
+		@Override public void actionPerformed(ActionEvent arg0) {
+			EventWindow eventWindow = new EventWindowFrame();
+			eventWindow.setWindowCloseListener(new NewIndicatorListener());
+		}
+	}
+	
+	CrassusEventTableModel model;
 
 	public CrassusEventTablePane(){
 		this.setBackground(Color.WHITE);
@@ -31,7 +51,7 @@ public class CrassusEventTablePane extends JPanel {
 		table.setBackground(Color.WHITE);
 		table.setTableHeader(null);//Disable table header
 		
-		CrassusEventTableModel model = new CrassusEventTableModel();
+		model = new CrassusEventTableModel();
 		table.setModel(model);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
@@ -82,6 +102,8 @@ public class CrassusEventTablePane extends JPanel {
 		buttonHolder.setLayout(new FlowLayout());
 		buttonHolder.add(addButton);
 		buttonHolder.add(removeButton);
+		
+		addButton.addActionListener(new NewEventListener());
 		
 		JPanel buttonAndLine = new JPanel();
 		buttonAndLine.setLayout(new BoxLayout(buttonAndLine,BoxLayout.Y_AXIS));

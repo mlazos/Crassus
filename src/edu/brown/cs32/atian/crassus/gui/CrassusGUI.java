@@ -3,13 +3,16 @@
  */
 package edu.brown.cs32.atian.crassus.gui;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 
-import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
-import javax.swing.plaf.ColorUIResource;
+
+import edu.brown.cs32.atian.crassus.backend.StockList;
 
 /**
  * @author Matthew
@@ -17,40 +20,22 @@ import javax.swing.plaf.ColorUIResource;
  */
 public class CrassusGUI implements GUI {
 	
-	/*
-	 * for testing purposes only
-	 */
-	public static void main(String[] args){
-		UIManager.getDefaults().put("Button.background",new Color(0xFFFFFF));//make JButtons less ugly
-		//UIManager.getDefaults().put("ScrollBar.thumb", new Color(0xFFFFFF));
-		//UIManager.getDefaults().put("Slider.thumb",new Color(0xFFFFFF));
-//		UIManager.put("ScrollBar.thumbHighlight", new ColorUIResource(0,0,0));
-//		UIManager.put("ScrollBar.thumbDarkShadow", new ColorUIResource(0,0,0));
-//		UIManager.put("ScrollBar.highlight", new ColorUIResource(0,0,0));
-//		UIManager.put("ScrollBar.trackHighlight", new ColorUIResource(0,0,0));
-		GUI gui = new CrassusGUI();
-		gui.launch();
-	}
-	
 	private JFrame frame;
 	
-	private JScrollPane stockListScrollPane;
-	
-	private JScrollPane eventListScrollPane;
-	
 	private CrassusPlotPane plotPane;
+	
+	CrassusStockTablePane stockBox;
+	CrassusEventTablePane eventBox;
 
-	public CrassusGUI() {
+	public CrassusGUI(StockList stocks) {
 		
 		frame = new JFrame("Crassus");
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		CrassusStockTablePane stockBox = new CrassusStockTablePane(frame);
+		stockBox = new CrassusStockTablePane(frame,stocks);
 
-		CrassusEventTablePane eventBox = new CrassusEventTablePane();
-		
-		//frame.add(eventBox, BorderLayout.EAST);
+		eventBox = new CrassusEventTablePane();
 		
 		//make plot pane
 		plotPane = new CrassusPlotPane();
@@ -81,8 +66,7 @@ public class CrassusGUI implements GUI {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		stockBox.refresh();
 	}
 
 }

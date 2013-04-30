@@ -1,10 +1,17 @@
 package edu.brown.cs32.atian.crassus.gui;
 
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
+
+import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.Stock;
 
 public class CrassusEventTableModel extends AbstractTableModel {
 	
 	private boolean[][] tempBooleanHolder = new boolean[20][2];
+	
+	private Stock stock;
 	
 	public CrassusEventTableModel(){
 		
@@ -68,6 +75,10 @@ public class CrassusEventTableModel extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		tempBooleanHolder[row][col] = ((Boolean)value).booleanValue();
+	}
+
+	public void addIndicator(Indicator ind) {
+		stock.addEvent(ind);
 	}
 
 }

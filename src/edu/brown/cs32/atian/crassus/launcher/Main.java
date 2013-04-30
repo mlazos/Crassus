@@ -1,0 +1,43 @@
+package edu.brown.cs32.atian.crassus.launcher;
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
+import javax.swing.UIManager;
+
+import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.backend.StockListImpl;
+import edu.brown.cs32.atian.crassus.gui.CrassusGUI;
+import edu.brown.cs32.atian.crassus.gui.GUI;
+
+public class Main {
+
+	public static class TimerListener implements ActionListener {
+		@Override public void actionPerformed(ActionEvent arg0) {
+			stocks.refreshAll();
+			gui.update();
+		}
+	}
+	
+	private static GUI gui;
+	private static StockList stocks;
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+
+		stocks = new StockListImpl();
+		
+		UIManager.getDefaults().put("Button.background",new Color(0xFFFFFF));//make JButtons less ugly
+		gui = new CrassusGUI(stocks);
+		gui.launch();
+	
+		Timer timer = new Timer(3000, new TimerListener());
+		timer.setRepeats(true);
+		timer.start();
+	}
+
+}

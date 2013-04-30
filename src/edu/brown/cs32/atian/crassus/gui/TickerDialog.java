@@ -30,6 +30,7 @@ public class TickerDialog extends JDialog {
 	public class OkListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			setVisible(false);
 			if(listener!=null)
 				listener.tickerDialogClosedWithTicker(text.getText());
 			dispose();

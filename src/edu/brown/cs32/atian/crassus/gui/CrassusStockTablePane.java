@@ -16,24 +16,20 @@ import javax.swing.table.TableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
+import edu.brown.cs32.atian.crassus.backend.StockList;
 
 public class CrassusStockTablePane extends JPanel {
 
 	public class NewTickerListener implements TickerDialogCloseListener {
-
-		@Override
-		public void tickerDialogClosedWithTicker(String symbol) {
+		@Override public void tickerDialogClosedWithTicker(String symbol) {
 			Stock stock = new StockImpl(symbol);
 			stock.refresh();
 			model.addStock(stock);
 		}
-
 	}
 
 	public class NewStockListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		@Override public void actionPerformed(ActionEvent arg0) {
 			TickerDialog tickerFrame = new TickerDialog(_frame);
 			tickerFrame.setTickerDialogCloseListener(new NewTickerListener());
 			tickerFrame.setVisible(true);
@@ -41,9 +37,7 @@ public class CrassusStockTablePane extends JPanel {
 	}
 	
 	public class RemoveStockListener implements ActionListener {
-		
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		@Override public void actionPerformed(ActionEvent arg0) {
 			model.removeStock(table.getSelectedRow());
 		}
 	}
@@ -52,7 +46,7 @@ public class CrassusStockTablePane extends JPanel {
 	private JTable table;
 	private CrassusStockTableModel model;
 	
-	public CrassusStockTablePane(JFrame frame){
+	public CrassusStockTablePane(JFrame frame, StockList stocks){
 		_frame = frame;
 		
 		this.setBackground(Color.WHITE);
@@ -64,7 +58,7 @@ public class CrassusStockTablePane extends JPanel {
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setFont(new Font("SansSerif",Font.BOLD,12));
 		
-		model = new CrassusStockTableModel();
+		model = new CrassusStockTableModel(stocks);
 		table.setModel(model);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
@@ -72,9 +66,6 @@ public class CrassusStockTablePane extends JPanel {
 		
 		for(int i=0; i<5; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
-//			column.setPreferredWidth(40);
-//			column.setMaxWidth(40);
-//			column.setMinWidth(40);
 			
 			column.setPreferredWidth(50);
 			column.setMaxWidth(50);
@@ -129,6 +120,10 @@ public class CrassusStockTablePane extends JPanel {
 		buttonAndLine.add(buttonHolder);
 		
 		this.add(buttonAndLine, BorderLayout.SOUTH);
+	}
+
+	public void refresh() {
+		model.refresh();
 	}
 	
 }

@@ -11,10 +11,10 @@ import edu.brown.cs32.atian.crassus.backend.StockRealTimeData;
 
 public class CrassusStockTableModel extends AbstractTableModel {
 	
-	private StockList stocks = new StockListImpl();
+	private StockList _stocks;
 	
-	public CrassusStockTableModel(){
-		
+	public CrassusStockTableModel(StockList stocks){
+		_stocks = stocks;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class CrassusStockTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return stocks.getStockList().size();
+		return _stocks.getStockList().size();
 	}
 	
 	private String format(double in){
@@ -53,30 +53,36 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	public Object getValueAt(int row, int col) {
 		switch(col){
 		case 0://ticker
-			return stocks.getStockList().get(row).getTicker();
+			return _stocks.getStockList().get(row).getTicker();
 		case 1://price
-			return format(stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice());
+			//System.out.println("price of "+_stocks.getStockList().get(row).getTicker()+": "+_stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice());
+			return format(_stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice());
 		case 2://open
-			return format(stocks.getStockList().get(row).getStockRealTimeData().getOpenPrice());
+			return format(_stocks.getStockList().get(row).getStockRealTimeData().getOpenPrice());
 		case 3://high
-			return format(stocks.getStockList().get(row).getWeek52High());
+			return format(_stocks.getStockList().get(row).getWeek52High());
 		case 4://low
-			return format(stocks.getStockList().get(row).getWeek52Low());
+			return format(_stocks.getStockList().get(row).getWeek52Low());
 		default:
 			return "ERR";
 		}
 	}
 
 	public void addStock(Stock stock) {
-		stocks.add(stock);
-		this.fireTableRowsInserted(stocks.getStockList().size()-1, stocks.getStockList().size()-1);
+		_stocks.add(stock);
+		this.fireTableRowsInserted(_stocks.getStockList().size()-1, _stocks.getStockList().size()-1);
 	}
 
 	public void removeStock(int i) {
 		if(i!=-1){
-			stocks.getStockList().remove(i);
+			_stocks.getStockList().remove(i);
 			this.fireTableRowsDeleted(i,i);
 		}
+	}
+
+	public void refresh() {
+		//System.out.println("refresh called");
+		this.fireTableRowsUpdated(0,_stocks.getStockList().size()-1);
 	}
 
 }
