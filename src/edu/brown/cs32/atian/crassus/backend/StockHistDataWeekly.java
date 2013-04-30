@@ -70,7 +70,8 @@ public class StockHistDataWeekly implements StockHistData {
       					 Double.parseDouble(splitted[3]), 							// low
       					 Double.parseDouble(splitted[4]),							// close
       					 Integer.parseInt(splitted[5]), 							// volume
-      					 Double.parseDouble(splitted[6]));							// adjusted close
+      					 Double.parseDouble(splitted[6]),
+                                         true);							// adjusted close
 
                 _histData.add(0, newTFData);   // latest last
             }

@@ -4,6 +4,7 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
+import edu.brown.cs32.atian.crassus.gui.StockPlot;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,10 @@ public interface Stock {
 
     String getCompanyName();
     
-    void setCurrFreq(String currFreq);   // "weekly", "daily", or "monthly" 
+    void setCurrFreq(String currFreq);   // "weekly", "daily", or "monthly"  
  
-    // getStockHistData and  getStockRealTimeData are now combined into a single method getStockPriceData()
+    StockRealTimeData getStockRealTimeData();
+    
     List<StockTimeFrameData> getStockPriceData(String freq);
     
     ArrayList<Indicator> getEventList();
@@ -36,4 +38,6 @@ public interface Stock {
     double getWeek52High();    
     
     void refresh();
+    
+    void addToPlot(StockPlot stockPlot);    
 }

@@ -73,7 +73,8 @@ public class StockHistDataDaily implements StockHistData {
                         Double.parseDouble(splitted[3]),   //Low
                         Double.parseDouble(splitted[4]),   //Close	
                         Integer.parseInt(splitted[5]),     //Volume
-                        Double.parseDouble(splitted[6]));  //Adjusted Close
+                        Double.parseDouble(splitted[6]),
+                        true);  //Adjusted Close
                 _histData.add(0, newTFData);   // from the earliest to the latest
             }
 

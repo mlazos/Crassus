@@ -4,6 +4,8 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
+import edu.brown.cs32.atian.crassus.gui.PlotWrapper;
+import edu.brown.cs32.atian.crassus.gui.StockPlot;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -63,21 +65,26 @@ public class StockImplTest {
         List<StockTimeFrameData> stockPriceData = s.getStockPriceData("daily");
         if(stockPriceData.size() > 0) {
             // print the first timeStamp
-            System.out.println(stockPriceData.get(0).getTime());            
+            System.out.println(stockPriceData.get(0).getTime());       
+            System.out.println(stockPriceData.get(0).getTimeInNumber());    
             // print the second timeStamp
             if(stockPriceData.size() > 1) {
                 System.out.println(stockPriceData.get(1).getTime());
+                System.out.println(stockPriceData.get(1).getTimeInNumber());                   
             }
             // print the third timeStamp
             if(stockPriceData.size() > 2) {
                 System.out.println(stockPriceData.get(2).getTime());
+                System.out.println(stockPriceData.get(2).getTimeInNumber());                   
             }            
             // print the fourth timeStamp
             if(stockPriceData.size() > 3) {
                 System.out.println(stockPriceData.get(3).getTime());
+                System.out.println(stockPriceData.get(3).getTimeInNumber());                   
             }             
             // print the last timeStamp
             System.out.println(stockPriceData.get(stockPriceData.size()-1).getTime());
+            System.out.println(stockPriceData.get(stockPriceData.size()-1).getTimeInNumber());        
         }
     }
     
@@ -112,7 +119,36 @@ public class StockImplTest {
         }
     }
     
-    
+
+    /**
+     * Test of getCompanyName method, of class StockImpl.
+     */
+    @Test
+    public void testGetMinutelyStockData() {
+        System.out.println("get minutely stockData");
+        
+        Stock s = new StockImpl("GOOG");
+        s.initialize();
+        List<StockTimeFrameData> stockPriceData = s.getStockPriceData("minutely");
+        if(stockPriceData.size() > 0) {
+            // print the first timeStamp
+            System.out.println(stockPriceData.get(0).getTime());            
+            // print the second timeStamp
+            if(stockPriceData.size() > 1) {
+                System.out.println(stockPriceData.get(1).getTime());
+            }
+            // print the third timeStamp
+            if(stockPriceData.size() > 2) {
+                System.out.println(stockPriceData.get(2).getTime());
+            }     
+            // print the fourth timeStamp
+            if(stockPriceData.size() > 3) {
+                System.out.println(stockPriceData.get(3).getTime());
+            }            
+            // print the last timeStamp
+            System.out.println(stockPriceData.get(stockPriceData.size()-1).getTime());
+        }
+    }    
 
     /**
      * Test of getCompanyName method, of class StockImpl.
@@ -121,7 +157,7 @@ public class StockImplTest {
     public void testGetMonthlyStockData() {
         System.out.println("get monthly tockData");
         
-        Stock s = new StockImpl("MSFT");
+        Stock s = new StockImpl("GOOG");
         s.initialize();
         List<StockTimeFrameData> stockPriceData = s.getStockPriceData("monthly");
         if(stockPriceData.size() > 0) {
@@ -143,4 +179,30 @@ public class StockImplTest {
             System.out.println(stockPriceData.get(stockPriceData.size()-1).getTime());
         }
     }    
+    
+
+    /**
+     * Test of getCompanyName method, of class StockImpl.
+     */
+    @Test
+    public void testGetPlotData() {
+        System.out.println("get stock price Plot Data");
+        
+        Stock s = new StockImpl("MSFT"); 
+        s.initialize();        
+        s.setCurrFreq("daily");
+        
+        StockPlot pw = new PlotWrapper("MSFT");        
+        s.addToPlot(pw);         
+        
+        // after 2 minutes
+        s.refresh();
+        
+        // clear series in pw here
+        
+        // re-add plot
+        s.addToPlot(pw);       
+
+        
+    } 
 }

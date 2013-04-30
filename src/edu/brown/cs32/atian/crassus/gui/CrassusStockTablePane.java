@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -12,30 +14,71 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockImpl;
+
 public class CrassusStockTablePane extends JPanel {
 
+	public class NewTickerListener implements TickerDialogCloseListener {
+
+		@Override
+		public void tickerDialogClosedWithTicker(String symbol) {
+			Stock stock = new StockImpl(symbol);
+			stock.refresh();
+			model.addStock(stock);
+		}
+
+	}
+
+	public class NewStockListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			TickerDialog tickerFrame = new TickerDialog(_frame);
+			tickerFrame.setTickerDialogCloseListener(new NewTickerListener());
+			tickerFrame.setVisible(true);
+		}
+	}
 	
-	public CrassusStockTablePane(){
+	public class RemoveStockListener implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			model.removeStock(table.getSelectedRow());
+		}
+	}
+
+	private JFrame _frame;
+	private JTable table;
+	private CrassusStockTableModel model;
+	
+	public CrassusStockTablePane(JFrame frame){
+		_frame = frame;
+		
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		
-		JTable table = new JTable();
+		table = new JTable();
 		table.setBackground(Color.WHITE);
 		table.getTableHeader().setBackground(Color.WHITE);
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setFont(new Font("SansSerif",Font.BOLD,12));
 		
-		CrassusStockTableModel model = new CrassusStockTableModel();
+		model = new CrassusStockTableModel();
 		table.setModel(model);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
 		table.setFillsViewportHeight(true);//makes extra space below table entries white
 		
-		for(int i=0; i<4; i++){
+		for(int i=0; i<5; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
-			column.setPreferredWidth(40);
-			column.setMaxWidth(40);
-			column.setMinWidth(40);
+//			column.setPreferredWidth(40);
+//			column.setMaxWidth(40);
+//			column.setMinWidth(40);
+			
+			column.setPreferredWidth(50);
+			column.setMaxWidth(50);
+			column.setMinWidth(50);
 			
 			if(i==0){
 				DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
@@ -54,7 +97,7 @@ public class CrassusStockTablePane extends JPanel {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(200,250));
+		scrollPane.setPreferredSize(new Dimension(290,250));
 		
 		JLabel title = new JLabel("Tickers",JLabel.CENTER);
 		title.setFont(new Font("SansSerif",Font.BOLD,18));
@@ -74,6 +117,9 @@ public class CrassusStockTablePane extends JPanel {
 		buttonHolder.setLayout(new FlowLayout());
 		buttonHolder.add(addButton);
 		buttonHolder.add(removeButton);
+		
+		addButton.addActionListener(new NewStockListener());
+		removeButton.addActionListener(new RemoveStockListener());
 		
 		JPanel buttonAndLine = new JPanel();
 		buttonAndLine.setLayout(new BoxLayout(buttonAndLine,BoxLayout.Y_AXIS));

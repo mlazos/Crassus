@@ -67,9 +67,10 @@ public class StockRealTimeDataImplTest {
 
         StockTimeFrameData lastData = allRealTimeData.get(allRealTimeData.size() - 1);
         tmp = (Long.parseLong(lastData.getTime()));
-        tmp = tmp * 1000;
+        tmp = tmp * 1000;  // to miniseconds
         calendar.setTimeInMillis(tmp);
         timeStamp = calendar.getTime().toString();
+        System.out.println("Latest data timestamp: " +  tmp);
         System.out.println("Latest data timestamp: " +  timeStamp);
     }
 }

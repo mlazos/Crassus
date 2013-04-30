@@ -46,7 +46,7 @@ public class CrassusGUI implements GUI {
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		CrassusStockTablePane stockBox = new CrassusStockTablePane();
+		CrassusStockTablePane stockBox = new CrassusStockTablePane(frame);
 
 		CrassusEventTablePane eventBox = new CrassusEventTablePane();
 		
