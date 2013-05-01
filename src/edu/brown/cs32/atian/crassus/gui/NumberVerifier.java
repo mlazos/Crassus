@@ -5,18 +5,20 @@ import java.util.regex.Pattern;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class NumberVerifier extends InputVerifier {
 
-	private JLabel fieldLabel;
-	private String defaultText;
+	private JComponent parent;
 	
-	public NumberVerifier(JLabel fieldLabel)
+	public NumberVerifier(JComponent parent)
 	{
-		this.fieldLabel = fieldLabel;
-		this.defaultText = fieldLabel.getText();
+		this.parent = parent;
 	}
 	
 	@Override
@@ -25,18 +27,13 @@ public class NumberVerifier extends InputVerifier {
 		JTextField f = (JTextField)input;
 		String fieldText = f.getText();
 		boolean valid = isParsable(fieldText);
+		
 		if(!valid)
 		{
-			f.setBackground(new Color(255,180,180));
-			fieldLabel.setForeground(Color.RED);
-			fieldLabel.setText("[Must be a number]");
+			JOptionPane.showMessageDialog(parent, "Input must be a number.", "Oops!", JOptionPane.ERROR_MESSAGE);
+			f.setText("");
 		}
-		else
-		{
-			f.setBackground(Color.WHITE);
-			fieldLabel.setForeground(Color.BLACK);
-			fieldLabel.setText(defaultText);
-		}
+
 		
 		return valid;
 	}
