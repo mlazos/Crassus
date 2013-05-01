@@ -16,17 +16,21 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+
 public class PivotPanel extends JPanel {
 
 	private WindowCloseListener closeListener;
+	private Stock stock;
 	private JDialog parent;
 	private ButtonGroup radioButtons;
 	
 	
-	public PivotPanel(WindowCloseListener closeListener, JDialog parent)
+	public PivotPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
+		this.stock = stock;
 	
 		
 		//top panel

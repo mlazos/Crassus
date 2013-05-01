@@ -12,18 +12,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+
 public class RSIPanel extends JPanel 
 {
 	
 	private WindowCloseListener closeListener;
+	private Stock stock;
 	private JDialog parent;
 	private JTextField period;
 
-	public RSIPanel(WindowCloseListener closeListener, JDialog parent)
+	public RSIPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		
 		this.closeListener = closeListener;
 		this.parent = parent;
+		this.stock = stock;
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel

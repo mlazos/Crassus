@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockImpl;
 
 public class EventWindowFrame implements EventWindow {
 
@@ -25,7 +27,7 @@ public class EventWindowFrame implements EventWindow {
 	{
 		JFrame p = new JFrame("this");
 		p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		EventWindowFrame w = new EventWindowFrame(p, new WindowCloseListenerStub());
+		EventWindowFrame w = new EventWindowFrame(p, new WindowCloseListenerStub(), new StockImpl(""));
 		w.display();
 	}
 	
@@ -35,7 +37,7 @@ public class EventWindowFrame implements EventWindow {
 		frame.setVisible(true);
 	}
 
-	public EventWindowFrame(JFrame parent, WindowCloseListener closeListener)
+	public EventWindowFrame(JFrame parent, WindowCloseListener closeListener, Stock stock)
 	{
 		frame = new JDialog(parent,"Bolinger Band Event");
 		frame.setResizable(false);
@@ -45,15 +47,15 @@ public class EventWindowFrame implements EventWindow {
 		frame.setLayout(new BorderLayout());
 		
 		this.closeListener = closeListener;
-		currentPanel = new BolingerBandPanel(new WindowCloseListenerStub(), frame);
+		currentPanel = new BolingerBandPanel(new WindowCloseListenerStub(), frame, stock);
 		
 		//add dropdown to main Frame
-		JPanel[] eventList = {new BolingerBandPanel(closeListener, frame), 
-							  new MACDPanel(closeListener, frame), 
-							  new PivotPanel(closeListener, frame), 
-							  new PriceChannelPanel(closeListener, frame), 
-							  new RSIPanel(closeListener, frame), 
-							  new StochOscillPanel(closeListener, frame)};
+		JPanel[] eventList = {new BolingerBandPanel(closeListener, frame, stock), 
+							  new MACDPanel(closeListener, frame, stock), 
+							  new PivotPanel(closeListener, frame, stock), 
+							  new PriceChannelPanel(closeListener, frame, stock), 
+							  new RSIPanel(closeListener, frame, stock), 
+							  new StochOscillPanel(closeListener, frame, stock)};
 		
 		JComboBox<JPanel> selectEvent = new JComboBox<JPanel>(eventList);
 		selectEvent.addActionListener(new WindowChanger());

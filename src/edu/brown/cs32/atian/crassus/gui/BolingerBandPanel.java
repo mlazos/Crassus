@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+
 public class BolingerBandPanel extends JPanel
 {
 
@@ -22,15 +24,17 @@ public class BolingerBandPanel extends JPanel
 	private static final long serialVersionUID = 1L;
 	
 	private WindowCloseListener closeListener;
+	private Stock stock;
 	private JDialog parent;
-	JTextField periods;
-	JTextField bandWidth;
+	private JTextField periods;
+	private JTextField bandWidth;
 	
 	
-	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent)
+	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
+		this.stock = stock;
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
@@ -68,7 +72,7 @@ public class BolingerBandPanel extends JPanel
 		JButton test = new JButton("Test");
 		test.addActionListener(new TestListener());
 		JButton cancel = new JButton("Cancel");
-		cancel.addActionListener(new CancelListener());
+		cancel.addActionListener(new CancelListener(parent));
 		buttons.add(ok);
 		buttons.add(test);
 		buttons.add(cancel);

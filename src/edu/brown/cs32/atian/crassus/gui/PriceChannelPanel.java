@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+
 public class PriceChannelPanel extends JPanel 
 {
 
@@ -21,13 +23,15 @@ public class PriceChannelPanel extends JPanel
 	private static final long serialVersionUID = 1L;
 	
 	private WindowCloseListener closeListener;
+	private Stock stock;
 	private JDialog parent;
 	private JTextField lookBack;
 	
-	public PriceChannelPanel(WindowCloseListener closeListener, JDialog parent)
+	public PriceChannelPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
+		this.stock = stock;
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
