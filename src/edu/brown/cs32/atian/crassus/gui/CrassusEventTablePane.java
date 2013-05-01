@@ -89,7 +89,7 @@ public class CrassusEventTablePane extends JPanel {
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(200,250));
 		
-		JLabel title = new JLabel("Events",JLabel.CENTER);
+		JLabel title = new JLabel("Indicators",JLabel.CENTER);
 		title.setFont(new Font("SansSerif",Font.BOLD,18));
 		this.add(title, BorderLayout.NORTH);
 		
@@ -101,7 +101,10 @@ public class CrassusEventTablePane extends JPanel {
 		
 
 		JButton addButton = new JButton("+");
+		addButton.addActionListener(new NewEventListener());
+		addButton.setToolTipText("add new indicator");
 		JButton removeButton = new JButton("-");
+		removeButton.setToolTipText("remove selected indicator");
 		
 		JPanel buttonHolder = new JPanel();
 		buttonHolder.setBackground(Color.WHITE);
@@ -109,7 +112,6 @@ public class CrassusEventTablePane extends JPanel {
 		buttonHolder.add(addButton);
 		buttonHolder.add(removeButton);
 		
-		addButton.addActionListener(new NewEventListener());
 		
 		JPanel buttonAndLine = new JPanel();
 		buttonAndLine.setLayout(new BoxLayout(buttonAndLine,BoxLayout.Y_AXIS));

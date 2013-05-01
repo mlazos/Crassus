@@ -6,10 +6,13 @@ package edu.brown.cs32.atian.crassus.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
@@ -37,6 +40,7 @@ public class CrassusGUI implements GUI {
 				stockInfoStateNormal = true;
 				frame.revalidate();
 				frame.setVisible(true);
+				frame.repaint();
 			}
 			
 			plotPane.changeToStock(stock);
@@ -88,7 +92,9 @@ public class CrassusGUI implements GUI {
 				BorderFactory.createEmptyBorder(20,20,20,20),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
 		nullStockInfo.setLayout(new BorderLayout());
-		nullStockInfo.add(new JPanel(), BorderLayout.CENTER);
+		JPanel greyPanel = new JPanel();
+		greyPanel.setBackground(new Color(210,210,210));
+		nullStockInfo.add(greyPanel, BorderLayout.CENTER);
 		
 		frame.add(stockBox, BorderLayout.WEST);
 		frame.add(nullStockInfo,BorderLayout.CENTER);
