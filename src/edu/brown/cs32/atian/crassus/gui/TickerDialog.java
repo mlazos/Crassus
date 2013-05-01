@@ -40,8 +40,6 @@ public class TickerDialog extends JDialog {
 	public class CancelListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//if(listener!=null)
-			//	listener.tickerDialogClosedWithCancel();
 			dispose();
 		}
 	}

@@ -23,21 +23,29 @@ public class CrassusGUI implements GUI {
 	
 	public class CompoundChangeStockListener implements CrassusChangeStockListener {
 		@Override public void changeToStock(Stock stock) {
+			System.out.println("change called");
 			if(stock==null && stockInfoStateNormal){
-				frame.getContentPane().remove(stockInfo);
+				System.out.println("replacing with empty pane");
+				frame.remove(stockInfo);
 				frame.add(nullStockInfo,BorderLayout.CENTER);
 				stockInfoStateNormal = false;
+				frame.revalidate();
+				frame.setVisible(true);
+				frame.repaint();
 			}
 			else if(!stockInfoStateNormal){
-				frame.getContentPane().remove(nullStockInfo);
+				System.out.println("replacing with normal pane");
+				frame.remove(nullStockInfo);
 				frame.add(stockInfo,BorderLayout.CENTER);
 				stockInfoStateNormal = true;
+				frame.revalidate();
+				frame.setVisible(true);
 			}
 			
 			plotPane.changeToStock(stock);
 			eventBox.changeToStock(stock);
 			
-			frame.getContentPane().revalidate();
+			//frame.getContentPane().revalidate();
 			//frame.repaint();
 		}
 	}
