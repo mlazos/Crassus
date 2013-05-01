@@ -95,7 +95,7 @@ public class CrassusStockTablePane extends JPanel {
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
 		table.setFillsViewportHeight(true);//makes extra space below table entries white
-		
+		table.setRowHeight(20);
 		for(int i=0; i<5; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
 			column.setPreferredWidth(50);
