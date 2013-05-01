@@ -15,20 +15,13 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import org.jfree.data.time.Day;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
-import org.jfree.data.xy.XYSeries;
 
 /**
  *
@@ -231,62 +224,6 @@ public class StockImpl implements Stock {
     @Override
     public void deleteEvent(Indicator event) {
         _events.remove(event);
-    }
-
-    @Override
-    public double getWeek52Low() {
-        if (_week52Low != null) {
-            return _week52Low;
-        }
-        if ( _weekly.getHistData().size() == 0) {
-             _weekly.Init();
-        }
-        double low = Double.MAX_VALUE;
-        List<StockTimeFrameData> weeklyData = _weekly.getHistData();
-        int end = weeklyData.size();
-        int begin;
-        if (weeklyData.size() < 52) {
-            begin = 0;
-        } else {
-            begin = end - 52;
-        }
-        for (int i = begin; i < end; i++) {
-            double tmp = weeklyData.get(i).getLow();
-            if (tmp < low) {
-                low = tmp;
-            }
-        }
-        _week52Low = low;
-        return _week52Low;
-    }
-
-    @Override
-    public double getWeek52High() {
-        if (_week52High != null) {
-            return _week52High;
-        }
-
-        if ( _weekly.getHistData().size() == 0) {
-             _weekly.Init();
-        }
-        
-        double high = 0.0;
-        List<StockTimeFrameData> weeklyData = _weekly.getHistData();
-        int end = weeklyData.size();
-        int begin;
-        if (weeklyData.size() < 52) {
-            begin = 0;
-        } else {
-            begin = end - 52;
-        }
-        for (int i = begin; i < end; i++) {
-            double tmp = weeklyData.get(i).getLow();
-            if (tmp > high) {
-                high = tmp;
-            }
-        }
-        _week52High = high;
-        return _week52High;
     }
     
     @Override

@@ -30,12 +30,7 @@ public interface Stock {
     ArrayList<Indicator> getEventList();
     void removeEventList();
     void addEvent(Indicator event);
-    void deleteEvent(Indicator event);
-    
-//    Indicator getEvent(String eventName);
-
-    double getWeek52Low();
-    double getWeek52High();    
+    void deleteEvent(Indicator event);   
     
     void refresh();
     
