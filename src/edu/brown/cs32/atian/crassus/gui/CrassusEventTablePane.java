@@ -40,12 +40,13 @@ public class CrassusEventTablePane extends JPanel {
 	public class NewEventListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
 			@SuppressWarnings("unused")
-			EventWindow eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener());
+			EventWindow eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
 		}
 	}
 	
 	CrassusEventTableModel model;
 	JFrame _frame;
+	Stock _stock;
 
 	public CrassusEventTablePane(JFrame frame){
 		_frame = frame;
@@ -124,7 +125,7 @@ public class CrassusEventTablePane extends JPanel {
 	}
 	
 	public void changeToStock(Stock stock){
+		_stock = stock;
 		model.changeToStock(stock);
-		
 	}
 }
