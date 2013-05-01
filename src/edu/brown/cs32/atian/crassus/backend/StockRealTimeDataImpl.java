@@ -24,15 +24,78 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
 
     private String _ticker;
     private ArrayList<StockTimeFrameData> _realtimeData;
-    private Double _high = null;
-    private Double _low = null;
+    private String _high = "N/A";
+    private String _low = "N/A";
+    private String _open = "N/A";
+    private String _curr = "N/A";
+    private String _high52Week = "N/A";
+    private String _low52Week = "N/A";
+    private String _changeAndPtgChange = "N/A";
 
     public StockRealTimeDataImpl(String ticker) {
         _ticker = ticker;
         _realtimeData = new ArrayList<StockTimeFrameData>();
     }
 
+    private void getStockTableData() {
+        //http://www.gummy-stuff.org/Yahoo-data.htm
+        String urlString = "http://finance.yahoo.com/d/quotes.csv?s=" + _ticker + "&f=sghjkol1c";
+        //MSFT	N/A	N/A	26.26	32.52	N/A	33.1
+//  ticker	Day's Low	high	52 low	52 high	open	price
+
+        // http://finance.yahoo.com/d/quotes.csv?s=MSFT&f=sghjkol1      
+        HttpURLConnection connection = null;
+        URL serverAddress = null;
+        BufferedReader reader = null;
+        String line = null;
+
+        try {
+            serverAddress = new URL(urlString);
+            //set up out communications stuff
+            connection = null;
+
+            //Set up the initial connection
+            connection = (HttpURLConnection) serverAddress.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoOutput(true);
+            connection.setReadTimeout(10000);
+
+            connection.connect();
+
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+
+            line = reader.readLine();  // skip the header line
+            String[] splitted = line.split(",");
+            if (splitted.length != 8) {
+                return;
+            }
+            _high = splitted[2];
+            _low = splitted[1];
+            _open = splitted[5];
+            _curr = splitted[6];
+            _high52Week = splitted[4];
+            _low52Week = splitted[3];
+            _changeAndPtgChange  = splitted[7];
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @Override
     public boolean Init() {
+        getStockTableData();
         _realtimeData.clear();
 
         String urlString = "http://chartapi.finance.yahoo.com/instrument/1.0/" + _ticker + "/chartdata;type=quote;range=1d/csv/";
@@ -57,7 +120,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
             //read the result from the server
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             //sb = new StringBuilder();
-            
+
             String[] sep_list = {",", ":"};
             StringBuilder regexp = new StringBuilder("");
             regexp.append("[");
@@ -65,40 +128,28 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
                 regexp.append(Pattern.quote(s));;
             }
             regexp.append("]");
-        
+
             line = reader.readLine();  // skip the header line
             while ((line = reader.readLine()) != null) {
 
                 String[] splitted = line.split(regexp.toString());
-                if (splitted.length == 3 && splitted[0].equals("high")) {
-                    _high = Double.parseDouble(splitted[2]);
-                    continue;
-                }      
-                if (splitted.length == 3 && splitted[0].equals("low")) {
-                    _low = Double.parseDouble(splitted[1]);
-                    continue;
-                }                 
+
                 if (splitted.length != 6) {
                     continue;
                 }
-                if(splitted[5].equals("volume") || splitted[0].equals("labels")) {
+                if (splitted[5].equals("volume") || splitted[0].equals("labels")) {
                     continue;
                 }
-//                long tmp = (Long.parseLong(splitted[0]));
-//                tmp = tmp*1000;
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTimeInMillis(tmp);
-//                String timeStamp = calendar.getTime().toString();
-                
+
                 StockTimeFrameData newTFData = new StockTimeFrameData(splitted[0], //Time
-                        Double.parseDouble(splitted[4]),   //Open				
-                        Double.parseDouble(splitted[2]),   //High				
-                        Double.parseDouble(splitted[3]),   //Low
-                        Double.parseDouble(splitted[1]),   //Close	
-                        Integer.parseInt(splitted[5]),     //Volume
-                        Double.parseDouble(splitted[1]),  // realtime data from yahoo has not adjusted close, we set it equal to Close
-                        false);  
-                    
+                        Double.parseDouble(splitted[4]), //Open				
+                        Double.parseDouble(splitted[2]), //High				
+                        Double.parseDouble(splitted[3]), //Low
+                        Double.parseDouble(splitted[1]), //Close	
+                        Integer.parseInt(splitted[5]), //Volume
+                        Double.parseDouble(splitted[1]), // realtime data from yahoo has not adjusted close, we set it equal to Close
+                        false);
+
                 _realtimeData.add(newTFData);   // from the earliest to the latest
             }
 
@@ -118,72 +169,61 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
         }
     }
 
+    @Override
     public List<StockTimeFrameData> getRealTimeData() {
         return _realtimeData;
     }
 
-    public double getPertChgFromOpen() {
-        if(getOpenPrice() == 0.0){
-            return 0;
-        }
-        else {
-            double result = (getCurrPrice() - getOpenPrice() )/getOpenPrice();
-            return result;
-        }
+    @Override
+    public String getChgAndPertChg() {
+        return _changeAndPtgChange;
     }
-
-    public double getOpenPrice() {               
-
-        StockTimeFrameData firstData = _realtimeData.get(0);
-        return firstData.getOpen();             
-    }
-
-    public double getCurrPrice() {
-        StockTimeFrameData firstData = _realtimeData.get(_realtimeData.size() - 1);
-        return firstData.getClose();   
-    }
-
-    public double getTodayLow() {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        if(_low != null) {
-            return _low;
-        } else {
-            if(_realtimeData.size() == 0) {
-                _low = 0.0;
-                return 0.0;
-            }
-            double low = Double.MAX_VALUE;
-            for(StockTimeFrameData tfData : _realtimeData ) {
-                if(low > tfData.getLow()) {
-                    low = tfData.getLow();
-                }
-            }
-            _low = low;
-            return low;
+    
+    private String format(String in) {
+        try {
+            Double tmp = Double.parseDouble(in);
+            return String.format("%1$,.2f", tmp);
+        } catch (NumberFormatException e) {
+            return "N/A";
         }
     }
+    
+    @Override
+    public String getOpenPrice() {
 
-    public double getTodayHigh() {
-        if(_high != null) {
-            return _high;
-        } else {
-            if(_realtimeData.size() == 0) {
-                _high = 0.0;
-                return 0.0;
-            }
-            double high = 0.0;
-            for(StockTimeFrameData tfData : _realtimeData ) {
-                if(high < tfData.getHigh()) {
-                    high = tfData.getHigh();
-                }
-            }
-            _high = high;
-            return high;
-        }
+        return format(this._open);
+    }
+    
+
+    
+    @Override
+    public String getCurrPrice() {
+        return format(this._curr);
     }
 
+    @Override
+    public String getTodayLow() {
+
+        return format(this._low);
+    }
+
+    @Override
+    public String getTodayHigh() {
+        return format(this._high);
+    }
+
+    @Override
+    public String getWeek52Low() {
+        return format(this._low52Week);
+    }
+
+    @Override
+    public String getWeek52High() {
+        return format(this._high52Week);
+    }
+
+    @Override
     public void refresh() {
         this.Init();
     }
-    
 }

@@ -16,11 +16,13 @@ public interface StockRealTimeData {
     List<StockTimeFrameData> getRealTimeData();   // latest data last
 
     
-    double getPertChgFromOpen();    
-    double getOpenPrice();
-    double getCurrPrice();
-    double getTodayLow();
-    double getTodayHigh();
+    String getChgAndPertChg();    
+    String getOpenPrice();
+    String getCurrPrice();
+    String getTodayLow();
+    String getTodayHigh();
+    String getWeek52Low();
+    String getWeek52High(); 
     
     void refresh();  
 }
