@@ -23,11 +23,16 @@ import edu.brown.cs32.atian.crassus.backend.StockList;
 public class CrassusStockTablePane extends JPanel {
 
 	public class ChangeStockListenerForwarder implements ListSelectionListener {
+		Stock lastStock;
 		@Override public void valueChanged(ListSelectionEvent e) {
 			if(_listener!=null){
 				int index = table.getSelectedRow();
-				if(index!=-1)
-					_listener.changeToStock(model.getStock(table.getSelectedRow()));
+				if(index!=-1){
+					Stock nextStock = model.getStock(table.getSelectedRow());
+					if(lastStock!=nextStock)
+						_listener.changeToStock(nextStock);
+					lastStock = nextStock;
+				}
 			}
 		}
 	}

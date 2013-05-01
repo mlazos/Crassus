@@ -23,7 +23,22 @@ public class CrassusGUI implements GUI {
 	
 	public class CompoundChangeStockListener implements CrassusChangeStockListener {
 		@Override public void changeToStock(Stock stock) {
+			if(stock==null && stockInfoStateNormal){
+				frame.getContentPane().remove(stockInfo);
+				frame.add(nullStockInfo,BorderLayout.CENTER);
+				stockInfoStateNormal = false;
+			}
+			else if(!stockInfoStateNormal){
+				frame.getContentPane().remove(nullStockInfo);
+				frame.add(stockInfo,BorderLayout.CENTER);
+				stockInfoStateNormal = true;
+			}
+			
 			plotPane.changeToStock(stock);
+			eventBox.changeToStock(stock);
+			
+			frame.getContentPane().revalidate();
+			//frame.repaint();
 		}
 	}
 
@@ -31,8 +46,12 @@ public class CrassusGUI implements GUI {
 	
 	private CrassusPlotPane plotPane;
 	
-	CrassusStockTablePane stockBox;
-	CrassusEventTablePane eventBox;
+	private CrassusStockTablePane stockBox;
+	private CrassusEventTablePane eventBox;
+	
+	private JPanel stockInfo;
+	private JPanel nullStockInfo;
+	private boolean stockInfoStateNormal = false;
 
 	public CrassusGUI(StockList stocks) {
 		
@@ -49,7 +68,7 @@ public class CrassusGUI implements GUI {
 		plotPane = new CrassusPlotPane();
 		
 		
-		JPanel stockInfo = new JPanel();
+		stockInfo = new JPanel();
 		stockInfo.setBackground(Color.WHITE);
 		stockInfo.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(20,20,20,20),
@@ -58,14 +77,19 @@ public class CrassusGUI implements GUI {
 		stockInfo.add(eventBox, BorderLayout.EAST);
 		stockInfo.add(plotPane,BorderLayout.CENTER);
 
+		nullStockInfo = new JPanel();
+		nullStockInfo.setBackground(Color.WHITE);
+		nullStockInfo.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(20,20,20,20),
+				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+		nullStockInfo.setLayout(new BorderLayout());
+		nullStockInfo.add(new JPanel(), BorderLayout.CENTER);
+		
 		frame.add(stockBox, BorderLayout.WEST);
-		frame.add(stockInfo,BorderLayout.CENTER);
+		frame.add(nullStockInfo,BorderLayout.CENTER);
 		frame.setMinimumSize(new Dimension(700,400));
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.brown.cs32.atian.crassus.gui.GUI#launch()
-	 */
 	@Override
 	public void launch() {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

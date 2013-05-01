@@ -40,19 +40,18 @@ public class CrassusPlotPane extends JPanel {
 	}
 	
 	public void refresh(){
-		if(stock!=null){
+		//check width of imageDisplayer because when pane is swapped out it will be zero, plot object flips out
+		if(stock!=null && imageDisplayer.getWidth()!=0){
 			StockPlot plot = new PlotWrapper(stock.getCompanyName());
 			stock.addToPlot(plot);
 			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
 			imageDisplayer.setImage(image);
-			imageDisplayer.revalidate();
-			imageDisplayer.repaint();
 		}
 		else{
 			imageDisplayer.setImage(null);
-			imageDisplayer.revalidate();
-			imageDisplayer.repaint();
 		}
+		imageDisplayer.revalidate();
+		imageDisplayer.repaint();
 	}
 	
 }

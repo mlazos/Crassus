@@ -9,7 +9,7 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 
 public class CrassusEventTableModel extends AbstractTableModel {
 	
-	private boolean[][] tempBooleanHolder = new boolean[20][2];
+	//private boolean[][] tempBooleanHolder = new boolean[20][2];
 	
 	private Stock stock;
 	
@@ -50,16 +50,19 @@ public class CrassusEventTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return 20;
+		if(stock==null)
+			return 0;
+		else
+			return stock.getEventList().size();
 	}
 
 	@Override
 	public Object getValueAt(int row, int col) {
 		switch(col){
 		case 0:
-			return tempBooleanHolder[row][0];
+			return stock.getEventList().get(row).getVisible();
 		case 1:
-			return tempBooleanHolder[row][1];
+			return stock.getEventList().get(row).getActive();
 		case 2:
 			return "Name of an event";
 		default:
@@ -74,11 +77,28 @@ public class CrassusEventTableModel extends AbstractTableModel {
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		tempBooleanHolder[row][col] = ((Boolean)value).booleanValue();
+		if(stock==null)
+			return;
+		
+		switch(col){
+		case 0:
+			stock.getEventList().get(row).setVisible(((Boolean)value).booleanValue());
+			break;
+		case 1:
+			stock.getEventList().get(row).setActive(((Boolean)value).booleanValue());
+			break;
+		}
 	}
 
 	public void addIndicator(Indicator ind) {
 		stock.addEvent(ind);
+		int index = stock.getEventList().size()-1;
+		this.fireTableRowsInserted(index,index);
+	}
+
+	public void changeToStock(Stock stock) {
+		this.stock = stock;
+		this.fireTableDataChanged();
 	}
 
 }
