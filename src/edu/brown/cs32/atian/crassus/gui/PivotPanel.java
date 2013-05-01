@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,10 +18,19 @@ import javax.swing.JTextField;
 
 public class PivotPanel extends JPanel {
 
-	public PivotPanel()
+	private WindowCloseListener closeListener;
+	private JDialog parent;
+	private ButtonGroup radioButtons;
+	
+	
+	public PivotPanel(WindowCloseListener closeListener, JDialog parent)
 	{
+		this.closeListener = closeListener;
+		this.parent = parent;
+	
+		
 		//top panel
-		ButtonGroup radioButtons = new ButtonGroup();
+		radioButtons = new ButtonGroup();
 		
 		JPanel standard = new JPanel();
 		standard.setLayout(new FlowLayout());
@@ -52,7 +62,9 @@ public class PivotPanel extends JPanel {
 		JButton ok = new JButton("Ok");
 		ok.addActionListener(new OkListener());
 		JButton test = new JButton("Test");
+		test.addActionListener(new TestListener());
 		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new CancelListener(parent));
 		buttons.add(ok);
 		buttons.add(test);
 		buttons.add(cancel);
@@ -71,16 +83,22 @@ public class PivotPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			JOptionPane.showMessageDialog(null, "Please");
+			
 		}
 		
 	}
-	/*
+	
 	class TestListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
-	*/
+	
 
 	public String toString()
 	{

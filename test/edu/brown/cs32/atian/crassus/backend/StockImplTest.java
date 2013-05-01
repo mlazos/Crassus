@@ -62,7 +62,7 @@ public class StockImplTest {
         
         Stock s = new StockImpl("MSFT");
         s.initialize();
-        List<StockTimeFrameData> stockPriceData = s.getStockPriceData("daily");
+        List<StockTimeFrameData> stockPriceData = s.getStockPriceData(StockFreqType.DAILY);
         if(stockPriceData.size() > 0) {
             // print the first timeStamp
             System.out.println(stockPriceData.get(0).getTime());       
@@ -98,7 +98,7 @@ public class StockImplTest {
         
         Stock s = new StockImpl("MSFT");
         s.initialize();
-        List<StockTimeFrameData> stockPriceData = s.getStockPriceData("weekly");
+        List<StockTimeFrameData> stockPriceData = s.getStockPriceData(StockFreqType.WEEKLY);
         if(stockPriceData.size() > 0) {
             // print the first timeStamp
             System.out.println(stockPriceData.get(0).getTime());            
@@ -129,7 +129,7 @@ public class StockImplTest {
         
         Stock s = new StockImpl("GOOG");
         s.initialize();
-        List<StockTimeFrameData> stockPriceData = s.getStockPriceData("minutely");
+        List<StockTimeFrameData> stockPriceData = s.getStockPriceData(StockFreqType.MINUTELY);
         if(stockPriceData.size() > 0) {
             // print the first timeStamp
             System.out.println(stockPriceData.get(0).getTime());            
@@ -159,7 +159,7 @@ public class StockImplTest {
         
         Stock s = new StockImpl("GOOG");
         s.initialize();
-        List<StockTimeFrameData> stockPriceData = s.getStockPriceData("monthly");
+        List<StockTimeFrameData> stockPriceData = s.getStockPriceData(StockFreqType.MONTHLY);
         if(stockPriceData.size() > 0) {
             // print the first timeStamp
             System.out.println(stockPriceData.get(0).getTime());            
@@ -185,24 +185,46 @@ public class StockImplTest {
      * Test of getCompanyName method, of class StockImpl.
      */
     @Test
-    public void testGetPlotData() {
-        System.out.println("get stock price Plot Data");
+    public void testGetPriceOpen() {
+        System.out.println("get open price");
         
-        Stock s = new StockImpl("MSFT"); 
-        s.initialize();        
-        s.setCurrFreq("daily");
+        Stock s = new StockImpl("GOOG");
+        s.initialize();
+        double open = s.getStockRealTimeData().getOpenPrice();
+        System.out.println("Open: " + open);
+        double price = s.getStockRealTimeData().getCurrPrice();
+        System.out.println("price: " + price); 
         
-        StockPlot pw = new PlotWrapper("MSFT");        
-        s.addToPlot(pw);         
-        
-        // after 2 minutes
         s.refresh();
+        open = s.getStockRealTimeData().getOpenPrice();
+        System.out.println("Open: " + open);
+        price = s.getStockRealTimeData().getCurrPrice();
+        System.out.println("price: " + price);         
         
-        // clear series in pw here
-        
-        // re-add plot
-        s.addToPlot(pw);       
-
-        
-    } 
+    }        
+//
+//    /**
+//     * Test of getCompanyName method, of class StockImpl.
+//     */
+//    @Test
+//    public void testGetPlotData() {
+//        System.out.println("get stock price Plot Data");
+//        
+//        Stock s = new StockImpl("MSFT"); 
+//        s.initialize();        
+//        s.setCurrFreq("daily");
+//        
+//        StockPlot pw = new PlotWrapper("MSFT");        
+//        s.addToPlot(pw);         
+//        
+//        // after 2 minutes
+//        s.refresh();
+//        
+//        // clear series in pw here
+//        
+//        // re-add plot
+//        s.addToPlot(pw);       
+//
+//        
+//    } 
 }
