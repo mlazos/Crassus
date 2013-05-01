@@ -47,7 +47,7 @@ public class StockRealTimeDataImplTest {
     public void testGetRealTimeData() {
         System.out.println("getRealTimeData");
         //System.out.println(System.currentTimeMillis());
-        StockRealTimeDataImpl instance = new StockRealTimeDataImpl("msft");
+        StockRealTimeDataImpl instance = new StockRealTimeDataImpl("goog");
         instance.Init();
         
         long now = System.currentTimeMillis();
@@ -59,6 +59,13 @@ public class StockRealTimeDataImplTest {
         List<StockTimeFrameData> allRealTimeData = instance.getRealTimeData();
 
         StockTimeFrameData firstData = allRealTimeData.get(0);
+        
+        double open = instance.getOpenPrice();
+        System.out.println("Open: " + open);
+        
+        double price = instance.getCurrPrice();
+        System.out.println("price: " + price);        
+        
         long tmp = (Long.parseLong(firstData.getTime()));
         tmp = tmp * 1000;
         calendar.setTimeInMillis(tmp);
