@@ -5,10 +5,20 @@ import java.util.regex.Pattern;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class NumberVerifier extends InputVerifier {
 
+	private JLabel fieldLabel;
+	private String defaultText;
+	
+	public NumberVerifier(JLabel fieldLabel)
+	{
+		this.fieldLabel = fieldLabel;
+		this.defaultText = fieldLabel.getText();
+	}
+	
 	@Override
 	public boolean verify(JComponent input) 
 	{
@@ -18,10 +28,14 @@ public class NumberVerifier extends InputVerifier {
 		if(!valid)
 		{
 			f.setBackground(new Color(255,180,180));
+			fieldLabel.setForeground(Color.RED);
+			fieldLabel.setText("[Must be a number]");
 		}
 		else
 		{
 			f.setBackground(Color.WHITE);
+			fieldLabel.setForeground(Color.BLACK);
+			fieldLabel.setText(defaultText);
 		}
 		
 		return valid;

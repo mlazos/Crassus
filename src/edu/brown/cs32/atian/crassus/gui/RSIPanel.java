@@ -18,7 +18,7 @@ public class RSIPanel extends JPanel
 		JLabel periodLabel = new JLabel("Period:");
 		
 		JTextField period = new JTextField();
-		period.setInputVerifier(new NumberVerifier());
+		period.setInputVerifier(new NumberVerifier(periodLabel));
 		period.setSize(50, 20);
 		period.setPreferredSize(new Dimension(50, 20));
 		
