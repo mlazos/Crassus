@@ -53,8 +53,6 @@ public class CrassusPlotPane extends JPanel {
 	
 	public void refresh(){
 		//check width of imageDisplayer because when pane is swapped out it will be zero, plot object flips out
-		System.out.println("is stock null: "+(stock==null));
-		System.out.println("is width 0: "+(imageDisplayer.getWidth()==0));
 		if(stock!=null && imageDisplayer.getWidth()!=0){
 			PlotWrapper plot = new PlotWrapper(stock.getCompanyName(), TimeFrame.DAILY);
 			plot.setAxesTitles("Time", "Price");

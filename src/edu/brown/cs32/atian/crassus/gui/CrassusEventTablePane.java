@@ -67,7 +67,7 @@ public class CrassusEventTablePane extends JPanel {
 			int colWidth = (i==2) ? 120 : 20;
 			column.setPreferredWidth(colWidth);
 			column.setMaxWidth(colWidth);
-			column.setMinWidth(colWidth);
+			column.setResizable(false);
 			
 			/*
 			if(i==0){

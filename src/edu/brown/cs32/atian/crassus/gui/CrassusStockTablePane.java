@@ -98,18 +98,16 @@ public class CrassusStockTablePane extends JPanel {
 		
 		for(int i=0; i<5; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
-			
 			column.setPreferredWidth(50);
 			column.setMaxWidth(50);
-			column.setMinWidth(50);
-			
+			column.setResizable(false);
 			if(i==0){
-				DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks);
 				renderer.setHorizontalAlignment(SwingConstants.CENTER);
 				column.setCellRenderer(renderer);
 			}
 			else{
-				DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks);
 				renderer.setHorizontalAlignment(SwingConstants.RIGHT);
 				column.setCellRenderer(renderer);
 			}
