@@ -27,7 +27,7 @@ public class EventWindowFrame implements EventWindow {
 	{
 		JFrame p = new JFrame("this");
 		p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		EventWindowFrame w = new EventWindowFrame(p, new WindowCloseListenerStub(), new StockImpl(""));
+		EventWindowFrame w = new EventWindowFrame(p, new WindowCloseListenerStub(), new StockImpl("GOOG"));
 		w.display();
 	}
 	

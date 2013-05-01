@@ -13,7 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.BollingerBands;
+import edu.brown.cs32.atian.crassus.backend.Indicator;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 
 public class BolingerBandPanel extends JPanel
 {
@@ -91,8 +94,27 @@ public class BolingerBandPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			String periodsArg = periods.getText();
+			String bandWidthArg = bandWidth.getText();
+			
+			if(periodsArg == null || bandWidthArg == null)
+			{
+				showErrorDialog();
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), Integer.parseInt(bandWidthArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe){}
+			}
 			
 		}
+		
+		private void showErrorDialog(){}
 		
 	}
 	
