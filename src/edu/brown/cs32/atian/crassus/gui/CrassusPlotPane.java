@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 
 public class CrassusPlotPane extends JPanel {
 
@@ -40,19 +41,18 @@ public class CrassusPlotPane extends JPanel {
 	}
 	
 	public void refresh(){
-		if(stock!=null){
-			StockPlot plot = new PlotWrapper(stock.getCompanyName());
+		//check width of imageDisplayer because when pane is swapped out it will be zero, plot object flips out
+		if(stock!=null && imageDisplayer.getWidth()!=0){
+			StockPlot plot = new PlotWrapper(stock.getCompanyName(), TimeFrame.DAILY);
 			stock.addToPlot(plot);
 			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
 			imageDisplayer.setImage(image);
-			imageDisplayer.revalidate();
-			imageDisplayer.repaint();
 		}
 		else{
 			imageDisplayer.setImage(null);
-			imageDisplayer.revalidate();
-			imageDisplayer.repaint();
 		}
+		imageDisplayer.revalidate();
+		imageDisplayer.repaint();
 	}
 	
 }

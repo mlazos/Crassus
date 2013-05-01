@@ -16,8 +16,13 @@ public class Main {
 
 	public static class TimerListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
+			//long start = System.currentTimeMillis();
 			stocks.refreshAll();
+			//long middle = System.currentTimeMillis();
 			gui.update();
+			//long end = System.currentTimeMillis();
+			//System.out.println("refreshing stocks: "+(middle-start));
+			//System.out.println("updating GUI: "+(end-middle));
 		}
 	}
 	
@@ -35,7 +40,7 @@ public class Main {
 		gui = new CrassusGUI(stocks);
 		gui.launch();
 	
-		Timer timer = new Timer(3000, new TimerListener());
+		Timer timer = new Timer(60000, new TimerListener());
 		timer.setRepeats(true);
 		timer.start();
 	}

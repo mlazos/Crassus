@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.Stock;
 
 public class CrassusEventTablePane extends JPanel {
 
@@ -117,5 +118,10 @@ public class CrassusEventTablePane extends JPanel {
 		buttonAndLine.add(buttonHolder);
 		
 		this.add(buttonAndLine, BorderLayout.SOUTH);
+	}
+	
+	public void changeToStock(Stock stock){
+		model.changeToStock(stock);
+		
 	}
 }
