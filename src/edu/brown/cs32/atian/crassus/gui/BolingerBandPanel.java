@@ -13,6 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.BollingerBands;
+import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+
 public class BolingerBandPanel extends JPanel
 {
 
@@ -22,15 +27,17 @@ public class BolingerBandPanel extends JPanel
 	private static final long serialVersionUID = 1L;
 	
 	private WindowCloseListener closeListener;
+	private Stock stock;
 	private JDialog parent;
-	JTextField periods;
-	JTextField bandWidth;
+	private JTextField periods;
+	private JTextField bandWidth;
 	
 	
-	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent)
+	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
+		this.stock = stock;
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
@@ -68,7 +75,7 @@ public class BolingerBandPanel extends JPanel
 		JButton test = new JButton("Test");
 		test.addActionListener(new TestListener());
 		JButton cancel = new JButton("Cancel");
-		cancel.addActionListener(new CancelListener());
+		cancel.addActionListener(new CancelListener(parent));
 		buttons.add(ok);
 		buttons.add(test);
 		buttons.add(cancel);
@@ -87,8 +94,27 @@ public class BolingerBandPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			String periodsArg = periods.getText();
+			String bandWidthArg = bandWidth.getText();
+			
+			if(periodsArg == null || bandWidthArg == null)
+			{
+				showErrorDialog();
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), Integer.parseInt(bandWidthArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe){}
+			}
 			
 		}
+		
+		private void showErrorDialog(){}
 		
 	}
 	

@@ -12,18 +12,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+
 public class MACDPanel extends JPanel 
 {
 	private WindowCloseListener closeListener;
 	private JDialog parent;
+	private Stock stock;
 	private JTextField signalP;
 	private JTextField shortP;
 	private JTextField longP;
 	
-	public MACDPanel(WindowCloseListener closeListener, JDialog parent)
+	public MACDPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
+		this.stock = stock;
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		

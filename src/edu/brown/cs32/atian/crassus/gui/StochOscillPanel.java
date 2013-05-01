@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.Stock;
+
 public class StochOscillPanel extends JPanel {
 
 	/**
@@ -20,13 +22,15 @@ public class StochOscillPanel extends JPanel {
 	private static final long serialVersionUID = 12154087L;
 	
 	private WindowCloseListener closeListener;
+	private Stock stock;
 	private JDialog parent;
 	private JTextField period;
 
-	public StochOscillPanel(WindowCloseListener closeListener, JDialog parent)
+	public StochOscillPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
+		this.stock = stock;
 		
 		NumberVerifier numberVerifier = new NumberVerifier(this);
 		
@@ -50,7 +54,7 @@ public class StochOscillPanel extends JPanel {
 		//middle panel
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
-		JButton ok = new JButton("Ok");\
+		JButton ok = new JButton("Ok");
 		ok.addActionListener(new OkListener());
 		JButton test = new JButton("Test");
 		test.addActionListener(new TestListener());
