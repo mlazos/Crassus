@@ -189,7 +189,7 @@ public class PlotWrapper implements StockPlot
 	
 	public static void main(String[] args)
 	{
-		PlotWrapper pw = new PlotWrapper("Mike");
+		PlotWrapper pw = new PlotWrapper("Mike",TimeFrame.DAILY);
 		
 		TimeSeries series1 = new TimeSeries(Math.random());
 		TimeSeries series2 = new TimeSeries(Math.random());
