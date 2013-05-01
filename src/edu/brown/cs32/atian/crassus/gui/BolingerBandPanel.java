@@ -16,7 +16,7 @@ public class BolingerBandPanel extends JPanel
 {
 
 	/**
-	 * 
+	 * This is the panel that is displayed for Bolinger Bands Events
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -64,29 +64,6 @@ public class BolingerBandPanel extends JPanel
 		this.add(parameters);
 		this.add(buttons);
 
-		
-	}
-	
-	class OkListener implements ActionListener
-	{
-
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-			
-			
-		}
-		
-	}
-	
-	class TestListener implements ActionListener
-	{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
 		
 	}
 	

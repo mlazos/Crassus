@@ -21,6 +21,11 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
 
+/**
+ * 
+ * @author mlazos
+ *This class handles generating plots and images of plots.
+ */
 
 public class PlotWrapper implements StockPlot 
 {
@@ -38,6 +43,7 @@ public class PlotWrapper implements StockPlot
 	private String yAxisTitle = "Y";
 	private JFreeChart primaryChart;
 	private JFreeChart rsChart;
+	
 	
 	public PlotWrapper(String stockName, TimeFrame timeFrame)
 	{ 
@@ -189,7 +195,7 @@ public class PlotWrapper implements StockPlot
 	
 	public static void main(String[] args)
 	{
-		PlotWrapper pw = new PlotWrapper("Mike");
+		PlotWrapper pw = new PlotWrapper("Mike", TimeFrame.DAILY);
 		
 		TimeSeries series1 = new TimeSeries(Math.random());
 		TimeSeries series2 = new TimeSeries(Math.random());
