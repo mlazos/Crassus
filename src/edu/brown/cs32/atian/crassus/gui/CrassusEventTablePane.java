@@ -27,6 +27,7 @@ import javax.swing.table.TableColumn;
 import edu.brown.cs32.atian.crassus.backend.Indicator;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 
+@SuppressWarnings("serial")
 public class CrassusEventTablePane extends JPanel {
 
 	public class NewIndicatorListener implements WindowCloseListener {
@@ -38,8 +39,8 @@ public class CrassusEventTablePane extends JPanel {
 
 	public class NewEventListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			EventWindow eventWindow = new EventWindowFrame(_frame);
-			eventWindow.setWindowCloseListener(new NewIndicatorListener());
+			@SuppressWarnings("unused")
+			EventWindow eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener());
 		}
 	}
 	
