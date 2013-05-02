@@ -21,6 +21,7 @@ import javax.swing.JTextField;
  * @author Matthew
  *
  */
+@SuppressWarnings("serial")
 public class TickerDialog extends JDialog {
 	
 	/**

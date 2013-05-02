@@ -26,7 +26,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
@@ -35,7 +34,7 @@ import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindowFrame;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 @SuppressWarnings("serial")
-public class CrassusEventTablePane extends JPanel {
+public class CrassusIndicatorTablePane extends JPanel {
 
 	public class NewIndicatorListener implements WindowCloseListener {
 		@Override public void windowClosedWithEvent(Indicator ind) {
@@ -71,11 +70,13 @@ public class CrassusEventTablePane extends JPanel {
 	}
 
 	private JTable table;
-	private CrassusEventTableModel model;
+	private CrassusIndicatorTableModel model;
+	CrassusIndicatorTableRenderer renderer;
+	private CrassusIndicatorTableEditor editor;
 	private JFrame _frame;
 	private Stock _stock;
 
-	public CrassusEventTablePane(JFrame frame){
+	public CrassusIndicatorTablePane(JFrame frame){
 		_frame = frame;
 		
 		this.setBackground(Color.WHITE);
@@ -85,11 +86,17 @@ public class CrassusEventTablePane extends JPanel {
 		table.setBackground(Color.WHITE);
 		table.setTableHeader(null);//Disable table header
 		
-		model = new CrassusEventTableModel();
+		model = new CrassusIndicatorTableModel();
 		table.setModel(model);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
 		table.setFillsViewportHeight(true);//makes extra space below table entries white
+		
+		table.setRowHeight(22);
+		table.setIntercellSpacing(new Dimension(0,2));
+		
+		editor = new CrassusIndicatorTableEditor();
+		renderer = new CrassusIndicatorTableRenderer();
 		
 		for(int i=0; i<3; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
@@ -98,16 +105,9 @@ public class CrassusEventTablePane extends JPanel {
 			column.setMaxWidth(colWidth);
 			column.setResizable(false);
 			
-			/*
-			if(i==0){
-				column.setCellRenderer(new CrassusEventTableCellEyeRenderer());
-				column.setCellEditor(new CrassusEventTableCellEyeEditor());
-			}
-			else*/ if(i==2){
-				DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-				renderer.setHorizontalAlignment(SwingConstants.CENTER);
-				column.setCellRenderer(renderer);
-			}
+			column.setCellRenderer(renderer);
+			if(i<2)
+				column.setCellEditor(editor);
 		}
 		
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -178,5 +178,7 @@ public class CrassusEventTablePane extends JPanel {
 	public void changeToStock(Stock stock){
 		_stock = stock;
 		model.changeToStock(stock);
+		renderer.changeToStock(stock);
+		editor.changeToStock(stock);
 	}
 }

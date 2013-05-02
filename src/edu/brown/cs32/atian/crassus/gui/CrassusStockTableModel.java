@@ -1,14 +1,11 @@
 package edu.brown.cs32.atian.crassus.gui;
 
-import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
-import edu.brown.cs32.atian.crassus.backend.StockListImpl;
-import edu.brown.cs32.atian.crassus.backend.StockRealTimeData;
 
+@SuppressWarnings("serial")
 public class CrassusStockTableModel extends AbstractTableModel {
 	
 	private StockList _stocks;
@@ -45,10 +42,6 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		return _stocks.getStockList().size();
 	}
 	
-	private String format(double in){
-		return String.format("%1$,.2f", in);
-	}
-
 	@Override
 	public Object getValueAt(int row, int col) {
 		switch(col){

@@ -8,32 +8,31 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
+@SuppressWarnings("serial")
 public class CrassusCheckBoxEye extends JCheckBox {
 
 
-	static Icon greyEye;
-	static Icon blackEye;
+	private static Icon blank;
+	private static Icon eye;
+	private static Icon pressed;
 	
-	{//STATIC CODE BLOCK
+	{
 		try {
-			greyEye = new ImageIcon(ImageIO.read(new File("icons/shittyTest.png")));
-			
-			blackEye = new ImageIcon(ImageIO.read(new File("icons/blackEye.png")));
+			blank = new ImageIcon(ImageIO.read(new File("icons/blankIcon.png")));
+			eye = new ImageIcon(ImageIO.read(new File("icons/eyeIcon.png")));
+			pressed = new ImageIcon(ImageIO.read(new File("icons/pressedIcon.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
-			greyEye = null;
-			blackEye = null;
+			blank = null;
+			eye = null;
 		}
 	}
 	
-
-	@Override
-	public void setSelected(boolean sel){
-		System.out.println("setSelected("+sel+");");
-		super.setSelected(sel);
-		if(sel)
-			setIcon(blackEye);
-		else
-			setIcon(greyEye);
+	public CrassusCheckBoxEye(){
+		this.setIcon(blank);
+		this.setSelectedIcon(eye);
+		this.setPressedIcon(pressed);
+		this.setToolTipText("plot indicator");
 	}
+	
 }

@@ -11,8 +11,6 @@ import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +27,6 @@ public class CrassusPlotPane extends JPanel {
 			if(stock==null)
 				return;
 			
-			System.out.println("stock: "+stock.getTicker()+", setting time-frequency to: "+timeFreqFromIndex(timeFreq.getSelectedIndex()));
 			stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
 			refresh();
 		}
@@ -65,7 +62,6 @@ public class CrassusPlotPane extends JPanel {
 			timeFreq.showPopup();
 			timeFreq.hidePopup();
 			
-			System.out.println("stock: "+stock.getTicker()+", setting time-frame to: "+timeframeFromIndex(timeframe.getSelectedIndex()));
 			stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
 			
 			timeFreq.addActionListener(timeFreqListener);
@@ -134,9 +130,7 @@ public class CrassusPlotPane extends JPanel {
 	
 	public void changeToStock(Stock stock){
 		this.stock = stock;
-		System.out.println("stock: "+stock.getTicker()+", setting time-frame to: "+timeframeFromIndex(timeframe.getSelectedIndex()));
 		this.stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
-		System.out.println("stock: "+stock.getTicker()+", setting time-frequency to: "+timeFreqFromIndex(timeFreq.getSelectedIndex()));
 		this.stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
 		refresh();
 	}

@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class CrassusImageDisplayer extends JPanel {
 
 	private BufferedImage _image;

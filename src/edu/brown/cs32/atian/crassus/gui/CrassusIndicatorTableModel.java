@@ -1,19 +1,18 @@
 package edu.brown.cs32.atian.crassus.gui;
 
-import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
-public class CrassusEventTableModel extends AbstractTableModel {
+@SuppressWarnings("serial")
+public class CrassusIndicatorTableModel extends AbstractTableModel {
 	
 	//private boolean[][] tempBooleanHolder = new boolean[20][2];
 	
 	private Stock stock;
 	
-	public CrassusEventTableModel(){
+	public CrassusIndicatorTableModel(){
 		
 	}
 
