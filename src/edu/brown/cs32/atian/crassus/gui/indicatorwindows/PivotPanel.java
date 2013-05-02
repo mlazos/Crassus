@@ -28,7 +28,7 @@ public class PivotPanel extends JPanel {
 	private JDialog parent;
 	private JRadioButton stan;
 	private JRadioButton fibo;
-	private JRadioButton demark;
+	private JRadioButton dem;
 	
 	
 	public PivotPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
@@ -43,19 +43,19 @@ public class PivotPanel extends JPanel {
 		
 		JPanel standard = new JPanel();
 		standard.setLayout(new FlowLayout());
-		JRadioButton stan = new JRadioButton("Standard");
+		stan = new JRadioButton("Standard");
 		radioButtons.add(stan);
 		standard.add(stan);
 		
 		JPanel fib = new JPanel();
 		fib.setLayout(new FlowLayout());
-		JRadioButton fibo = new JRadioButton("Fibonacci");
+		fibo = new JRadioButton("Fibonacci");
 		radioButtons.add(fibo);
 		fib.add(fibo);
 		
 		JPanel demark = new JPanel();
 		demark.setLayout(new FlowLayout());
-		JRadioButton dem = new JRadioButton("Demark");
+		dem = new JRadioButton("Demark");
 		radioButtons.add(dem);
 		demark.add(dem);
 		
@@ -109,7 +109,7 @@ public class PivotPanel extends JPanel {
 			{
 				currentButton = "fibonacci";
 			}
-			else if(demark.isSelected())
+			else if(dem.isSelected())
 			{
 				currentButton = "demark";
 			}
@@ -121,9 +121,11 @@ public class PivotPanel extends JPanel {
 			
 			try
 			{
+				System.out.println("creating pivs");
 				Indicator ind = new PivotPoints(stock.getStockPriceData(StockFreqType.DAILY), currentButton);
-				parent.dispose();
 				closeListener.windowClosedWithEvent(ind);
+				parent.dispose();
+				
 			}
 			catch(NumberFormatException nfe)
 			{
