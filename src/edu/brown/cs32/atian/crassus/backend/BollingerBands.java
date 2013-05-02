@@ -19,9 +19,9 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  */
 public class BollingerBands implements Indicator {
 
-	private List<IndicatorDatum> middleBand;
-	private List<IndicatorDatum> lowerBand;
-	private List<IndicatorDatum> upperBand;
+	private List<IndicatorDatum> middleBand;		// oldest data first
+	private List<IndicatorDatum> lowerBand;			
+	private List<IndicatorDatum> upperBand;			
 	private int period;
 	private List<StockTimeFrameData> data;
 	private int bandWidth;
@@ -160,6 +160,9 @@ public class BollingerBands implements Indicator {
 	@Override
 	public StockEventType isTriggered() {
 		// TODO Auto-generated method stub
+		/*		for (i = period - 1; i < data.size(); i++) {
+		
+		}*/
 		return null;
 	}
 }
