@@ -6,6 +6,7 @@ package edu.brown.cs32.atian.crassus.backend;
 
 import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
+import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.jfree.data.time.Day;
+import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 
 /**
@@ -42,8 +44,9 @@ public class StockImpl implements Stock {
     
     ArrayList<Indicator> _events = null;
 
-    
-    StockFreqType _currFreq = StockFreqType.DAILY;    // be default se use daily
+    TimeFrame _timeFrame = TimeFrame.DAILY;  
+    StockFreqType _currFreq = StockFreqType.MINUTELY;    // be default se use daily
+    Date _startTime;
     
     public StockImpl(String ticker) {
         _ticker = ticker;
@@ -52,8 +55,10 @@ public class StockImpl implements Stock {
         _weekly = new StockHistDataWeekly(_ticker);
         _monthly = new StockHistDataMonthly(_ticker);
         _realTime = new StockRealTimeDataImpl(_ticker);
-        _events = new ArrayList<Indicator>();
-
+        _events = new ArrayList<Indicator>();        
+ 
+        _startTime = computeStartTime();
+                
         // if getCompanyName() return same string as ticker that the ticker is invalid
         _companyName = getCompanyName();
         if (_companyName.equalsIgnoreCase(_ticker)) {
@@ -61,6 +66,24 @@ public class StockImpl implements Stock {
         }
     }
 
+    private Date computeStartTime() {       
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new java.util.Date());  
+        
+        if(_timeFrame==TimeFrame.DAILY) {            ;
+            cal.add(Calendar.DATE, -1);
+        } else if(_timeFrame==TimeFrame.WEEKLY) {
+            cal.add(Calendar.DATE, -7);
+        } else if(_timeFrame==TimeFrame.MONTHLY) {
+            cal.add(Calendar.MONTH, -1);
+        } else if(_timeFrame==TimeFrame.YEARLY) {
+            cal.add(Calendar.YEAR, -1);
+        }
+        
+        return cal.getTime();        
+    }
+    
     @Override
     public boolean initialize() {   // false mean it fails to get data from data source
         boolean init = false;
@@ -154,6 +177,12 @@ public class StockImpl implements Stock {
         this.refreshIndicator();
     }
     
+    @Override
+    public void setTimeFrame(TimeFrame timeFrame) {  
+        
+        _startTime = computeStartTime();
+    }
+     
     // combine both the history data with today's data so the plot and indicator calculation don't need to combine the hist data with realtime data
     @Override
     public List<StockTimeFrameData> getStockPriceData(StockFreqType freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
@@ -230,11 +259,13 @@ public class StockImpl implements Stock {
     public void refresh() {
         refreshStockPrice();
         refreshIndicator();
+        _startTime = computeStartTime();
     }
     
     @Override
     public void addToPlot(StockPlot stockPlot) {
         TimeSeries series = new TimeSeries(_ticker);
+
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
         
         for(StockTimeFrameData tf : stockPriceData) {
@@ -242,8 +273,14 @@ public class StockImpl implements Stock {
              long tmp = tf.getTimeInNumber() * 1000;    // from second to Millisecond
              Calendar calendar = Calendar.getInstance();
              calendar.setTimeInMillis(tmp);
-             Date date = calendar.getTime();         
-             series.add(new Day(date) , tf.getAdjustedClose());
+             Date date = calendar.getTime();  
+             
+             Calendar calendarStart = Calendar.getInstance();
+             calendarStart.setTime(this._startTime);
+
+             if(calendarStart.before(calendar)) {
+                series.add(new Minute(date) , tf.getAdjustedClose());
+             }
         }
         
         SeriesWrapper sw = new SeriesWrapper(series, Color.BLACK);
