@@ -177,6 +177,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 	public void changeToStock(Stock stock){
 		_stock = stock;
+		table.clearSelection();
 		model.changeToStock(stock);
 		renderer.changeToStock(stock);
 		editor.changeToStock(stock);

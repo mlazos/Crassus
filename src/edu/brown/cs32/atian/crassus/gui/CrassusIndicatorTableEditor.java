@@ -47,5 +47,6 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 
 	public void changeToStock(Stock stock){
 		this.stock = stock;
+		this.fireEditingStopped();
 	}
 }

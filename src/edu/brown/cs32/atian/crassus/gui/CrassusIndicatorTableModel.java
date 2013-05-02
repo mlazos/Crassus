@@ -76,7 +76,7 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		if(stock==null)
+		if(stock==null || row >= stock.getEventList().size())
 			return;
 		
 		switch(col){
