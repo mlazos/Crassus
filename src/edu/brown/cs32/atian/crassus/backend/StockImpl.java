@@ -181,8 +181,8 @@ public class StockImpl implements Stock {
     }
     
     @Override
-    public void setTimeFrame(TimeFrame timeFrame) { 
-        
+    public void setTimeFrame(TimeFrame timeFrame) {      
+        _timeFrame = timeFrame;
         _startTime = computeStartTime();
     }
      
