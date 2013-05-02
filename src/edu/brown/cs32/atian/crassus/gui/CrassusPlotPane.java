@@ -64,10 +64,11 @@ public class CrassusPlotPane extends JPanel {
 			timeFreq.showPopup();
 			timeFreq.hidePopup();
 			
-			//stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
+			stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
 			
 			timeFreq.addActionListener(timeFreqListener);
 			timeFreq.setSelectedIndex(0);//force timeFreq to update. This will make 'refresh' unnecessary
+			refresh();
 		}
 	}
 
@@ -99,20 +100,19 @@ public class CrassusPlotPane extends JPanel {
 		
 		timeframe = new JComboBox<>();
 		timeframe.addItem("Today");
-		timeframe.addItem("This Week");
-		timeframe.addItem("This Month");
-		timeframe.addItem("This Year");
+		timeframe.addItem("One Week");
+		timeframe.addItem("One Month");
+		timeframe.addItem("One Year");
 		timeframe.addItem("Five Years");
-		timeframe.setSelectedIndex(4);
 		timeframe.addActionListener(new TimeScaleChangeListener());
 		
 		timeFreq = new JComboBox<>();
 		timeFreq.setModel(new DefaultComboBoxModel<String>());
-		//timeFreq.addItem("Minutely");
-		timeFreq.addItem("Daily");
-		timeFreq.addItem("Weekly");
-		timeFreq.addItem("Monthly");
-		timeFreq.addItem("Yearly");
+		timeFreq.addItem("Minutely");
+//		timeFreq.addItem("Daily");
+//		timeFreq.addItem("Weekly");
+//		timeFreq.addItem("Monthly");
+//		timeFreq.addItem("Yearly");
 		
 		timeFreqListener = new TimeFreqChangeListener();
 		timeFreq.addActionListener(timeFreqListener);
@@ -133,6 +133,7 @@ public class CrassusPlotPane extends JPanel {
 	
 	public void changeToStock(Stock stock){
 		this.stock = stock;
+		this.stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
 		this.stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
 		refresh();
 	}
