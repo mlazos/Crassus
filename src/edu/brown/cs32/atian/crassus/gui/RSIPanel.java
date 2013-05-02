@@ -12,11 +12,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.BollingerBands;
+import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.RSI;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 
 public class RSIPanel extends JPanel 
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6684347084049152488L;
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
@@ -67,14 +75,43 @@ public class RSIPanel extends JPanel
 		
 	}
 	
-	class OkListener implements ActionListener
+	class OkListener extends AbstractOkListener
 	{
+
+		public OkListener() 
+		{
+			super(parent);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			String periodArg = period.getText();
+			
+			if(periodArg == null)
+			{
+				showErrorDialog("You must enter a value.");
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new RSI(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
+			}
 			
 		}
+		
 		
 	}
 	

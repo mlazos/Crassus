@@ -40,6 +40,7 @@ public class EventWindowFrame implements EventWindow {
 	public EventWindowFrame(JFrame parent, WindowCloseListener closeListener, Stock stock)
 	{
 		frame = new JDialog(parent,"Bolinger Band Event");
+		frame.setModal(true);
 		frame.setResizable(false);
 		frame.setSize(325, 450);
 		frame.setMinimumSize(new Dimension(325, 450));

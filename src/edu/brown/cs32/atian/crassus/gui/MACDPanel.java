@@ -12,7 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.backend.BollingerBands;
+import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.MACD;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 
 public class MACDPanel extends JPanel 
 {
@@ -93,14 +97,46 @@ public class MACDPanel extends JPanel
 		
 	}
 	
-	class OkListener implements ActionListener
+	class OkListener extends AbstractOkListener
 	{
+
+		public OkListener() 
+		{
+			super(parent);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-	
+			
+			String signalPArg = signalP.getText();
+			String shortPArg = shortP.getText();
+			String longPArg = longP.getText();
+			
+			if(signalPArg == null || shortPArg == null || longPArg == null)
+			{
+				showErrorDialog("You must enter values.");
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new MACD(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(signalPArg), Integer.parseInt(shortPArg), Integer.parseInt(longPArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
+			}
+			
 		}
+		
 		
 	}
 	
