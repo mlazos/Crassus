@@ -180,11 +180,21 @@ public class StockImpl implements Stock {
     }
     
     @Override
-    public void setTimeFrame(TimeFrame timeFrame) {  
+    public void setTimeFrame(TimeFrame timeFrame) { 
         
         _startTime = computeStartTime();
     }
      
+    @Override
+    public StockFreqType getCurrFreq()   { // MINUTELY, DAILY, WEEKLY, MONTHLY 
+            return this._currFreq;
+    }
+    
+    @Override
+    public TimeFrame getTimeFrame() {
+        return this._timeFrame;
+    }
+    
     // combine both the history data with today's data so the plot and indicator calculation don't need to combine the hist data with realtime data
     @Override
     public List<StockTimeFrameData> getStockPriceData(StockFreqType freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
@@ -221,7 +231,6 @@ public class StockImpl implements Stock {
             latestRealTime.setTime(date);
             latestRealTime.setIsHist(true);
         }
-
 
         if (result.size() > 0) {
             // after 4PM of each trading day, the history data will already include today's data, and we don't need to add today's data to history data
