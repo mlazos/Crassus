@@ -1,5 +1,6 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
@@ -36,15 +37,16 @@ public class StochasticOscillator implements Indicator {
 	private List<IndicatorDatum> signalLine;
     private boolean isActive;
     private boolean isVisible;
+    private Date startTime;
 	
-	public StochasticOscillator(List<StockTimeFrameData> data, int period) {
+	public StochasticOscillator(List<StockTimeFrameData> data, int period, Date startTime) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
-		
+		this.startTime = startTime;
 		this.data = data;
 		this.period = period;
 		this.SMAPeriod = 3;
 		
-		refresh(data);
+		refresh(data, startTime);
 	}
 	
 	@Override
@@ -123,8 +125,8 @@ public class StochasticOscillator implements Indicator {
 			
 			double K = (data.get(i).getClose() - low) / (high - low) * 100;
 			
-			signalLine.add(new IndicatorDatum(data.get(i).getTime(), D));
-			stocOscillator.add(new IndicatorDatum(data.get(i).getTime(), K));
+			signalLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), D));
+			stocOscillator.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), K));
 		}
 	}
 	
@@ -134,14 +136,15 @@ public class StochasticOscillator implements Indicator {
 	}
 	
 	@Override
-	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
+	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime) {
 		this.data = data;
+		this.startTime = startTime;
 		updateStochasticOscillator();
 	}
 
@@ -149,5 +152,11 @@ public class StochasticOscillator implements Indicator {
 	public StockEventType isTriggered() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double getTestResults() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

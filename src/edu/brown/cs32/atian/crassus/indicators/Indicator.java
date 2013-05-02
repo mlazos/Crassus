@@ -11,18 +11,18 @@ public interface Indicator {
 	/**
 	 * Adds the indicator data to the plot.
 	 */
-	void addToPlot(StockPlot stockPlot, int startIndex, int endIndex);
+	void addToPlot(StockPlot stockPlot);
 	
 	/**
 	 * Refreshes the indicator data values.
 	 */
-	void refresh(List<StockTimeFrameData> data);
+	void refresh(List<StockTimeFrameData> data, Date startTime);
 	
 	/*
 	 * Tests the indicator against data which should have been
 	 * passed into the Indicator's constructor.
 	 */
-	//void test();
+	double getTestResults();
 	
 	/**
 	 * Returns boolean whether Indicator is visible

@@ -1,6 +1,7 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
@@ -28,14 +29,15 @@ public class RSI implements Indicator {
 	private int period;
 	private boolean isActive;
 	private boolean isVisible;
+	private Date startTime;
 	
-	public RSI(List<StockTimeFrameData> data, int period) {
+	public RSI(List<StockTimeFrameData> data, int period, Date startTime) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
-	
+		this.startTime = startTime;
 		this.data = data;
 		this.period = period;
 		this.RSIPoints = new ArrayList<IndicatorDatum>();
-		refresh(data);
+		refresh(data, startTime);
 	}
 	
 	List<IndicatorDatum> getRSIPoints() {
@@ -81,7 +83,7 @@ public class RSI implements Indicator {
 				avgLoss = avgGainLoss[1];
 				rs = avgGain / avgLoss;
 				rsi = 100 - (100 / (1 + rs));
-				RSIPoints.add(new IndicatorDatum(data.get(period).getTime(), rsi));
+				RSIPoints.add(new IndicatorDatum(data.get(period).getTime(), data.get(period).getTimeInNumber(), rsi));
 				continue;
 			}
 			
@@ -97,7 +99,7 @@ public class RSI implements Indicator {
 
 			rs = avgGain / avgLoss;
 			rsi = 100 - (100 / (1 + rs));
-			RSIPoints.add(new IndicatorDatum(data.get(i + period).getTime(), rsi));
+			RSIPoints.add(new IndicatorDatum(data.get(i + period).getTime(), data.get(i + period).getTimeInNumber(), rsi));
 		}
 	}
 	
@@ -135,14 +137,15 @@ public class RSI implements Indicator {
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
+	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime) {
 		this.data = data;
+		this.startTime = startTime;
 		updateRSI();
 	}
 
@@ -150,5 +153,11 @@ public class RSI implements Indicator {
 	public StockEventType isTriggered() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double getTestResults() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

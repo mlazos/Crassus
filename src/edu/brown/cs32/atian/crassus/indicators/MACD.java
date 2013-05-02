@@ -1,6 +1,7 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
@@ -40,18 +41,21 @@ public class MACD implements Indicator {
 	private List<IndicatorDatum> MACDHistogram;
 	private boolean isActive;
 	private boolean isVisible;
+	private Date startTime;
 	
-	public MACD(List<StockTimeFrameData> data, int signalPeriod, int shorterPeriod, int longerPeriod) {
+	public MACD(List<StockTimeFrameData> data, int signalPeriod, int shorterPeriod, int longerPeriod,
+			Date startTime) {
 		this.data = data;
 		this.signalPeriod = signalPeriod;
 		this.shortPeriod = shorterPeriod;
 		this.longPeriod = longerPeriod;
+		this.startTime = startTime;
 		
 		MACDLine = new ArrayList<IndicatorDatum>();
 		signalLine = new ArrayList<IndicatorDatum>();
 		MACDHistogram = new ArrayList<IndicatorDatum>();
 		
-		refresh(data);
+		refresh(data, startTime);
 	}
 	
 	@Override
@@ -141,9 +145,9 @@ public class MACD implements Indicator {
 		double firstShortEMA = calcSMA(startIndex - shortPeriod + 1, startIndex);
 		double firstLongEMA = calcSMA(startIndex - longPeriod + 1, startIndex);
 		
-		MACDLine.add(new IndicatorDatum(data.get(startIndex).getTime(), firstShortEMA - firstLongEMA));
-		signalLine.add(new IndicatorDatum(data.get(startIndex).getTime(), firstSignalEMA));
-		MACDHistogram.add(new IndicatorDatum(data.get(startIndex).getTime(), firstShortEMA - firstLongEMA - firstSignalEMA));
+		MACDLine.add(new IndicatorDatum(data.get(startIndex).getTime(), data.get(startIndex).getTimeInNumber(), firstShortEMA - firstLongEMA));
+		signalLine.add(new IndicatorDatum(data.get(startIndex).getTime(), data.get(startIndex).getTimeInNumber(), firstSignalEMA));
+		MACDHistogram.add(new IndicatorDatum(data.get(startIndex).getTime(), data.get(startIndex).getTimeInNumber(), firstShortEMA - firstLongEMA - firstSignalEMA));
 		
 		double prevSigEMA = firstSignalEMA;
 		double prevShortEMA = firstShortEMA;
@@ -158,9 +162,10 @@ public class MACD implements Indicator {
 			double MACDHistPoint = MACDPoint - currSigEMA;
 			
 			String currTimeLabel = data.get(i).getTime();
-			MACDLine.add(new IndicatorDatum(currTimeLabel, MACDPoint));
-			signalLine.add(new IndicatorDatum(currTimeLabel, currSigEMA));
-			MACDHistogram.add(new IndicatorDatum(currTimeLabel, MACDHistPoint));
+			long currTime = data.get(i).getTimeInNumber();
+			MACDLine.add(new IndicatorDatum(currTimeLabel, currTime, MACDPoint));
+			signalLine.add(new IndicatorDatum(currTimeLabel, currTime, currSigEMA));
+			MACDHistogram.add(new IndicatorDatum(currTimeLabel, currTime, MACDHistPoint));
 			
 			prevSigEMA = currSigEMA;		// save prev EMA values for next EMA calculation
 			prevShortEMA = currShortEMA;
@@ -169,14 +174,15 @@ public class MACD implements Indicator {
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
+	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime) {
 		this.data = data;
+		this.startTime = startTime;
 		updateMACD();
 	}
 
@@ -184,5 +190,11 @@ public class MACD implements Indicator {
 	public StockEventType isTriggered() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double getTestResults() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

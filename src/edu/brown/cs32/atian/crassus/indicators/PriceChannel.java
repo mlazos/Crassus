@@ -1,6 +1,7 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
@@ -38,14 +39,16 @@ public class PriceChannel implements Indicator {
 	private int lookBackPeriod;
 	private boolean isActive;
 	private boolean isVisible;
+	private Date startTime;
 	
-	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
+	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod, Date startTime) {
 		this.data = data;
 		this.lookBackPeriod = lookBackPeriod;
+		this.startTime = startTime;
 		upperChannel = new ArrayList<IndicatorDatum>();
 		lowerChannel = new ArrayList<IndicatorDatum>();
 		centreLine = new ArrayList<IndicatorDatum>();
-		refresh(data);
+		refresh(data, startTime);
 	}
 	
 	List<IndicatorDatum> getUpperChannel() {
@@ -93,9 +96,11 @@ public class PriceChannel implements Indicator {
 			double periodLow = periodHighLow[1];
 			double centreVal = (periodHigh + periodLow) / 2;
 			
-			upperChannel.add(new IndicatorDatum(data.get(i + lookBackPeriod).getTime(), periodHigh));
-			lowerChannel.add(new IndicatorDatum(data.get(i + lookBackPeriod).getTime(), periodLow));
-			centreLine.add(new IndicatorDatum(data.get(i + lookBackPeriod).getTime(), centreVal));
+			String timeLabel = data.get(i + lookBackPeriod).getTime();
+			long currTime = data.get(i + lookBackPeriod).getTimeInNumber();
+			upperChannel.add(new IndicatorDatum(timeLabel, currTime, periodHigh));
+			lowerChannel.add(new IndicatorDatum(timeLabel, currTime, periodLow));
+			centreLine.add(new IndicatorDatum(timeLabel, currTime, centreVal));
 		}
 	}
 	
@@ -129,14 +134,15 @@ public class PriceChannel implements Indicator {
 	}
 	
 	@Override
-	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
+	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime) {
 		this.data = data;
+		this.startTime = startTime;
 		updatePriceChannel();
 	}
 
@@ -144,5 +150,11 @@ public class PriceChannel implements Indicator {
 	public StockEventType isTriggered() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double getTestResults() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -5,8 +5,13 @@ package edu.brown.cs32.atian.crassus.gui;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Date;
+import java.util.List;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.time.TimeSeries;
+
+import edu.brown.cs32.atian.crassus.indicators.IndicatorDatum;
 
 /**
  * 
@@ -60,5 +65,7 @@ public interface StockPlot {
 	public BufferedImage getPrimaryBufferedImage(int width, int height);
 	
 	public BufferedImage getRsBufferedImage(int width, int height);
+	
+	public SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime, Color seriesColor);
 	
 }

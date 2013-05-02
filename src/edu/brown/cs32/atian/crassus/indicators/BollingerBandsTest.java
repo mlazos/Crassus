@@ -44,7 +44,7 @@ public class BollingerBandsTest {
 		data.add(new StockTimeFrameData("u", 0, 0, 0, 91.24, 0, 0, false)); 
 		data.add(new StockTimeFrameData("v", 0, 0, 0, 91.17, 0, 0, false)); 
 		data.add(new StockTimeFrameData("x", 0, 0, 0, 91.05, 0, 0, false)); 
-		bb = new BollingerBands(data, 20, 2);
+		bb = new BollingerBands(data, 20, 2, null);
 	}
 	
 	@Test

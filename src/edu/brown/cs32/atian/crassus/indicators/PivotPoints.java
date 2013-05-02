@@ -1,6 +1,7 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
@@ -39,10 +40,12 @@ public class PivotPoints implements Indicator {
 	private int pivotType;
 	private boolean isVisible;
 	private boolean isActive;
+	private Date startTime;
 	
 	
-	public PivotPoints(List<StockTimeFrameData> data, String pivotOption) {
+	public PivotPoints(List<StockTimeFrameData> data, String pivotOption, Date startTime) {
 		this.data = data;
+		this.startTime = startTime;
 		pivotPoints = new ArrayList<IndicatorDatum>();
 		support1 = new ArrayList<IndicatorDatum>();
 		support2 = new ArrayList<IndicatorDatum>();
@@ -59,11 +62,11 @@ public class PivotPoints implements Indicator {
         } else  {
             pivotType = 0;
         }
-		refresh(data);
+		refresh(data, startTime);
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
+	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
 	}
 	
@@ -114,6 +117,7 @@ public class PivotPoints implements Indicator {
 		for (int i = 1; i < data.size(); i++) {
 			StockTimeFrameData previous = data.get(i - 1);
 			String currTimeLabel = data.get(i).getTime();
+			long currTime = data.get(i).getTimeInNumber();
 			double pivot = (previous.getHigh() + previous.getClose() + previous.getLow()) / 3;
 			double high = previous.getHigh();
 			double low = previous.getLow();
@@ -138,14 +142,14 @@ public class PivotPoints implements Indicator {
 			
 			}
 			
-			pivotPoints.add(new IndicatorDatum(currTimeLabel, pivot));
-			support1.add(new IndicatorDatum(currTimeLabel, s1));
-			support2.add(new IndicatorDatum(currTimeLabel, s2));
-			support3.add(new IndicatorDatum(currTimeLabel, s3));
+			pivotPoints.add(new IndicatorDatum(currTimeLabel, currTime, pivot));
+			support1.add(new IndicatorDatum(currTimeLabel, currTime, s1));
+			support2.add(new IndicatorDatum(currTimeLabel, currTime, s2));
+			support3.add(new IndicatorDatum(currTimeLabel, currTime, s3));
 			
-			resistance1.add(new IndicatorDatum(currTimeLabel, r1));
-			resistance2.add(new IndicatorDatum(currTimeLabel, r2));
-			resistance3.add(new IndicatorDatum(currTimeLabel, r3));
+			resistance1.add(new IndicatorDatum(currTimeLabel, currTime, r1));
+			resistance2.add(new IndicatorDatum(currTimeLabel, currTime, r2));
+			resistance3.add(new IndicatorDatum(currTimeLabel, currTime, r3));
 		}
 	}
 	
@@ -159,6 +163,7 @@ public class PivotPoints implements Indicator {
 		for (int i = 1; i < data.size(); i++) {
 			StockTimeFrameData previous = data.get(i - 1);
 			String currTimeLabel = data.get(i).getTime();
+			long currTime = data.get(i).getTimeInNumber();
 			
 			double pivot = (previous.getHigh() + previous.getClose() + previous.getLow()) / 3;
 			double high = previous.getHigh();
@@ -179,17 +184,17 @@ public class PivotPoints implements Indicator {
 			double s1 = x/2 - high;
 			double r1 = x/2 - low;
 			
-			pivotPoints.add(new IndicatorDatum(currTimeLabel, pivot));
-			support1.add(new IndicatorDatum(currTimeLabel, s1));
-			resistance1.add(new IndicatorDatum(currTimeLabel, r1));
+			pivotPoints.add(new IndicatorDatum(currTimeLabel, currTime, pivot));
+			support1.add(new IndicatorDatum(currTimeLabel, currTime, s1));
+			resistance1.add(new IndicatorDatum(currTimeLabel, currTime, r1));
 		}
 	}
 	
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime) {
 		this.data = data;
-		
+		this.startTime = startTime;
 		if (pivotType == 2) updateDemark();
 		else updatePivot();
 	}
@@ -215,6 +220,12 @@ public class PivotPoints implements Indicator {
 	public StockEventType isTriggered() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double getTestResults() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 

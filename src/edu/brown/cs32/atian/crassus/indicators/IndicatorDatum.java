@@ -10,10 +10,16 @@ public class IndicatorDatum {
 	
 	private String timeLabel;
 	private double value;
+	private long time;
 	
-	public IndicatorDatum(String timeLabel, double value) {
+	public IndicatorDatum(String timeLabel, long time, double value) {
 		this.timeLabel = timeLabel;
+		this.time = time;
 		this.value = value;
+	}
+	
+	public long getTime() {
+		return time;
 	}
 	
 	public String getTimeLabel() {

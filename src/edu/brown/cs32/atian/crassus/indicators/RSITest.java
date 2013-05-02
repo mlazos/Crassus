@@ -29,7 +29,7 @@ public class RSITest {
 		data.add(new StockTimeFrameData("f", 0, 0, 0, 88.69, 0, 0, false)); 
 		data.add(new StockTimeFrameData("g", 0, 0, 0, 88.9, 0, 0, false)); 	
 		data.add(new StockTimeFrameData("h", 0, 0, 0, 89.2, 0, 0, false)); 
-		rsi = new RSI(data, 4);
+		rsi = new RSI(data, 4, null);
 	}
 	
 	

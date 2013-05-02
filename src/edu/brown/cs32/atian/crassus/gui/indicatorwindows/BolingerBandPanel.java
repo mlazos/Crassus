@@ -110,7 +110,8 @@ public class BolingerBandPanel extends JPanel
 			{
 				try
 				{
-					Indicator ind = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), Integer.parseInt(bandWidthArg));
+					Indicator ind = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), 
+							Integer.parseInt(bandWidthArg), stock.getStartTime());
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}
