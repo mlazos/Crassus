@@ -74,6 +74,11 @@ public class PriceChannel implements Indicator {
 		this.isActive = isActive;
 	}
 	
+	@Override 
+	public String getName() {
+		return "Price Channel";
+	}
+	
 	/**
 	 * Updates the price channel bands and centre line.
 	 */

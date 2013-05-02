@@ -69,6 +69,11 @@ public class MACD implements Indicator {
 		this.isActive = isActive;
 	}
 	
+	@Override
+	public String getName() {
+		return "MACD";
+	}
+	
 	/**
 	 * Calculates the SMA from start index to end index of data
 	 * inclusively.

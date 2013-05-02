@@ -49,4 +49,11 @@ public interface Indicator {
 	 */
 	StockEventType isTriggered();
 	
+	/**
+	 * Gets the name of an Indicator
+	 * 
+	 * @return		String name of Indicator
+	 */
+	String getName();
+	
 }

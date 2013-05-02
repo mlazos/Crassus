@@ -125,6 +125,11 @@ public class StochasticOscillator implements Indicator {
 	}
 	
 	@Override
+	public String getName() {
+		return "Stochastic Oscillator";
+	}
+	
+	@Override
 	public void addToPlot(StockPlot stockPlot) {
 		// TODO Auto-generated method stub
 		

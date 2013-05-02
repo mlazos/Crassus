@@ -48,14 +48,14 @@ public class PivotPoints implements Indicator {
 		resistance2 = new ArrayList<IndicatorDatum>();
 		resistance3 = new ArrayList<IndicatorDatum>();
 		if(pivotOption.equals("standard")) {
-                    pivotType = 0;
-                } else if(pivotOption.equals("fibonacci")) {
-                    pivotType = 1;
-                } else if(pivotOption.equals("demark")) {
-                    pivotType = 2;
-                } else  {
-                    pivotType = 0;
-                }
+			pivotType = 0;
+        } else if(pivotOption.equals("fibonacci")) {
+            pivotType = 1;
+        } else if(pivotOption.equals("demark")) {
+            pivotType = 2;
+        } else  {
+            pivotType = 0;
+        }
 		refresh(data);
 	}
 
@@ -92,10 +92,16 @@ public class PivotPoints implements Indicator {
 		return support3;
 	}
 	
-	
-	
-	
-	
+	@Override
+	public String getName() {
+		switch (pivotType) {
+			case 0: return "Standard Pivot Points"; 
+			case 1: return "Fibonacci Pivot Points";
+			case 2: return "Demark Pivot Points";
+			default: return "";
+		}
+	}
+
 	/**
 	 * Updates the standard pivot points and resistance and support lines. 
 	 */

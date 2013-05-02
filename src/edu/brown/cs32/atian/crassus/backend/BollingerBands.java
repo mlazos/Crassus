@@ -70,6 +70,11 @@ public class BollingerBands implements Indicator {
 		this.isActive = isActive;
 	}
 	
+	@Override
+	public String getName() {
+		return "Bollinger Bands";
+	}
+	
 	/**
 	 * Calculates the standard deviation given start and end index of data inclusive.
 	 * 

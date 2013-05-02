@@ -55,6 +55,11 @@ public class RSI implements Indicator {
 		this.isActive = isActive;
 	}
 	
+	@Override
+	public String getName() {
+		return "Relative Strength Index";
+	}
+	
 	/**
 	 * Updates the RSI data points
 	 */
