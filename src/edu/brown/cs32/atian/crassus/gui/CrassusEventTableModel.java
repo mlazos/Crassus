@@ -101,4 +101,11 @@ public class CrassusEventTableModel extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 
+	public void removeIndicator(int i) {
+		if(i!=-1){
+			stock.getEventList().remove(i);
+			this.fireTableRowsDeleted(i, i);
+		}
+	}
+
 }

@@ -7,16 +7,21 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -37,16 +42,36 @@ public class CrassusEventTablePane extends JPanel {
 		@Override public void windowClosedWithCancel() {}
 	}
 
-	public class NewEventListener implements ActionListener {
+	public class PlusButtonListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
 			@SuppressWarnings("unused")
 			EventWindow eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
 		}
 	}
 	
-	CrassusEventTableModel model;
-	JFrame _frame;
-	Stock _stock;
+	public class CtrlIAction extends AbstractAction {
+		@Override public void actionPerformed(ActionEvent e) {
+			@SuppressWarnings("unused")
+			EventWindow eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
+		}
+	}
+
+	public class MinusButtonListener implements ActionListener {
+		@Override public void actionPerformed(ActionEvent arg0) {
+			removeSelectedIndicator();
+		}
+	}
+
+	public class CtrlShiftIAction extends AbstractAction {
+		@Override public void actionPerformed(ActionEvent e) {
+			removeSelectedIndicator();
+		}
+	}
+
+	private JTable table;
+	private CrassusEventTableModel model;
+	private JFrame _frame;
+	private Stock _stock;
 
 	public CrassusEventTablePane(JFrame frame){
 		_frame = frame;
@@ -54,7 +79,7 @@ public class CrassusEventTablePane extends JPanel {
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		
-		JTable table = new JTable();
+		table = new JTable();
 		table.setBackground(Color.WHITE);
 		table.setTableHeader(null);//Disable table header
 		
@@ -102,10 +127,20 @@ public class CrassusEventTablePane extends JPanel {
 		
 
 		JButton addButton = new JButton("+");
-		addButton.addActionListener(new NewEventListener());
+		addButton.addActionListener(new PlusButtonListener());
 		addButton.setToolTipText("add new indicator");
+		addButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK),
+				"CTRL I");
+		addButton.getActionMap().put("CTRL I", new CtrlIAction());
+		
 		JButton removeButton = new JButton("-");
+		removeButton.addActionListener(new MinusButtonListener());
 		removeButton.setToolTipText("remove selected indicator");
+		removeButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK|InputEvent.SHIFT_DOWN_MASK), 
+				"CTRL SHIFT I");
+		removeButton.getActionMap().put("CTRL SHIFT I", new CtrlShiftIAction());
 		
 		JPanel buttonHolder = new JPanel();
 		buttonHolder.setBackground(Color.WHITE);
@@ -124,6 +159,20 @@ public class CrassusEventTablePane extends JPanel {
 		this.add(buttonAndLine, BorderLayout.SOUTH);
 	}
 	
+	public void removeSelectedIndicator() {
+		if(table.getRowCount()==0)
+			return;
+		
+		int index = table.getSelectedRow();
+		if(table.getRowCount()>1){
+			if(index == table.getRowCount()-1)
+				table.setRowSelectionInterval(index-1,index-1);
+			else
+				table.setRowSelectionInterval(index+1,index+1);
+		}
+		model.removeIndicator(index);
+	}
+
 	public void changeToStock(Stock stock){
 		_stock = stock;
 		model.changeToStock(stock);

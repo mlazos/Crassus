@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -54,17 +55,19 @@ public class CrassusStockTablePane extends JPanel {
 		}
 	}
 
+	private static final Pattern p =  Pattern.compile("[^a-zA-Z0-9]");
 	public class NewTickerListener implements TickerDialogCloseListener {
 		@Override public void tickerDialogClosedWithTicker(String symbol) {
 			try{
-				if(symbol.contains("&")||symbol.contains("="))
+				if(p.matcher(symbol).find())
 					throw new IllegalArgumentException();
+				symbol = symbol.toUpperCase();
 				Stock stock = new StockImpl(symbol);
 				stock.refresh();
 				model.addStock(stock);
 				table.setRowSelectionInterval(model.getRowCount()-1, model.getRowCount()-1);
 			}catch(IllegalArgumentException e){
-				JOptionPane.showMessageDialog(_frame,symbol+" is not a valid ticker symbol");
+				JOptionPane.showMessageDialog(_frame,"\'"+symbol+"\' is not a valid ticker symbol");
 			}
 		}
 	}
@@ -158,7 +161,7 @@ public class CrassusStockTablePane extends JPanel {
 		
 		JButton addButton = new JButton("+");
 		addButton.addActionListener(new PlusButtonListener());
-		addButton.setToolTipText("add new ticker\n");
+		addButton.setToolTipText("add new ticker");
 		addButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_DOWN_MASK),
 				"CTRL T");
@@ -166,7 +169,7 @@ public class CrassusStockTablePane extends JPanel {
 		
 		JButton removeButton = new JButton("-");
 		removeButton.addActionListener(new MinusButtonListener());
-		removeButton.setToolTipText("remove selected ticker\n");
+		removeButton.setToolTipText("remove selected ticker");
 		removeButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_DOWN_MASK|InputEvent.SHIFT_DOWN_MASK), 
 				"CTRL SHIFT T");
@@ -196,6 +199,9 @@ public class CrassusStockTablePane extends JPanel {
 	}
 
 	public void removeSelectedTicker() {
+		if(table.getRowCount()==0)
+			return;
+		
 		int index = table.getSelectedRow();
 		if(table.getRowCount()>1){
 			if(index == table.getRowCount()-1)
