@@ -198,6 +198,7 @@ public class BollingerBands implements Indicator {
 	@Override
 	public void refresh(List<StockTimeFrameData> data, Date startTime) {
 		this.data = data;
+		this.startTime = startTime;
 		updateBollingerBands();
 	}
 
