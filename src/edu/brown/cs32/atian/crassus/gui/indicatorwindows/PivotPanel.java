@@ -121,7 +121,6 @@ public class PivotPanel extends JPanel {
 			
 			try
 			{
-				System.out.println("creating pivs");
 				Indicator ind = new PivotPoints(stock.getStockPriceData(StockFreqType.DAILY), currentButton);
 				closeListener.windowClosedWithEvent(ind);
 				parent.dispose();
