@@ -6,19 +6,28 @@ package edu.brown.cs32.atian.crassus.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Stack;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.CrassusStockTablePane.CtrlTAction;
 
 /**
  * @author Matthew
@@ -26,6 +35,20 @@ import edu.brown.cs32.atian.crassus.backend.StockList;
  */
 public class CrassusGUI implements GUI {
 	
+	@SuppressWarnings("serial")
+	public class CtrlZAction extends AbstractAction implements Action {
+		@Override public void actionPerformed(ActionEvent e) {
+			undoables.undo();
+		}
+	}
+
+	@SuppressWarnings("serial")
+	public class CtrlYAction extends AbstractAction implements Action {
+		@Override public void actionPerformed(ActionEvent e) {
+			undoables.redo();
+		}
+	}
+
 	public class CompoundChangeStockListener implements CrassusChangeStockListener {
 		@Override public void changeToStock(Stock stock) {
 			if(stock==null && stockInfoStateNormal){
@@ -63,10 +86,24 @@ public class CrassusGUI implements GUI {
 	private JPanel stockInfo;
 	private JPanel nullStockInfo;
 	private boolean stockInfoStateNormal = false;
+	
+	UndoableStack undoables;
 
 	public CrassusGUI(StockList stocks) {
 		
 		frame = new JFrame("Crassus");
+		
+		undoables = new UndoableStack();
+
+		frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK),
+				"CTRL Z");
+		frame.getRootPane().getActionMap().put("CTRL Z", new CtrlZAction());
+		
+		frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Y,InputEvent.CTRL_DOWN_MASK),
+				"CTRL Y");
+		frame.getRootPane().getActionMap().put("CTRL Y", new CtrlYAction());
 		
 		try {
 			BufferedImage img = ImageIO.read(new File("icons/programIcon.png"));
@@ -76,7 +113,7 @@ public class CrassusGUI implements GUI {
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		stockBox = new CrassusStockTablePane(frame,stocks);
+		stockBox = new CrassusStockTablePane(frame,stocks,undoables);
 		stockBox.setChangeStockListener(new CompoundChangeStockListener());
 
 		eventBox = new CrassusIndicatorTablePane(frame);

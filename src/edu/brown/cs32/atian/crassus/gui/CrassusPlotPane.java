@@ -183,12 +183,11 @@ public class CrassusPlotPane extends JPanel {
 			PlotWrapper plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
 			plot.setAxesTitles("Time", "Price");
 			stock.addToPlot(plot);
-			
-			for(Indicator ind: stock.getEventList()){
-				if(ind.getVisible())
-					ind.addToPlot(plot);
-			}
-			
+//			
+//			for(Indicator ind: stock.getEventList()){
+//				ind.addToPlot(plot);
+//			}
+//			
 			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
 			imageDisplayer.setImage(image);
 		}

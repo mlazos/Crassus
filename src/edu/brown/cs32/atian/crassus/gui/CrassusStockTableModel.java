@@ -1,5 +1,7 @@
 package edu.brown.cs32.atian.crassus.gui;
 
+import java.util.Stack;
+
 import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
@@ -9,9 +11,11 @@ import edu.brown.cs32.atian.crassus.backend.StockList;
 public class CrassusStockTableModel extends AbstractTableModel {
 	
 	private StockList _stocks;
+	private Stack<Undoable> undoables;
 	
-	public CrassusStockTableModel(StockList stocks){
+	public CrassusStockTableModel(StockList stocks, Stack<Undoable> undoables){
 		_stocks = stocks;
+		this.undoables = undoables;
 	}
 
 	@Override
@@ -63,16 +67,19 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	public void addStock(Stock stock) {
 		_stocks.add(stock);
 		this.fireTableRowsInserted(_stocks.getStockList().size()-1, _stocks.getStockList().size()-1);
+		//undoables.add(new UndoableStockTableChange(this, stock, _stocks.getStockList().size()-1, true));
 	}
 	
 	public void addStock(int i, Stock stock) {
 		_stocks.getStockList().add(i,stock);
+		//undoables.add(new UndoableStockTableChange(this, stock, i, true));
 	}
 
 	public Stock removeStock(int i) {
 		if(i!=-1){
 			Stock stock = _stocks.getStockList().remove(i);
 			this.fireTableRowsDeleted(i,i);
+			//undoables.add(new UndoableStockTableChange(this, stock, i, false));
 			return stock;
 		}
 		else return null;

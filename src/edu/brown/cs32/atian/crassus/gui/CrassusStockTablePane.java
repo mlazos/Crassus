@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.Stack;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
@@ -93,7 +94,7 @@ public class CrassusStockTablePane extends JPanel {
 	
 	private StockList stocks;
 	
-	public CrassusStockTablePane(JFrame frame, StockList stocks){
+	public CrassusStockTablePane(JFrame frame, StockList stocks, Stack<Undoable> undoables){
 		_frame = frame;
 		
 		this.stocks = stocks;
@@ -107,7 +108,7 @@ public class CrassusStockTablePane extends JPanel {
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setFont(new Font("SansSerif",Font.BOLD,12));
 		
-		model = new CrassusStockTableModel(stocks);
+		model = new CrassusStockTableModel(stocks,undoables);
 		table.setModel(model);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
