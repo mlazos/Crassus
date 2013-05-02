@@ -312,8 +312,12 @@ public class StockImpl implements Stock {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
          
         for (Indicator ind : _events) {
-            ind.refresh(stockPriceData);
+            ind.refresh(stockPriceData, _startTime);
         }        
+    }
+    
+    public Date getStartTime() {
+    	return _startTime;
     }
     
     public StockEventType isTriggered() {

@@ -9,6 +9,7 @@ import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +42,8 @@ public interface Stock {
     void refresh();
     
     void addToPlot(StockPlot stockPlot);   
+    
+    Date getStartTime();
     
     StockEventType isTriggered();
 }

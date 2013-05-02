@@ -96,7 +96,8 @@ public class RSIPanel extends JPanel
 			{
 				try
 				{
-					Indicator ind = new RSI(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
+					Indicator ind = new RSI(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg),
+							stock.getStartTime());
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}

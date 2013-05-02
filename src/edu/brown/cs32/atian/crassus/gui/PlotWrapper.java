@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -17,9 +19,13 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Minute;
+import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+
+import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
+import edu.brown.cs32.atian.crassus.indicators.IndicatorDatum;
 
 
 public class PlotWrapper implements StockPlot 
@@ -234,9 +240,28 @@ public class PlotWrapper implements StockPlot
 		   
 	    }
 	}
+	
+	@Override
+    public  SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime,
+    		Color seriesColor) {
+        TimeSeries series = new TimeSeries(seriesName);
+        
+        for(IndicatorDatum datum : indicatorPoints) {
+             //  return time represented by a second value 
+             long tmp = datum.getTime() * 1000;    // from second to Millisecond
+             Calendar calendar = Calendar.getInstance();
+             calendar.setTimeInMillis(tmp);
+             Date date = calendar.getTime();  
+             
+             Calendar calendarStart = Calendar.getInstance();
+             calendarStart.setTime(startTime);
 
-	
-	
-	
+             if(calendarStart.before(calendar)) {
+                series.add(new Second(date) , datum.getValue());
+             }
+        }
+        
+        return new SeriesWrapper(series, seriesColor);
+    }
 
 }

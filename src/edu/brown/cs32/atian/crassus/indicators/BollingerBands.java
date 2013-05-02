@@ -1,9 +1,14 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.awt.Color;
 import java.util.*;
+
+import org.jfree.data.time.Second;
+import org.jfree.data.time.TimeSeries;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
+import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /**
@@ -29,17 +34,22 @@ public class BollingerBands implements Indicator {
 	private int bandWidth;
 	private boolean isActive;
 	private boolean isVisible;
+	private final double START_AMT = 10000;
+	private double percentMade;
+	private Date startTime;
 	
-	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {
+	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth,
+			Date startTime) throws IllegalArgumentException {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
 		
 		this.data = data;
 		this.period = period;
 		this.bandWidth = bandWidth;
+		this.startTime = startTime;
 		middleBand = new ArrayList<IndicatorDatum>();
 		upperBand = new ArrayList<IndicatorDatum>();
 		lowerBand = new ArrayList<IndicatorDatum>();
-		refresh(data);
+		refresh(data, startTime);
 	}
 	
 	/**
@@ -122,29 +132,54 @@ public class BollingerBands implements Indicator {
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
-		//XYSeries xyseries = new XYSeries();
+	public void addToPlot(StockPlot stockPlot) {
+
+		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperBand, "Upper Band", startTime, Color.red);
+		SeriesWrapper middleSeries = stockPlot.getTimeSeries(middleBand, "Middle Band", startTime, Color.blue);
+		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerBand, "Lower Band", startTime, Color.GREEN);
 		
+		stockPlot.addSeries(upperSeries);
+		stockPlot.addSeries(middleSeries);
+		stockPlot.addSeries(lowerSeries);
 	}
 	
 	/**
 	 * Updates the Bollinger Bands.
 	 */
 	private void updateBollingerBands() {
+		
+		StockEventType currEvent = StockEventType.NONE;
+		double currAmt = START_AMT;
+		double epsilon = 0.1;
+		double numStocks = 0;
 		for (int i = 0; (i + period - 1) < data.size(); i++) {
 			double avg = calcSMA(i, i + period - 1);
 			double stdDev = calcStdDev(i, i + period - 1, avg);
 			
-			/*if (i == 0) {
-				for (int j = 0; j < period - 1; j++) {
-					middleBand.add(new IndicatorDatum(data.get(j).getTime(), avg));		// add (period-1) times
+			double upperBandValue = avg + (bandWidth * stdDev);
+			double lowerBandValue = avg - (bandWidth * stdDev);
+			double currClose = data.get(i).getClose();
+			
+			if ((currClose > upperBandValue - epsilon) || (currClose < upperBandValue + epsilon) || (i == data.size() - 1)) {
+				if (currEvent.equals(StockEventType.BUY)) {		// if we have already bought then sell now or sell at whatever price is 
+					currAmt += numStocks * currClose;			// last price
+					currEvent = StockEventType.SELL;
 				}
-			}*/
+			}
+			
+			if ((currClose > lowerBandValue - epsilon) || (currClose < lowerBandValue + epsilon)) {
+				numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
+				currAmt = currAmt%currClose;					// keep amount left over
+				currEvent = StockEventType.BUY;
+			}
 
-			middleBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg));
-			upperBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg + (bandWidth * stdDev)));
-			lowerBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), avg - (bandWidth * stdDev)));
+			middleBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), data.get(i + period - 1).getTimeInNumber(), avg));
+			upperBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), data.get(i + period - 1).getTimeInNumber(), upperBandValue));
+			lowerBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), data.get(i + period - 1).getTimeInNumber(), lowerBandValue));
 		}
+		
+		percentMade = ((currAmt - START_AMT) / START_AMT);
+
 	}
 	
 	
@@ -161,7 +196,7 @@ public class BollingerBands implements Indicator {
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime) {
 		this.data = data;
 		updateBollingerBands();
 	}
@@ -173,5 +208,10 @@ public class BollingerBands implements Indicator {
 		
 		}*/
 		return null;
+	}
+
+	@Override
+	public double getTestResults() {
+		return percentMade;
 	}
 }
