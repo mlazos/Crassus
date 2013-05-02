@@ -64,7 +64,7 @@ public class CrassusEventTableModel extends AbstractTableModel {
 		case 1:
 			return stock.getEventList().get(row).getActive();
 		case 2:
-			return "Name of an event";
+			return stock.getEventList().get(row).getName();
 		default:
 			return "ERR";
 		}
