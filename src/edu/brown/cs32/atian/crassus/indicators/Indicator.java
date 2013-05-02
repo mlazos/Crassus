@@ -11,7 +11,7 @@ public interface Indicator {
 	/**
 	 * Adds the indicator data to the plot.
 	 */
-	void addToPlot(StockPlot stockPlot);
+	void addToPlot(StockPlot stockPlot, int startIndex, int endIndex);
 	
 	/**
 	 * Refreshes the indicator data values.

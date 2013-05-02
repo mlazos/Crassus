@@ -122,7 +122,7 @@ public class BollingerBands implements Indicator {
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot) {
+	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
 		//XYSeries xyseries = new XYSeries();
 		
 	}

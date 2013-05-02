@@ -63,7 +63,7 @@ public class PivotPoints implements Indicator {
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot) {
+	public void addToPlot(StockPlot stockPlot, int startIndex, int endIndex) {
 		// TODO Auto-generated method stub
 	}
 	
