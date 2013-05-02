@@ -40,12 +40,9 @@ public class EventWindowFrame implements EventWindow {
 		frame = new JDialog(parent,"Bolinger Band Event");
 		frame.setModal(true);
 		frame.setResizable(false);
-		frame.setSize(325, 450);
-		frame.setMinimumSize(new Dimension(325, 450));
-		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setLayout(new BorderLayout());
 		
-		currentPanel = new BolingerBandPanel(new WindowCloseListenerStub(), frame, stock);
+		
+		currentPanel = new BolingerBandPanel(closeListener, frame, stock);
 		
 		//add dropdown to main Frame
 		JPanel[] eventList = {new BolingerBandPanel(closeListener, frame, stock), 
@@ -54,6 +51,12 @@ public class EventWindowFrame implements EventWindow {
 							  new PriceChannelPanel(closeListener, frame, stock), 
 							  new RSIPanel(closeListener, frame, stock), 
 							  new StochOscillPanel(closeListener, frame, stock)};
+		
+		frame.setSize(350, eventList[0].getHeight() + 70);
+		frame.setMinimumSize(new Dimension(350, eventList[0].getHeight() + 70));
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setLayout(new BorderLayout());
+		
 		
 		JComboBox<JPanel> selectEvent = new JComboBox<JPanel>(eventList);
 		selectEvent.addActionListener(new WindowChanger());
@@ -68,8 +71,6 @@ public class EventWindowFrame implements EventWindow {
 		frame.add(dropDownPanel, BorderLayout.NORTH);
 		frame.add(currentPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		
-		selectEvent.setSelectedIndex(0); 
 	}
 	
 	class WindowChanger implements ActionListener
@@ -79,7 +80,7 @@ public class EventWindowFrame implements EventWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			
+			System.out.println("selection made");
 			@SuppressWarnings("unchecked")
 			JComboBox<JPanel> selectEvent = (JComboBox<JPanel>)e.getSource();
 			JPanel newPanel = (JPanel)selectEvent.getSelectedItem();
@@ -90,9 +91,7 @@ public class EventWindowFrame implements EventWindow {
 			frame.add(currentPanel, BorderLayout.CENTER);
 			frame.setSize(350, 70 + panelDim.height);
 			frame.setMinimumSize(new Dimension(350, 70 + panelDim.height));
-			frame.pack();
-			frame.setVisible(true);
-			
+			display();
 		}
 		
 	}
