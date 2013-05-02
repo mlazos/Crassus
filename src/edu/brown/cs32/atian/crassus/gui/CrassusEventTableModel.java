@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import edu.brown.cs32.atian.crassus.backend.Indicator;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 public class CrassusEventTableModel extends AbstractTableModel {
 	
@@ -99,6 +99,13 @@ public class CrassusEventTableModel extends AbstractTableModel {
 	public void changeToStock(Stock stock) {
 		this.stock = stock;
 		this.fireTableDataChanged();
+	}
+
+	public void removeIndicator(int i) {
+		if(i!=-1){
+			stock.getEventList().remove(i);
+			this.fireTableRowsDeleted(i, i);
+		}
 	}
 
 }

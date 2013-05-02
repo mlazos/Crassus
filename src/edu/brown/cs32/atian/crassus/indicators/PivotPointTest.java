@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.backend;
+package edu.brown.cs32.atian.crassus.indicators;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 
 public class PivotPointTest {
 

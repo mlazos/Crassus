@@ -1,8 +1,10 @@
-package edu.brown.cs32.atian.crassus.backend;
+package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.brown.cs32.atian.crassus.backend.StockEventType;
+import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /**
@@ -67,6 +69,11 @@ public class MACD implements Indicator {
 	@Override
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	@Override
+	public String getName() {
+		return "MACD";
 	}
 	
 	/**

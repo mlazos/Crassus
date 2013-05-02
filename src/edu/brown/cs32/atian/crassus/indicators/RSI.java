@@ -1,14 +1,16 @@
-package edu.brown.cs32.atian.crassus.backend;
+package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.brown.cs32.atian.crassus.backend.StockEventType;
+import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /** 
  * @author atian
  *
- * RSI is a momentum oscillator that measures spped and change
+ * RSI is a momentum oscillator that measures speed and change
  * of price movements.
  * 
  * RSI oscillates between 0 and 100
@@ -28,6 +30,8 @@ public class RSI implements Indicator {
 	private boolean isVisible;
 	
 	public RSI(List<StockTimeFrameData> data, int period) {
+		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
+	
 		this.data = data;
 		this.period = period;
 		this.RSIPoints = new ArrayList<IndicatorDatum>();
@@ -53,6 +57,11 @@ public class RSI implements Indicator {
 	@Override
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	@Override
+	public String getName() {
+		return "Relative Strength Index";
 	}
 	
 	/**

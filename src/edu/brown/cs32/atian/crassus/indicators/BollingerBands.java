@@ -1,7 +1,9 @@
-package edu.brown.cs32.atian.crassus.backend;
+package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.*;
 
+import edu.brown.cs32.atian.crassus.backend.StockEventType;
+import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /**
@@ -19,16 +21,18 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  */
 public class BollingerBands implements Indicator {
 
-	private List<IndicatorDatum> middleBand;
-	private List<IndicatorDatum> lowerBand;
-	private List<IndicatorDatum> upperBand;
+	private List<IndicatorDatum> middleBand;		// oldest data first
+	private List<IndicatorDatum> lowerBand;			
+	private List<IndicatorDatum> upperBand;			
 	private int period;
 	private List<StockTimeFrameData> data;
 	private int bandWidth;
 	private boolean isActive;
 	private boolean isVisible;
 	
-	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) {
+	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {
+		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
+		
 		this.data = data;
 		this.period = period;
 		this.bandWidth = bandWidth;
@@ -68,6 +72,11 @@ public class BollingerBands implements Indicator {
 	@Override
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	@Override
+	public String getName() {
+		return "Bollinger Bands";
 	}
 	
 	/**
@@ -160,6 +169,9 @@ public class BollingerBands implements Indicator {
 	@Override
 	public StockEventType isTriggered() {
 		// TODO Auto-generated method stub
+		/*		for (i = period - 1; i < data.size(); i++) {
+		
+		}*/
 		return null;
 	}
 }

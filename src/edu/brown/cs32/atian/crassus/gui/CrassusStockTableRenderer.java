@@ -10,9 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 
+@SuppressWarnings("serial")
 public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 
 	StockList stocks;
@@ -27,21 +27,11 @@ public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		
 		if(row%5==0)//(stocks.getStockList().get(row).isTriggered() == StockEventType.BUY)
-//			if(isSelected)
-				c.setBackground(new Color(0,230,0));
-//			else
-//				c.setBackground(new Color(170,230,170));
+			c.setBackground(new Color(170,230,170));
 		else if(row%5==1)//(stocks.getStockList().get(row).isTriggered() == StockEventType.SELL)
-//			if(isSelected)
-				c.setBackground(new Color(255,50,50));
-//			else
-//				c.setBackground(new Color(255,150,150));
+			c.setBackground(new Color(255,150,150));
 		else
-//			if(isSelected)
-//			//	c.setBackground(new Color(210,210,255));
-//				c.setBackground(new Color(130,130,180));
-//			else
-				c.setBackground(Color.WHITE);
+			c.setBackground(Color.WHITE);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -56,12 +46,18 @@ public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 		}
 		
 		if(column==0)
-			panel.setBorder(BorderFactory.createEmptyBorder(2,2,2,0));
+			panel.setBorder(BorderFactory.createCompoundBorder(
+					BorderFactory.createEmptyBorder(3,3,3,0),
+					BorderFactory.createMatteBorder(0, 0, 0, 3, c.getBackground())));
 		else if(column==4)
-			panel.setBorder(BorderFactory.createEmptyBorder(2,0,2,2));
+			panel.setBorder(BorderFactory.createEmptyBorder(3,0,3,3));
 		else
-			panel.setBorder(BorderFactory.createEmptyBorder(2,0,2,0));
+			panel.setBorder(BorderFactory.createCompoundBorder(
+					BorderFactory.createEmptyBorder(3,0,3,0),
+					BorderFactory.createMatteBorder(0, 0, 0, 3, c.getBackground())));
 
+		panel.setToolTipText(stocks.getStockList().get(row).getCompanyName());
+		
 		return panel;
 	}
 }
