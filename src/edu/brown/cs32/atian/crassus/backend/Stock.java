@@ -5,6 +5,7 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
+import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public interface Stock {
     String getCompanyName();
     
     void setCurrFreq(StockFreqType currFreq);   // MINUTELY, DAILY, WEEKLY, MONTHLY
+    void setTimeFrame(TimeFrame timeFrame);
  
     StockRealTimeData getStockRealTimeData();
     
