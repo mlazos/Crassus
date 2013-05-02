@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,29 +12,37 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.StochasticOscillator;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
-public class RSIPanel extends JPanel 
-{
+public class StochOscillPanel extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 12154087L;
 	
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
 	private JTextField period;
 
-	public RSIPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
+	public StochOscillPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
-		
 		this.closeListener = closeListener;
 		this.parent = parent;
 		this.stock = stock;
 		
-		NumberVerifier inputValidator = new NumberVerifier(this);
+		NumberVerifier numberVerifier = new NumberVerifier(this);
+		
 		//top panel
 		JLabel periodLabel = new JLabel("Period:");
 		
-		period = new JTextField();
-		period.setInputVerifier(inputValidator);
+		JTextField period = new JTextField();
+		period.setInputVerifier(numberVerifier);
 		period.setSize(50, 20);
 		period.setPreferredSize(new Dimension(50, 20));
 		
@@ -64,17 +72,47 @@ public class RSIPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
+
 		
 	}
-	
-	class OkListener implements ActionListener
+
+	class OkListener extends AbstractOkListener
 	{
+
+		public OkListener() 
+		{
+			super(parent);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			String periodArg = period.getText();
+			
+			if(periodArg == null)
+			{
+				showErrorDialog("You must enter a value.");
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new StochasticOscillator(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
+			}
 			
 		}
+		
 		
 	}
 	
@@ -88,9 +126,9 @@ public class RSIPanel extends JPanel
 		}
 		
 	}
-	
 	public String toString()
 	{
-		return "Relative Strength Index Event";
+		return "Stochastic Oscillator Event";
 	}
+
 }

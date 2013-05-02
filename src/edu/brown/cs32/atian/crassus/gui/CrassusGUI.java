@@ -98,7 +98,7 @@ public class CrassusGUI implements GUI {
 		
 		frame.add(stockBox, BorderLayout.WEST);
 		frame.add(nullStockInfo,BorderLayout.CENTER);
-		frame.setMinimumSize(new Dimension(1000,500));
+		frame.setMinimumSize(new Dimension(1050,500));
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,10 +12,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.MACD;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
 public class MACDPanel extends JPanel 
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private WindowCloseListener closeListener;
 	private JDialog parent;
 	private Stock stock;
@@ -93,14 +101,46 @@ public class MACDPanel extends JPanel
 		
 	}
 	
-	class OkListener implements ActionListener
+	class OkListener extends AbstractOkListener
 	{
+
+		public OkListener() 
+		{
+			super(parent);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-	
+			
+			String signalPArg = signalP.getText();
+			String shortPArg = shortP.getText();
+			String longPArg = longP.getText();
+			
+			if(signalPArg == null || shortPArg == null || longPArg == null)
+			{
+				showErrorDialog("You must enter values.");
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new MACD(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(signalPArg), Integer.parseInt(shortPArg), Integer.parseInt(longPArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
+			}
+			
 		}
+		
 		
 	}
 	

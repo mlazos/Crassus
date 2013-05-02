@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,7 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.PriceChannel;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
 public class PriceChannelPanel extends JPanel 
 {
@@ -72,14 +76,43 @@ public class PriceChannelPanel extends JPanel
 		
 	}
 	
-	class OkListener implements ActionListener
+	class OkListener extends AbstractOkListener
 	{
+
+		public OkListener() 
+		{
+			super(parent);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			String lookBackArg = lookBack.getText();
+			
+			if(lookBackArg == null)
+			{
+				showErrorDialog("You must enter a value.");
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new PriceChannel(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(lookBackArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
+			}
 			
 		}
+		
 		
 	}
 	

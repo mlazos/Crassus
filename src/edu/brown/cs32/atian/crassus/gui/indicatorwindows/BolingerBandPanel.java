@@ -1,11 +1,10 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -15,6 +14,7 @@ import javax.swing.JTextField;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.indicators.BollingerBands;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
@@ -88,8 +88,13 @@ public class BolingerBandPanel extends JPanel
 		
 	}
 	
-	class OkListener implements ActionListener
+	class OkListener extends AbstractOkListener
 	{
+
+		public OkListener() 
+		{
+			super(parent);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
@@ -99,7 +104,7 @@ public class BolingerBandPanel extends JPanel
 			
 			if(periodsArg == null || bandWidthArg == null)
 			{
-				showErrorDialog();
+				showErrorDialog("You must enter values.");
 			}
 			else
 			{
@@ -109,12 +114,18 @@ public class BolingerBandPanel extends JPanel
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}
-				catch(NumberFormatException nfe){}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
 			}
 			
 		}
 		
-		private void showErrorDialog(){}
 		
 	}
 	

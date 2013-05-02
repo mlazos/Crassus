@@ -1,11 +1,10 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -15,13 +14,12 @@ import javax.swing.border.EmptyBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
-import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
 public class EventWindowFrame implements EventWindow {
 
 	private JPanel currentPanel;
 	private JDialog frame;
-	private WindowCloseListener closeListener;
 	
 	public static void main(String[] args) 
 	{
@@ -40,13 +38,13 @@ public class EventWindowFrame implements EventWindow {
 	public EventWindowFrame(JFrame parent, WindowCloseListener closeListener, Stock stock)
 	{
 		frame = new JDialog(parent,"Bolinger Band Event");
+		frame.setModal(true);
 		frame.setResizable(false);
 		frame.setSize(325, 450);
 		frame.setMinimumSize(new Dimension(325, 450));
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setLayout(new BorderLayout());
 		
-		this.closeListener = closeListener;
 		currentPanel = new BolingerBandPanel(new WindowCloseListenerStub(), frame, stock);
 		
 		//add dropdown to main Frame
@@ -64,7 +62,7 @@ public class EventWindowFrame implements EventWindow {
 		dropDownPanel.setMaximumSize(new Dimension(250,20));
 		dropDownPanel.add(selectEvent);
 		dropDownPanel.setBorder(new EmptyBorder(20,20,20,20));
-		
+
 		
 		
 		frame.add(dropDownPanel, BorderLayout.NORTH);
