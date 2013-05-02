@@ -21,9 +21,17 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 
 public class CrassusPlotPane extends JPanel {
+
+	public class TimeFreqChangeListener implements ActionListener {
+		@Override public void actionPerformed(ActionEvent e) {
+			stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
+			refresh();
+		}
+	}
 
 	public class TimeScaleChangeListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
@@ -40,6 +48,7 @@ public class CrassusPlotPane extends JPanel {
 
 	private CrassusImageDisplayer imageDisplayer;
 	private JComboBox<String> timeframe;
+	private JComboBox<String> timeFreq;
 	private Stock stock;
 	
 	public CrassusPlotPane(){
@@ -64,13 +73,23 @@ public class CrassusPlotPane extends JPanel {
 		
 		timeframe.addActionListener(new TimeScaleChangeListener());
 		
-		JPanel timescalePanel = new JPanel();
-		timescalePanel.setBackground(Color.WHITE);
-		timescalePanel.setLayout(new FlowLayout());
-		timescalePanel.add(new JLabel("Time-scale: "));
-		timescalePanel.add(timeframe);
+		timeFreq = new JComboBox<>();
+		timeFreq.addItem("Minutely");
+		timeFreq.addItem("Daily");
+		timeFreq.addItem("Weekly");
+		timeFreq.addItem("Monthly");
 		
-		this.add(timescalePanel, BorderLayout.SOUTH);
+		timeFreq.addActionListener(new TimeFreqChangeListener());
+		
+		JPanel timePanel = new JPanel();
+		timePanel.setBackground(Color.WHITE);
+		timePanel.setLayout(new FlowLayout());
+		timePanel.add(new JLabel("Time-scale: "));
+		timePanel.add(timeframe);
+		timePanel.add(new JLabel("  Time-frequency: "));
+		timePanel.add(timeFreq);
+		
+		this.add(timePanel, BorderLayout.SOUTH);
 		
 		this.addComponentListener(new ResizeListener());
 	}
@@ -93,6 +112,20 @@ public class CrassusPlotPane extends JPanel {
 		case 4:
 		default:
 			return TimeFrame.FIVE_YEAR;
+		}
+	}
+	
+	private StockFreqType timeFreqFromIndex(int index){
+		switch(index){
+		case 0:
+			return StockFreqType.MINUTELY;
+		case 1:
+			return StockFreqType.DAILY;
+		case 2:
+			return StockFreqType.WEEKLY;
+		case 3:
+		default:
+			return StockFreqType.MONTHLY;
 		}
 	}
 	

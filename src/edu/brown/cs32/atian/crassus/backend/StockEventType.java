@@ -7,7 +7,7 @@ package edu.brown.cs32.atian.crassus.backend;
  * will return this type.
  */
 public enum StockEventType {
-	BUY, SELL, NONE;
+	BUY, SELL, NONE, CONFLICT;
 	
 	@Override
 	public String toString() {
@@ -16,6 +16,7 @@ public enum StockEventType {
 			case BUY: toReturn = "BUY"; break;
 			case SELL: toReturn = "SELL"; break;
 			case NONE: toReturn = "NONE"; break;
+			case CONFLICT: toReturn = "CONFLICT"; break;
 		}
 		return toReturn;
 	}
