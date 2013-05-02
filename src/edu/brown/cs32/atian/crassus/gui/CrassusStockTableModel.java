@@ -48,7 +48,6 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		case 0://ticker
 			return _stocks.getStockList().get(row).getTicker();
 		case 1://price
-			//System.out.println("price of "+_stocks.getStockList().get(row).getTicker()+": "+_stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice());
 			return _stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice();
 		case 2://open
 			return _stocks.getStockList().get(row).getStockRealTimeData().getOpenPrice();

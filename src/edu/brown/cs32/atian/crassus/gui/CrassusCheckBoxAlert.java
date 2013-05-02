@@ -32,7 +32,7 @@ public class CrassusCheckBoxAlert extends JCheckBox {
 		this.setIcon(blank);
 		this.setSelectedIcon(alert);
 		this.setPressedIcon(pressed);
-		this.setToolTipText("plot indicator");
+		this.setToolTipText("turn alerts on");
 	}
 	
 }

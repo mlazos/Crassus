@@ -11,14 +11,14 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.border.Border;
 import javax.swing.table.TableCellRenderer;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 
 public class CrassusIndicatorTableRenderer implements TableCellRenderer{// extends DefaultTableCellRenderer {
 
-	Stock stock;
-	
+	private Stock stock;
 	
 	
 	@Override
@@ -55,6 +55,34 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 		else
 			c.setBackground(Color.WHITE);
 
+		if(c instanceof JCheckBox){
+			JPanel panel = new JPanel(new BorderLayout());
+			panel.add(c,BorderLayout.CENTER);
+			panel.setBackground(c.getBackground());
+			panel.setMinimumSize(new Dimension(19,19));
+			c = panel;
+		}
+		
+		
+		if(column==0){
+			if(isSelected)
+				c.setBorder(BorderFactory.createMatteBorder(3,3,3,0,Color.BLACK));
+			else
+				c.setBorder(BorderFactory.createEmptyBorder(3,3,3,0));
+		}
+		else if(column==1){
+			if(isSelected)
+				c.setBorder(BorderFactory.createMatteBorder(3,0,3,0,Color.BLACK));
+			else
+				c.setBorder(BorderFactory.createEmptyBorder(3,0,3,0));
+		}
+		else if(column==2){
+			if(isSelected)
+				c.setBorder(BorderFactory.createMatteBorder(3,0,3,3,Color.BLACK));
+			else
+				c.setBorder(BorderFactory.createEmptyBorder(3,0,3,3));
+		}
+		
 			
 		return c;
 	}

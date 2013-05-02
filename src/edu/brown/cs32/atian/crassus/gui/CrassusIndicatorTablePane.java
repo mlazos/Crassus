@@ -29,7 +29,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableColumn;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
-import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindow;
 import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindowFrame;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
@@ -45,15 +44,15 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 	public class PlusButtonListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			@SuppressWarnings("unused")
-			EventWindow eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
+			EventWindowFrame eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
+			eventWindow.display();
 		}
 	}
 	
 	public class CtrlIAction extends AbstractAction {
 		@Override public void actionPerformed(ActionEvent e) {
-			@SuppressWarnings("unused")
-			EventWindow eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
+			EventWindowFrame eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
+			eventWindow.display();
 		}
 	}
 
@@ -92,7 +91,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
 		table.setFillsViewportHeight(true);//makes extra space below table entries white
 		
-		table.setRowHeight(22);
+		table.setRowHeight(26);
 		table.setIntercellSpacing(new Dimension(0,2));
 		
 		editor = new CrassusIndicatorTableEditor();
@@ -100,7 +99,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		
 		for(int i=0; i<3; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
-			int colWidth = (i==2) ? 120 : 20;
+			int colWidth = (i==2) ? 120 : 26;
 			column.setPreferredWidth(colWidth);
 			column.setMaxWidth(colWidth);
 			column.setResizable(false);
@@ -173,6 +172,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 				table.setRowSelectionInterval(index+1,index+1);
 		}
 		model.removeIndicator(index);
+		editor.indicatorWasRemoved();
 	}
 
 	public void changeToStock(Stock stock){
