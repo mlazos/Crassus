@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Minute;
+import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 
 /**
@@ -290,7 +291,7 @@ public class StockImpl implements Stock {
              calendarStart.setTime(this._startTime);
 
              if(calendarStart.before(calendar)) {
-                series.add(new Minute(date) , tf.getAdjustedClose());
+                series.add(new Second(date) , tf.getAdjustedClose());
              }
         }
         
