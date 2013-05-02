@@ -44,7 +44,6 @@ public class CrassusPlotPane extends JPanel {
 				timeFreq.addItem("Daily");
 				timeFreq.addItem("Weekly");
 				timeFreq.addItem("Monthly");
-				timeFreq.addItem("Yearly");
 				break;
 			case 3:
 				timeFreq.addItem("Daily");
@@ -101,7 +100,7 @@ public class CrassusPlotPane extends JPanel {
 		imageDisplayer = new CrassusImageDisplayer();
 		this.add(imageDisplayer, BorderLayout.CENTER);
 		
-		timeframe = new JComboBox<>();
+		timeframe = new JComboBox<String>();
 		timeframe.addItem("Today");
 		timeframe.addItem("One Week");
 		timeframe.addItem("One Month");
@@ -109,7 +108,7 @@ public class CrassusPlotPane extends JPanel {
 		timeframe.addItem("Five Years");
 		timeframe.addActionListener(new TimeScaleChangeListener());
 		
-		timeFreq = new JComboBox<>();
+		timeFreq = new JComboBox<String>();
 		timeFreq.setModel(new DefaultComboBoxModel<String>());
 		timeFreq.addItem("Minutely");
 //		timeFreq.addItem("Daily");
