@@ -4,17 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,12 +20,14 @@ import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
-import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 
+@SuppressWarnings("serial")
 public class CrassusPlotPane extends JPanel {
 
 	public class TimeFreqChangeListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent e) {
+			if(stock==null)
+				return;
 			stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
 			refresh();
 		}
@@ -35,7 +35,37 @@ public class CrassusPlotPane extends JPanel {
 
 	public class TimeScaleChangeListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			refresh();
+			timeFreq.removeActionListener(timeFreqListener);//must be done to keep timeFreq from going bannanas; added back at the end of function
+			timeFreq.removeAllItems();
+			switch(timeframe.getSelectedIndex()){
+			case 4:
+				timeFreq.addItem("Daily");
+				timeFreq.addItem("Weekly");
+				timeFreq.addItem("Monthly");
+				timeFreq.addItem("Yearly");
+				break;
+			case 3:
+				timeFreq.addItem("Daily");
+				timeFreq.addItem("Weekly");
+				timeFreq.addItem("Monthly");
+				break;
+			case 2:
+				timeFreq.addItem("Daily");
+				timeFreq.addItem("Weekly");
+				break;
+			case 1:
+				timeFreq.addItem("Minutely");
+				timeFreq.addItem("Daily");
+				break;
+			case 0:
+				timeFreq.addItem("Minutely");
+			}
+			
+			timeFreq.showPopup();
+			timeFreq.hidePopup();
+			//timeFreq.revalidate();
+			timeFreq.addActionListener(timeFreqListener);
+			timeFreq.setSelectedIndex(0);//force timeFreq to update. This will make 'refresh' unnecessary
 		}
 	}
 
@@ -49,6 +79,7 @@ public class CrassusPlotPane extends JPanel {
 	private CrassusImageDisplayer imageDisplayer;
 	private JComboBox<String> timeframe;
 	private JComboBox<String> timeFreq;
+	private TimeFreqChangeListener timeFreqListener;
 	private Stock stock;
 	
 	public CrassusPlotPane(){
@@ -70,16 +101,20 @@ public class CrassusPlotPane extends JPanel {
 		timeframe.addItem("This Month");
 		timeframe.addItem("This Year");
 		timeframe.addItem("Five Years");
-		
+		timeframe.setSelectedIndex(4);
 		timeframe.addActionListener(new TimeScaleChangeListener());
 		
 		timeFreq = new JComboBox<>();
-		timeFreq.addItem("Minutely");
+		timeFreq.setModel(new DefaultComboBoxModel<String>());
+		//timeFreq.addItem("Minutely");
 		timeFreq.addItem("Daily");
 		timeFreq.addItem("Weekly");
 		timeFreq.addItem("Monthly");
+		timeFreq.addItem("Yearly");
 		
-		timeFreq.addActionListener(new TimeFreqChangeListener());
+		timeFreqListener = new TimeFreqChangeListener();
+		timeFreq.addActionListener(timeFreqListener);
+		
 		
 		JPanel timePanel = new JPanel();
 		timePanel.setBackground(Color.WHITE);
@@ -96,6 +131,7 @@ public class CrassusPlotPane extends JPanel {
 	
 	public void changeToStock(Stock stock){
 		this.stock = stock;
+		this.stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
 		refresh();
 	}
 	
@@ -115,7 +151,16 @@ public class CrassusPlotPane extends JPanel {
 		}
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	private StockFreqType timeFreqFromIndex(int index){
+		
+		switch(timeframeFromIndex(timeframe.getSelectedIndex())){
+		case FIVE_YEAR:
+		case YEARLY:
+		case MONTHLY:
+			index++;//first three don't allow minutely data
+		}
+		
 		switch(index){
 		case 0:
 			return StockFreqType.MINUTELY;
