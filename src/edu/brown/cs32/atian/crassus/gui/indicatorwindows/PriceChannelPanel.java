@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,48 +12,48 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.brown.cs32.atian.crassus.backend.BollingerBands;
-import edu.brown.cs32.atian.crassus.backend.Indicator;
-import edu.brown.cs32.atian.crassus.backend.StochasticOscillator;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.PriceChannel;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
-public class StochOscillPanel extends JPanel {
+public class PriceChannelPanel extends JPanel 
+{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 12154087L;
+	private static final long serialVersionUID = 1L;
 	
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
-	private JTextField period;
-
-	public StochOscillPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
+	private JTextField lookBack;
+	
+	public PriceChannelPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
 		this.stock = stock;
 		
-		NumberVerifier numberVerifier = new NumberVerifier(this);
-		
+		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
-		JLabel periodLabel = new JLabel("Period:");
+		JLabel lookBackLabel = new JLabel("Look Back Period:");
 		
-		JTextField period = new JTextField();
-		period.setInputVerifier(numberVerifier);
-		period.setSize(50, 20);
-		period.setPreferredSize(new Dimension(50, 20));
+		lookBack = new JTextField();
+		lookBack.setInputVerifier(inputValidator);
+		lookBack.setSize(50, 20);
+		lookBack.setPreferredSize(new Dimension(50, 20));
 		
-		JPanel periodInput = new JPanel();
-		periodInput.setLayout(new FlowLayout());
-		periodInput.add(periodLabel);
-		periodInput.add(period);
+		JPanel lookBackInput = new JPanel();
+		lookBackInput.setLayout(new FlowLayout());
+		lookBackInput.add(lookBackLabel);
+		lookBackInput.add(lookBack);
 		
 		JPanel parameters = new JPanel();
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));
-		parameters.add(periodInput);
+		parameters.add(lookBackInput);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -75,7 +75,7 @@ public class StochOscillPanel extends JPanel {
 
 		
 	}
-
+	
 	class OkListener extends AbstractOkListener
 	{
 
@@ -87,9 +87,9 @@ public class StochOscillPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			String periodArg = period.getText();
+			String lookBackArg = lookBack.getText();
 			
-			if(periodArg == null)
+			if(lookBackArg == null)
 			{
 				showErrorDialog("You must enter a value.");
 			}
@@ -97,7 +97,7 @@ public class StochOscillPanel extends JPanel {
 			{
 				try
 				{
-					Indicator ind = new StochasticOscillator(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
+					Indicator ind = new PriceChannel(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(lookBackArg));
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}
@@ -126,9 +126,11 @@ public class StochOscillPanel extends JPanel {
 		}
 		
 	}
+	
+	
 	public String toString()
 	{
-		return "Stochastic Oscillator Event";
+		return "Price Channel Event";
 	}
 
 }

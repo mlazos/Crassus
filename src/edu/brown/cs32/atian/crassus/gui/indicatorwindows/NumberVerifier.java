@@ -1,15 +1,9 @@
-package edu.brown.cs32.atian.crassus.gui;
-
-import java.awt.Color;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 import java.util.regex.Pattern;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class NumberVerifier extends InputVerifier {

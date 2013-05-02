@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,48 +12,48 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.brown.cs32.atian.crassus.backend.BollingerBands;
-import edu.brown.cs32.atian.crassus.backend.Indicator;
-import edu.brown.cs32.atian.crassus.backend.PriceChannel;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.RSI;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 
-public class PriceChannelPanel extends JPanel 
+public class RSIPanel extends JPanel 
 {
-
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 6684347084049152488L;
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
-	private JTextField lookBack;
-	
-	public PriceChannelPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
+	private JTextField period;
+
+	public RSIPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
+		
 		this.closeListener = closeListener;
 		this.parent = parent;
 		this.stock = stock;
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
-		JLabel lookBackLabel = new JLabel("Look Back Period:");
+		JLabel periodLabel = new JLabel("Period:");
 		
-		lookBack = new JTextField();
-		lookBack.setInputVerifier(inputValidator);
-		lookBack.setSize(50, 20);
-		lookBack.setPreferredSize(new Dimension(50, 20));
+		period = new JTextField();
+		period.setInputVerifier(inputValidator);
+		period.setSize(50, 20);
+		period.setPreferredSize(new Dimension(50, 20));
 		
-		JPanel lookBackInput = new JPanel();
-		lookBackInput.setLayout(new FlowLayout());
-		lookBackInput.add(lookBackLabel);
-		lookBackInput.add(lookBack);
+		JPanel periodInput = new JPanel();
+		periodInput.setLayout(new FlowLayout());
+		periodInput.add(periodLabel);
+		periodInput.add(period);
 		
 		JPanel parameters = new JPanel();
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));
-		parameters.add(lookBackInput);
+		parameters.add(periodInput);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -72,7 +72,6 @@ public class PriceChannelPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
-
 		
 	}
 	
@@ -87,9 +86,9 @@ public class PriceChannelPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			String lookBackArg = lookBack.getText();
+			String periodArg = period.getText();
 			
-			if(lookBackArg == null)
+			if(periodArg == null)
 			{
 				showErrorDialog("You must enter a value.");
 			}
@@ -97,7 +96,7 @@ public class PriceChannelPanel extends JPanel
 			{
 				try
 				{
-					Indicator ind = new PriceChannel(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(lookBackArg));
+					Indicator ind = new RSI(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}
@@ -127,10 +126,8 @@ public class PriceChannelPanel extends JPanel
 		
 	}
 	
-	
 	public String toString()
 	{
-		return "Price Channel Event";
+		return "Relative Strength Index Event";
 	}
-
 }

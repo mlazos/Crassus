@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,48 +12,60 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.brown.cs32.atian.crassus.backend.BollingerBands;
-import edu.brown.cs32.atian.crassus.backend.Indicator;
-import edu.brown.cs32.atian.crassus.backend.RSI;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
+import edu.brown.cs32.atian.crassus.indicators.BollingerBands;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
-public class RSIPanel extends JPanel 
+public class BolingerBandPanel extends JPanel
 {
-	
+
 	/**
-	 * 
+	 * This is the panel that is displayed for Bolinger Bands Events
 	 */
-	private static final long serialVersionUID = 6684347084049152488L;
+	private static final long serialVersionUID = 1L;
+	
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
-	private JTextField period;
-
-	public RSIPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
+	private JTextField periods;
+	private JTextField bandWidth;
+	
+	
+	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
-		
 		this.closeListener = closeListener;
 		this.parent = parent;
 		this.stock = stock;
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
-		JLabel periodLabel = new JLabel("Period:");
+		JLabel periodsLabel = new JLabel("Number of Periods:");
+		JLabel bandWidthLabel = new JLabel("Bandwidth:");
+		periods = new JTextField();
+		periods.setInputVerifier(inputValidator);
+		periods.setSize(50, 20);
+		periods.setPreferredSize(new Dimension(50, 20));
+		bandWidth = new JTextField();
+		bandWidth.setInputVerifier(inputValidator);
+		bandWidth.setSize(50, 20);
+		bandWidth.setPreferredSize(new Dimension(50,20));
 		
-		period = new JTextField();
-		period.setInputVerifier(inputValidator);
-		period.setSize(50, 20);
-		period.setPreferredSize(new Dimension(50, 20));
+		JPanel periodsInput = new JPanel();
+		periodsInput.setLayout(new FlowLayout());
+		periodsInput.add(periodsLabel);
+		periodsInput.add(periods);
 		
-		JPanel periodInput = new JPanel();
-		periodInput.setLayout(new FlowLayout());
-		periodInput.add(periodLabel);
-		periodInput.add(period);
+		JPanel bandWidthInput = new JPanel();
+		bandWidthInput.setLayout(new FlowLayout());
+		bandWidthInput.add(bandWidthLabel);
+		bandWidthInput.add(bandWidth);
 		
 		JPanel parameters = new JPanel();
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));
-		parameters.add(periodInput);
+		parameters.add(periodsInput);
+		parameters.add(bandWidthInput);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -72,6 +84,7 @@ public class RSIPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
+
 		
 	}
 	
@@ -86,17 +99,18 @@ public class RSIPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			String periodArg = period.getText();
+			String periodsArg = periods.getText();
+			String bandWidthArg = bandWidth.getText();
 			
-			if(periodArg == null)
+			if(periodsArg == null || bandWidthArg == null)
 			{
-				showErrorDialog("You must enter a value.");
+				showErrorDialog("You must enter values.");
 			}
 			else
 			{
 				try
 				{
-					Indicator ind = new RSI(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
+					Indicator ind = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), Integer.parseInt(bandWidthArg));
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}
@@ -128,6 +142,6 @@ public class RSIPanel extends JPanel
 	
 	public String toString()
 	{
-		return "Relative Strength Index Event";
+		return "Bolinger Band Event";
 	}
 }

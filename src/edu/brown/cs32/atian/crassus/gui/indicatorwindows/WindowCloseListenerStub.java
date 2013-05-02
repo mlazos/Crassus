@@ -1,5 +1,6 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 public class WindowCloseListenerStub implements WindowCloseListener {

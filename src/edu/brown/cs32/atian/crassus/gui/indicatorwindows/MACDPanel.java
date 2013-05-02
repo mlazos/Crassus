@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,14 +12,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.brown.cs32.atian.crassus.backend.BollingerBands;
-import edu.brown.cs32.atian.crassus.backend.Indicator;
-import edu.brown.cs32.atian.crassus.backend.MACD;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.MACD;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
 public class MACDPanel extends JPanel 
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private WindowCloseListener closeListener;
 	private JDialog parent;
 	private Stock stock;

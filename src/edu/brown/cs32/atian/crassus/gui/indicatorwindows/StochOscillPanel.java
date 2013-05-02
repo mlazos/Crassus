@@ -1,11 +1,10 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,59 +12,48 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.StochasticOscillator;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
-import edu.brown.cs32.atian.crassus.indicators.BollingerBands;
-import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
-public class BolingerBandPanel extends JPanel
-{
+public class StochOscillPanel extends JPanel {
 
 	/**
-	 * This is the panel that is displayed for Bolinger Bands Events
+	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 12154087L;
 	
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
-	private JTextField periods;
-	private JTextField bandWidth;
-	
-	
-	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
+	private JTextField period;
+
+	public StochOscillPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		this.closeListener = closeListener;
 		this.parent = parent;
 		this.stock = stock;
 		
-		NumberVerifier inputValidator = new NumberVerifier(this);
+		NumberVerifier numberVerifier = new NumberVerifier(this);
+		
 		//top panel
-		JLabel periodsLabel = new JLabel("Number of Periods:");
-		JLabel bandWidthLabel = new JLabel("Bandwidth:");
-		periods = new JTextField();
-		periods.setInputVerifier(inputValidator);
-		periods.setSize(50, 20);
-		periods.setPreferredSize(new Dimension(50, 20));
-		bandWidth = new JTextField();
-		bandWidth.setInputVerifier(inputValidator);
-		bandWidth.setSize(50, 20);
-		bandWidth.setPreferredSize(new Dimension(50,20));
+		JLabel periodLabel = new JLabel("Period:");
 		
-		JPanel periodsInput = new JPanel();
-		periodsInput.setLayout(new FlowLayout());
-		periodsInput.add(periodsLabel);
-		periodsInput.add(periods);
+		JTextField period = new JTextField();
+		period.setInputVerifier(numberVerifier);
+		period.setSize(50, 20);
+		period.setPreferredSize(new Dimension(50, 20));
 		
-		JPanel bandWidthInput = new JPanel();
-		bandWidthInput.setLayout(new FlowLayout());
-		bandWidthInput.add(bandWidthLabel);
-		bandWidthInput.add(bandWidth);
+		JPanel periodInput = new JPanel();
+		periodInput.setLayout(new FlowLayout());
+		periodInput.add(periodLabel);
+		periodInput.add(period);
 		
 		JPanel parameters = new JPanel();
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));
-		parameters.add(periodsInput);
-		parameters.add(bandWidthInput);
+		parameters.add(periodInput);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -87,7 +75,7 @@ public class BolingerBandPanel extends JPanel
 
 		
 	}
-	
+
 	class OkListener extends AbstractOkListener
 	{
 
@@ -99,18 +87,17 @@ public class BolingerBandPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			String periodsArg = periods.getText();
-			String bandWidthArg = bandWidth.getText();
+			String periodArg = period.getText();
 			
-			if(periodsArg == null || bandWidthArg == null)
+			if(periodArg == null)
 			{
-				showErrorDialog("You must enter values.");
+				showErrorDialog("You must enter a value.");
 			}
 			else
 			{
 				try
 				{
-					Indicator ind = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), Integer.parseInt(bandWidthArg));
+					Indicator ind = new StochasticOscillator(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}
@@ -139,9 +126,9 @@ public class BolingerBandPanel extends JPanel
 		}
 		
 	}
-	
 	public String toString()
 	{
-		return "Bolinger Band Event";
+		return "Stochastic Oscillator Event";
 	}
+
 }
