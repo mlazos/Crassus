@@ -35,7 +35,7 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 			c = cb1;
 			break;
 		case 1:
-			JCheckBox cb2 = new CrassusCheckBoxEye();
+			JCheckBox cb2 = new CrassusCheckBoxAlert();
 			if(value.equals(true))
 				cb2.setSelected(true);
 			c = cb2;

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
@@ -12,22 +13,32 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 @SuppressWarnings("serial")
 public class CrassusIndicatorTableEditor extends AbstractCellEditor implements TableCellEditor {
 
-	private CrassusCheckBoxEye cb;
+	private CrassusCheckBoxEye cbe;
+	private CrassusCheckBoxAlert cba;
 	private Stock stock;
 	
+	boolean usingEye;
+	
 	public CrassusIndicatorTableEditor(){
-		cb = new CrassusCheckBoxEye();
+		cbe = new CrassusCheckBoxEye();
+		cba = new CrassusCheckBoxAlert();
 	}
 	
 	@Override
 	public Object getCellEditorValue() {
-		return cb.isSelected();
+		if(usingEye)
+			return cbe.isSelected();
+		else
+			return cba.isSelected();
 	}
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected, int row, int column) {
 
+		JCheckBox cb = (column==0) ? cbe : cba;
+		usingEye = (column==0);
+		
 		if (value instanceof Boolean) {
             boolean selected = (boolean) value;
             cb.setSelected(selected);
