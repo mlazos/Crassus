@@ -25,6 +25,7 @@ import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedExceptio
 public class PlotWrapper implements StockPlot 
 {
 	private String stockName;
+	private TimeFrame timeFrame;
 	private TimeSeriesCollection series = new TimeSeriesCollection();
 	private TimeSeriesCollection rsSeries = new TimeSeriesCollection();
 	private List<Color> seriesColors = new ArrayList<Color>();
@@ -38,9 +39,20 @@ public class PlotWrapper implements StockPlot
 	private JFreeChart primaryChart;
 	private JFreeChart rsChart;
 	
-	public PlotWrapper(String stockName)
+	public PlotWrapper(String stockName, TimeFrame timeFrame)
 	{ 
 		this.stockName = stockName; 
+		this.timeFrame = timeFrame;
+	}
+	
+	public void setTimeFrame(TimeFrame timeFrame)
+	{
+		this.timeFrame = timeFrame;
+	}
+	
+	public TimeFrame getTimeFrame()
+	{
+		return timeFrame;
 	}
 	
 	//add a series to the list of series
@@ -177,7 +189,7 @@ public class PlotWrapper implements StockPlot
 	
 	public static void main(String[] args)
 	{
-		PlotWrapper pw = new PlotWrapper("Mike");
+		PlotWrapper pw = new PlotWrapper("Mike",TimeFrame.DAILY);
 		
 		TimeSeries series1 = new TimeSeries(Math.random());
 		TimeSeries series2 = new TimeSeries(Math.random());

@@ -2,33 +2,54 @@ package edu.brown.cs32.atian.crassus.gui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class MACDPanel extends JPanel {
+import edu.brown.cs32.atian.crassus.backend.Stock;
 
-	public MACDPanel()
+public class MACDPanel extends JPanel 
+{
+	private WindowCloseListener closeListener;
+	private JDialog parent;
+	private Stock stock;
+	private JTextField signalP;
+	private JTextField shortP;
+	private JTextField longP;
+	
+	public MACDPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
+		this.closeListener = closeListener;
+		this.parent = parent;
+		this.stock = stock;
+		
+		NumberVerifier inputValidator = new NumberVerifier(this);
+		
 		//top panel
 		JLabel signalLabel = new JLabel("Signal Period:");
 		JLabel shortLabel = new JLabel("Shorter Period:");
 		JLabel longLabel = new JLabel("Longer Period:");
 		
-		JTextField signalP = new JTextField();
+		signalP = new JTextField();
+		signalP.setInputVerifier(inputValidator);
 		signalP.setSize(50, 20);
 		signalP.setPreferredSize(new Dimension(50, 20));
 		
-		JTextField shortP = new JTextField();
+		shortP = new JTextField();
+		shortP.setInputVerifier(inputValidator);
 		shortP.setSize(50, 20);
 		shortP.setPreferredSize(new Dimension(50,20));
 		
-		JTextField LongP = new JTextField();
-		LongP.setSize(50, 20);
-		LongP.setPreferredSize(new Dimension(50,20));
+		longP = new JTextField();
+		longP.setInputVerifier(inputValidator);
+		longP.setSize(50, 20);
+		longP.setPreferredSize(new Dimension(50,20));
 		
 		JPanel signalInput = new JPanel();
 		signalInput.setLayout(new FlowLayout());
@@ -43,7 +64,7 @@ public class MACDPanel extends JPanel {
 		JPanel longerInput = new JPanel();
 		longerInput.setLayout(new FlowLayout());
 		longerInput.add(longLabel);
-		longerInput.add(LongP);
+		longerInput.add(longP);
 		
 		JPanel parameters = new JPanel();
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));
@@ -55,8 +76,11 @@ public class MACDPanel extends JPanel {
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
 		JButton ok = new JButton("Ok");
+		ok.addActionListener(new OkListener());
 		JButton test = new JButton("Test");
+		test.addActionListener(new TestListener());
 		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new CancelListener(parent));
 		buttons.add(ok);
 		buttons.add(test);
 		buttons.add(cancel);
@@ -68,17 +92,29 @@ public class MACDPanel extends JPanel {
 
 		
 	}
-	/*
+	
 	class OkListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+	
+		}
 		
 	}
 	
 	class TestListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+
+		}
 		
 	}
-	*/
+	
 
 	public String toString()
 	{

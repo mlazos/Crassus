@@ -11,4 +11,5 @@ public interface GUI {
 	 * Should be called when there is new data to draw to the screen
 	 */
 	public void update();
+
 }

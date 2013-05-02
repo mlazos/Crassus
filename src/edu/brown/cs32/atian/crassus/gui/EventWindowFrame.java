@@ -13,19 +13,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockImpl;
+
 public class EventWindowFrame implements EventWindow {
 
 	private JPanel currentPanel;
-	
 	private JDialog frame;
-	/**
-	 * @param args
-	 */
+	private WindowCloseListener closeListener;
+	
 	public static void main(String[] args) 
 	{
 		JFrame p = new JFrame("this");
 		p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		EventWindowFrame w = new EventWindowFrame(p);
+		EventWindowFrame w = new EventWindowFrame(p, new WindowCloseListenerStub(), new StockImpl("GOOG"));
 		w.display();
 	}
 	
@@ -35,12 +37,26 @@ public class EventWindowFrame implements EventWindow {
 		frame.setVisible(true);
 	}
 
-	public EventWindowFrame(JFrame parent)
+	public EventWindowFrame(JFrame parent, WindowCloseListener closeListener, Stock stock)
 	{
-		currentPanel = new BolingerBandPanel();
+		frame = new JDialog(parent,"Bolinger Band Event");
+		frame.setResizable(false);
+		frame.setSize(325, 450);
+		frame.setMinimumSize(new Dimension(325, 450));
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setLayout(new BorderLayout());
+		
+		this.closeListener = closeListener;
+		currentPanel = new BolingerBandPanel(new WindowCloseListenerStub(), frame, stock);
 		
 		//add dropdown to main Frame
-		JPanel[] eventList = {new BolingerBandPanel(), new MACDPanel(), new PivotPanel(), new PriceChannelPanel(), new RSIPanel(), new StochOscillPanel()};
+		JPanel[] eventList = {new BolingerBandPanel(closeListener, frame, stock), 
+							  new MACDPanel(closeListener, frame, stock), 
+							  new PivotPanel(closeListener, frame, stock), 
+							  new PriceChannelPanel(closeListener, frame, stock), 
+							  new RSIPanel(closeListener, frame, stock), 
+							  new StochOscillPanel(closeListener, frame, stock)};
+		
 		JComboBox<JPanel> selectEvent = new JComboBox<JPanel>(eventList);
 		selectEvent.addActionListener(new WindowChanger());
 		JPanel dropDownPanel = new JPanel();
@@ -49,12 +65,8 @@ public class EventWindowFrame implements EventWindow {
 		dropDownPanel.add(selectEvent);
 		dropDownPanel.setBorder(new EmptyBorder(20,20,20,20));
 		
-		frame = new JDialog(parent,"Bolinger Band Event");
-		frame.setResizable(false);
-		frame.setSize(325, 450);
-		frame.setMinimumSize(new Dimension(325, 450));
-		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setLayout(new BorderLayout());
+		
+		
 		frame.add(dropDownPanel, BorderLayout.NORTH);
 		frame.add(currentPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -78,8 +90,8 @@ public class EventWindowFrame implements EventWindow {
 			currentPanel = newPanel;
 			frame.setTitle(newPanel.toString());
 			frame.add(currentPanel, BorderLayout.CENTER);
-			frame.setSize(330, 70 + panelDim.height);
-			frame.setMinimumSize(new Dimension(330, 70 + panelDim.height));
+			frame.setSize(350, 70 + panelDim.height);
+			frame.setMinimumSize(new Dimension(350, 70 + panelDim.height));
 			frame.pack();
 			frame.setVisible(true);
 			
@@ -88,8 +100,5 @@ public class EventWindowFrame implements EventWindow {
 	}
 	
 	@Override
-	public void setWindowCloseListener(WindowCloseListener listener) 
-	{
-		
-	}
+	public void setWindowCloseListener(WindowCloseListener listener){}
 }

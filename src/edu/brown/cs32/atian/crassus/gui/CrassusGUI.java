@@ -3,13 +3,20 @@
  */
 package edu.brown.cs32.atian.crassus.gui;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
-import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
-import javax.swing.plaf.ColorUIResource;
+
+import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockList;
 
 /**
  * @author Matthew
@@ -17,46 +24,60 @@ import javax.swing.plaf.ColorUIResource;
  */
 public class CrassusGUI implements GUI {
 	
-	/*
-	 * for testing purposes only
-	 */
-	public static void main(String[] args){
-		UIManager.getDefaults().put("Button.background",new Color(0xFFFFFF));//make JButtons less ugly
-		//UIManager.getDefaults().put("ScrollBar.thumb", new Color(0xFFFFFF));
-		//UIManager.getDefaults().put("Slider.thumb",new Color(0xFFFFFF));
-//		UIManager.put("ScrollBar.thumbHighlight", new ColorUIResource(0,0,0));
-//		UIManager.put("ScrollBar.thumbDarkShadow", new ColorUIResource(0,0,0));
-//		UIManager.put("ScrollBar.highlight", new ColorUIResource(0,0,0));
-//		UIManager.put("ScrollBar.trackHighlight", new ColorUIResource(0,0,0));
-		GUI gui = new CrassusGUI();
-		gui.launch();
+	public class CompoundChangeStockListener implements CrassusChangeStockListener {
+		@Override public void changeToStock(Stock stock) {
+			if(stock==null && stockInfoStateNormal){
+				frame.remove(stockInfo);
+				frame.add(nullStockInfo,BorderLayout.CENTER);
+				stockInfoStateNormal = false;
+				frame.revalidate();
+				frame.setVisible(true);
+				frame.repaint();
+			}
+			else if(!stockInfoStateNormal){
+				frame.remove(nullStockInfo);
+				frame.add(stockInfo,BorderLayout.CENTER);
+				stockInfoStateNormal = true;
+				frame.revalidate();
+				frame.setVisible(true);
+				frame.repaint();
+			}
+			
+			plotPane.changeToStock(stock);
+			eventBox.changeToStock(stock);
+			
+			//frame.getContentPane().revalidate();
+			//frame.repaint();
+		}
 	}
-	
+
 	private JFrame frame;
 	
-	private JScrollPane stockListScrollPane;
-	
-	private JScrollPane eventListScrollPane;
-	
 	private CrassusPlotPane plotPane;
+	
+	private CrassusStockTablePane stockBox;
+	private CrassusEventTablePane eventBox;
+	
+	private JPanel stockInfo;
+	private JPanel nullStockInfo;
+	private boolean stockInfoStateNormal = false;
 
-	public CrassusGUI() {
+	public CrassusGUI(StockList stocks) {
 		
 		frame = new JFrame("Crassus");
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		CrassusStockTablePane stockBox = new CrassusStockTablePane(frame);
+		stockBox = new CrassusStockTablePane(frame,stocks);
+		stockBox.setChangeStockListener(new CompoundChangeStockListener());
 
-		CrassusEventTablePane eventBox = new CrassusEventTablePane();
-		
-		//frame.add(eventBox, BorderLayout.EAST);
+		eventBox = new CrassusEventTablePane(frame);
 		
 		//make plot pane
 		plotPane = new CrassusPlotPane();
 		
 		
-		JPanel stockInfo = new JPanel();
+		stockInfo = new JPanel();
 		stockInfo.setBackground(Color.WHITE);
 		stockInfo.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(20,20,20,20),
@@ -65,14 +86,21 @@ public class CrassusGUI implements GUI {
 		stockInfo.add(eventBox, BorderLayout.EAST);
 		stockInfo.add(plotPane,BorderLayout.CENTER);
 
+		nullStockInfo = new JPanel();
+		nullStockInfo.setBackground(Color.WHITE);
+		nullStockInfo.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(20,20,20,20),
+				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+		nullStockInfo.setLayout(new BorderLayout());
+		JPanel greyPanel = new JPanel();
+		greyPanel.setBackground(new Color(210,210,210));
+		nullStockInfo.add(greyPanel, BorderLayout.CENTER);
+		
 		frame.add(stockBox, BorderLayout.WEST);
-		frame.add(stockInfo,BorderLayout.CENTER);
-		frame.setMinimumSize(new Dimension(700,400));
+		frame.add(nullStockInfo,BorderLayout.CENTER);
+		frame.setMinimumSize(new Dimension(1000,500));
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.brown.cs32.atian.crassus.gui.GUI#launch()
-	 */
 	@Override
 	public void launch() {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -81,8 +109,8 @@ public class CrassusGUI implements GUI {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		stockBox.refresh();
+		plotPane.refresh();
 	}
 
 }

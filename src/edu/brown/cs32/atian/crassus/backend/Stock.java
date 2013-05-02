@@ -21,21 +21,16 @@ public interface Stock {
 
     String getCompanyName();
     
-    void setCurrFreq(String currFreq);   // "weekly", "daily", or "monthly"  
+    void setCurrFreq(StockFreqType currFreq);   // MINUTELY, DAILY, WEEKLY, MONTHLY
  
     StockRealTimeData getStockRealTimeData();
     
-    List<StockTimeFrameData> getStockPriceData(String freq);
+    List<StockTimeFrameData> getStockPriceData(StockFreqType freq);
     
     ArrayList<Indicator> getEventList();
     void removeEventList();
     void addEvent(Indicator event);
-    void deleteEvent(Indicator event);
-    
-//    Indicator getEvent(String eventName);
-
-    double getWeek52Low();
-    double getWeek52High();    
+    void deleteEvent(Indicator event);   
     
     void refresh();
     

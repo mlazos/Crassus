@@ -2,32 +2,53 @@ package edu.brown.cs32.atian.crassus.gui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import edu.brown.cs32.atian.crassus.backend.BollingerBands;
+import edu.brown.cs32.atian.crassus.backend.Indicator;
+import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 
 public class BolingerBandPanel extends JPanel
 {
 
 	/**
-	 * 
+	 * This is the panel that is displayed for Bolinger Bands Events
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public BolingerBandPanel()
+	private WindowCloseListener closeListener;
+	private Stock stock;
+	private JDialog parent;
+	private JTextField periods;
+	private JTextField bandWidth;
+	
+	
+	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
+		this.closeListener = closeListener;
+		this.parent = parent;
+		this.stock = stock;
+		
+		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
 		JLabel periodsLabel = new JLabel("Number of Periods:");
 		JLabel bandWidthLabel = new JLabel("Bandwidth:");
-		JTextField periods = new JTextField();
+		periods = new JTextField();
+		periods.setInputVerifier(inputValidator);
 		periods.setSize(50, 20);
 		periods.setPreferredSize(new Dimension(50, 20));
-		JTextField bandWidth = new JTextField();
+		bandWidth = new JTextField();
+		bandWidth.setInputVerifier(inputValidator);
 		bandWidth.setSize(50, 20);
 		bandWidth.setPreferredSize(new Dimension(50,20));
 		
@@ -50,8 +71,11 @@ public class BolingerBandPanel extends JPanel
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
 		JButton ok = new JButton("Ok");
+		ok.addActionListener(new OkListener());
 		JButton test = new JButton("Test");
+		test.addActionListener(new TestListener());
 		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new CancelListener(parent));
 		buttons.add(ok);
 		buttons.add(test);
 		buttons.add(cancel);
@@ -63,17 +87,47 @@ public class BolingerBandPanel extends JPanel
 
 		
 	}
-	/*
+	
 	class OkListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			String periodsArg = periods.getText();
+			String bandWidthArg = bandWidth.getText();
+			
+			if(periodsArg == null || bandWidthArg == null)
+			{
+				showErrorDialog();
+			}
+			else
+			{
+				try
+				{
+					Indicator ind = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), Integer.parseInt(bandWidthArg));
+					parent.dispose();
+					closeListener.windowClosedWithEvent(ind);
+				}
+				catch(NumberFormatException nfe){}
+			}
+			
+		}
+		
+		private void showErrorDialog(){}
 		
 	}
 	
 	class TestListener implements ActionListener
 	{
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			
+		}
 		
 	}
-	*/
 	
 	public String toString()
 	{

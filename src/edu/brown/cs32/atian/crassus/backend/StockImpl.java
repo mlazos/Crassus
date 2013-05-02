@@ -15,19 +15,13 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.Minute;
+import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
-import org.jfree.data.xy.XYSeries;
 
 /**
  *
@@ -37,18 +31,23 @@ public class StockImpl implements Stock {
 
     String _ticker;
     String _companyName = null;
+    
+    StockHistData _minutely = null;    
     StockHistData _daily = null;
     StockHistData _weekly = null;
     StockHistData _monthly = null;
     StockRealTimeData _realTime = null;
-    ArrayList<Indicator> _events = null;
     Double _week52Low = null;
     Double _week52High = null;
     
-    String _currFreq = "daily";    // be default se use daily
+    ArrayList<Indicator> _events = null;
+
+    
+    StockFreqType _currFreq = StockFreqType.DAILY;    // be default se use daily
     
     public StockImpl(String ticker) {
         _ticker = ticker;
+        _minutely = new StockHistDataMinutely(_ticker);
         _daily = new StockHistDataDaily(_ticker);
         _weekly = new StockHistDataWeekly(_ticker);
         _monthly = new StockHistDataMonthly(_ticker);
@@ -64,12 +63,26 @@ public class StockImpl implements Stock {
 
     @Override
     public boolean initialize() {   // false mean it fails to get data from data source
-        boolean init1 = _daily.Init();
-        boolean init2 = _weekly.Init();
-        boolean init3 = _monthly.Init();
-        boolean init4 = _realTime.Init();
+        boolean init = false;
+        
+        switch(this._currFreq) {
+            case MINUTELY:
+                init = _minutely.Init();
+                break;
+            case DAILY:
+                init = _daily.Init();
+                break;
+            case WEEKLY:
+                init = _weekly.Init();
+                break;
+            case MONTHLY:
+                init = _monthly.Init();
+                break;
+        }
 
-        if (init1 && init2 && init3 && init4) {
+        boolean init2 = this._realTime.Init();
+        
+        if (init && init2 ) {
             return true;
         } else {
             return false;
@@ -116,9 +129,11 @@ public class StockImpl implements Stock {
             String[] splitted = line.split(",");
             if (splitted.length == 2) {
                 _companyName = splitted[1];
+                _companyName = _companyName.substring(1, _companyName.length()-1);
             } else {
                 _companyName = "";
             }
+            
         } catch (MalformedURLException e) {
             e.printStackTrace();
             _companyName = "";
@@ -133,28 +148,29 @@ public class StockImpl implements Stock {
     }
 
     @Override    
-    public void setCurrFreq(String currFreq) {
+    public void setCurrFreq(StockFreqType currFreq) {
         _currFreq = currFreq;
-        refreshIndicator();
+        this.refreshStockPrice();
+        this.refreshIndicator();
     }
     
     // combine both the history data with today's data so the plot and indicator calculation don't need to combine the hist data with realtime data
     @Override
-    public List<StockTimeFrameData> getStockPriceData(String freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
+    public List<StockTimeFrameData> getStockPriceData(StockFreqType freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
 
         List<StockTimeFrameData> realTime = this._realTime.getRealTimeData();
         List<StockTimeFrameData> result = null;
-        if (freq.equals("minutely")) {   
-            return realTime;   // just return realtime data, which includes most recent 15 days' minute by minute data including most recent minute
+        if (freq == StockFreqType.MINUTELY) {   
+            return _minutely.getHistData();   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
         }
         
         // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
         
-        if (freq.equals("daily")) {
+        if (freq == StockFreqType.DAILY) {
             result = _daily.getHistData();
-        } else if (freq.equals("weekly")) {
+        } else if (freq == StockFreqType.WEEKLY) {
             result = _weekly.getHistData();
-        } else if (freq.equals("monthly")) {
+        } else if (freq == StockFreqType.MONTHLY) {
             result = _monthly.getHistData();
         }
         
@@ -209,60 +225,6 @@ public class StockImpl implements Stock {
     public void deleteEvent(Indicator event) {
         _events.remove(event);
     }
-
-    @Override
-    public double getWeek52Low() {
-        if (_week52Low != null) {
-            return _week52Low;
-        }
-        if (_weekly == null || _weekly.getHistData().size() == 0) {
-            return 0.0;
-        }
-        double low = Double.MAX_VALUE;
-        List<StockTimeFrameData> weeklyData = _weekly.getHistData();
-        int end = weeklyData.size();
-        int begin;
-        if (weeklyData.size() < 52) {
-            begin = 0;
-        } else {
-            begin = end - 52;
-        }
-        for (int i = begin; i < end; i++) {
-            double tmp = weeklyData.get(i).getLow();
-            if (tmp < low) {
-                low = tmp;
-            }
-        }
-        _week52Low = low;
-        return _week52Low;
-    }
-
-    @Override
-    public double getWeek52High() {
-        if (_week52High != null) {
-            return _week52High;
-        }
-        if (_weekly == null || _weekly.getHistData().size() == 0) {
-            return 0.0;
-        }
-        double high = 0.0;
-        List<StockTimeFrameData> weeklyData = _weekly.getHistData();
-        int end = weeklyData.size();
-        int begin;
-        if (weeklyData.size() < 52) {
-            begin = 0;
-        } else {
-            begin = end - 52;
-        }
-        for (int i = begin; i < end; i++) {
-            double tmp = weeklyData.get(i).getLow();
-            if (tmp > high) {
-                high = tmp;
-            }
-        }
-        _week52High = high;
-        return _week52High;
-    }
     
     @Override
     public void refresh() {
@@ -281,7 +243,7 @@ public class StockImpl implements Stock {
              Calendar calendar = Calendar.getInstance();
              calendar.setTimeInMillis(tmp);
              Date date = calendar.getTime();         
-             series.add(new Minute(date) , tf.getAdjustedClose());
+             series.add(new Day(date) , tf.getAdjustedClose());
         }
         
         SeriesWrapper sw = new SeriesWrapper(series, Color.BLACK);
@@ -293,7 +255,6 @@ public class StockImpl implements Stock {
         this.initialize();
         _week52Low = null;
         _week52High = null;
-
     }
 
     private void refreshIndicator() {

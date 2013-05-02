@@ -12,7 +12,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,13 +26,29 @@ public class StockHistDataWeekly implements StockHistData {
 
     private String _ticker;
     private List<StockTimeFrameData> _histData;
-
+    private String _currDate;
+    DateFormat _dateFormat;
     public StockHistDataWeekly(String ticker) {
         _ticker = ticker;
         _histData = new ArrayList<StockTimeFrameData>();
+        _currDate = null;
+        _dateFormat = new SimpleDateFormat("yyyy-MM-dd");        
     }
 
     public boolean Init() {
+        
+        if(_currDate == null) {            
+            Date date = new Date();
+            this._currDate = _dateFormat.format(date);            
+        } else {    
+            Date date = new Date();
+            String today = _dateFormat.format(date); 
+            // when the data does not change, the daily, monthly, weekly data won't change
+            // if date does not change, there is no need to retrive the hist data again because they will be same.
+            if(today.equals(this._currDate)) {   
+                return true;
+            }
+        }        
         _histData.clear();
         String begYear = "1900";
         String urlString = "http://ichart.finance.yahoo.com/table.csv?s=" + _ticker + "&c=" + begYear + "&g=w&ignore=.csv";
