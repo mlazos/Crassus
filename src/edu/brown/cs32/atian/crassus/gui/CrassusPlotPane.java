@@ -63,7 +63,9 @@ public class CrassusPlotPane extends JPanel {
 			
 			timeFreq.showPopup();
 			timeFreq.hidePopup();
-			//timeFreq.revalidate();
+			
+			//stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
+			
 			timeFreq.addActionListener(timeFreqListener);
 			timeFreq.setSelectedIndex(0);//force timeFreq to update. This will make 'refresh' unnecessary
 		}
