@@ -3,6 +3,8 @@ package edu.brown.cs32.atian.crassus.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+
 public class IndicatorList {
 
 	List<Indicator> indicatorList;

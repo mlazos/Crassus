@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author lyzhang
  */
-class StockTimeFrameData {
+public class StockTimeFrameData {
 
     private String _time;
     private boolean _isHist;   // is the data retrieved from yahoo stock historical data or yahoo realtime data?

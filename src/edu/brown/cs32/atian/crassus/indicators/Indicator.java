@@ -1,6 +1,9 @@
-package edu.brown.cs32.atian.crassus.backend;
+package edu.brown.cs32.atian.crassus.indicators;
 
 import java.util.*;
+
+import edu.brown.cs32.atian.crassus.backend.StockEventType;
+import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 public interface Indicator {
@@ -48,5 +51,12 @@ public interface Indicator {
 	 * @return	StockEventType which is either BUY, SELL, or NONE
 	 */
 	StockEventType isTriggered();
+	
+	/**
+	 * Gets the name of an Indicator
+	 * 
+	 * @return		String name of Indicator
+	 */
+	String getName();
 	
 }

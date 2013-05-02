@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import edu.brown.cs32.atian.crassus.backend.Indicator;
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 public class CrassusEventTableModel extends AbstractTableModel {
 	
