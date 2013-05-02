@@ -15,7 +15,7 @@ import edu.brown.cs32.atian.crassus.gui.StockPlot;
  * It is useful for identifying overbought and oversold levels because
  * it is range bound.
  * 
- * Typical period is 14 periods, which can be days, weeks, moneths, or
+ * Typical period is 14 periods, which can be days, weeks, months, or
  * an intraday time frame.
  * 
  * %K = (Current Close - Lowest Low)/(Highest High - Lowest Low) * 100
@@ -36,6 +36,8 @@ public class StochasticOscillator implements Indicator {
     private boolean isVisible;
 	
 	public StochasticOscillator(List<StockTimeFrameData> data, int period) {
+		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
+		
 		this.data = data;
 		this.period = period;
 		this.SMAPeriod = 3;

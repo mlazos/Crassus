@@ -28,7 +28,9 @@ public class BollingerBands implements Indicator {
 	private boolean isActive;
 	private boolean isVisible;
 	
-	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) {
+	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {
+		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
+		
 		this.data = data;
 		this.period = period;
 		this.bandWidth = bandWidth;
