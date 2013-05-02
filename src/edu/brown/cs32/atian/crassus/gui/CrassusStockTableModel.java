@@ -64,12 +64,18 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		_stocks.add(stock);
 		this.fireTableRowsInserted(_stocks.getStockList().size()-1, _stocks.getStockList().size()-1);
 	}
+	
+	public void addStock(int i, Stock stock) {
+		_stocks.getStockList().add(i,stock);
+	}
 
-	public void removeStock(int i) {
+	public Stock removeStock(int i) {
 		if(i!=-1){
-			_stocks.getStockList().remove(i);
+			Stock stock = _stocks.getStockList().remove(i);
 			this.fireTableRowsDeleted(i,i);
+			return stock;
 		}
+		else return null;
 	}
 
 	public void refresh() {

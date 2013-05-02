@@ -58,17 +58,7 @@ public class CrassusStockTablePane extends JPanel {
 	private static final Pattern p =  Pattern.compile("[^a-zA-Z0-9]");
 	public class NewTickerListener implements TickerDialogCloseListener {
 		@Override public void tickerDialogClosedWithTicker(String symbol) {
-			try{
-				if(p.matcher(symbol).find())
-					throw new IllegalArgumentException();
-				symbol = symbol.toUpperCase();
-				Stock stock = new StockImpl(symbol);
-				stock.refresh();
-				model.addStock(stock);
-				table.setRowSelectionInterval(model.getRowCount()-1, model.getRowCount()-1);
-			}catch(IllegalArgumentException e){
-				JOptionPane.showMessageDialog(_frame,"\'"+symbol+"\' is not a valid ticker symbol");
-			}
+			addTicker(symbol);
 		}
 	}
 
@@ -101,8 +91,12 @@ public class CrassusStockTablePane extends JPanel {
 	private CrassusStockTableModel model;
 	private CrassusChangeStockListener _listener;
 	
+	private StockList stocks;
+	
 	public CrassusStockTablePane(JFrame frame, StockList stocks){
 		_frame = frame;
+		
+		this.stocks = stocks;
 		
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
@@ -129,12 +123,12 @@ public class CrassusStockTablePane extends JPanel {
 			column.setResizable(false);
 			
 			if(i==0){
-				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks);
+				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks,model);
 				renderer.setHorizontalAlignment(SwingConstants.CENTER);
 				column.setCellRenderer(renderer);
 			}
 			else{
-				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks);
+				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks,model);
 				renderer.setHorizontalAlignment(SwingConstants.RIGHT);
 				column.setCellRenderer(renderer);
 			}
@@ -192,10 +186,36 @@ public class CrassusStockTablePane extends JPanel {
 		this.add(buttonAndLine, BorderLayout.SOUTH);
 	}
 	
+
 	public void launchTickerCreator() {
 		TickerDialog tickerFrame = new TickerDialog(_frame);
 		tickerFrame.setTickerDialogCloseListener(new NewTickerListener());
 		tickerFrame.setVisible(true);
+	}
+
+	public void addTicker(String symbol) {
+		try{
+			if(p.matcher(symbol).find())
+				throw new IllegalArgumentException();
+			symbol = symbol.toUpperCase();
+			
+			for(Stock other: stocks.getStockList()){
+				if(symbol.equals(other.getTicker())){
+					JOptionPane.showMessageDialog(_frame, "\'"+symbol+"\' is already in your ticker-table");
+					int index = stocks.getStockList().indexOf(other);
+					table.setRowSelectionInterval(index,index);
+					return;
+				}
+			}
+			
+			Stock stock = new StockImpl(symbol);
+			stock.refresh();
+			model.addStock(stock);
+			table.setRowSelectionInterval(model.getRowCount()-1, model.getRowCount()-1);
+			
+		}catch(IllegalArgumentException e){
+			JOptionPane.showMessageDialog(_frame,"\'"+symbol+"\' is not a valid ticker symbol");
+		}
 	}
 
 	public void removeSelectedTicker() {

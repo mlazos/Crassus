@@ -6,8 +6,13 @@ package edu.brown.cs32.atian.crassus.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
@@ -62,6 +67,12 @@ public class CrassusGUI implements GUI {
 	public CrassusGUI(StockList stocks) {
 		
 		frame = new JFrame("Crassus");
+		
+		try {
+			BufferedImage img = ImageIO.read(new File("icons/programIcon.png"));
+			frame.setIconImage(img);
+		} catch (IOException e) {}//not a disaster, can be ignored....
+		
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

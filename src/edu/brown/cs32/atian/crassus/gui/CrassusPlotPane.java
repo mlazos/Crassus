@@ -18,6 +18,7 @@ import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 @SuppressWarnings("serial")
 public class CrassusPlotPane extends JPanel {
@@ -129,10 +130,12 @@ public class CrassusPlotPane extends JPanel {
 	}
 	
 	public void changeToStock(Stock stock){
-		this.stock = stock;
-		this.stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
-		this.stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
-		refresh();
+		if(stock!=null){
+			this.stock = stock;
+			this.stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
+			this.stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
+			refresh();
+		}
 	}
 	
 	private TimeFrame timeframeFromIndex(int index){
@@ -180,6 +183,12 @@ public class CrassusPlotPane extends JPanel {
 			PlotWrapper plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
 			plot.setAxesTitles("Time", "Price");
 			stock.addToPlot(plot);
+			
+			for(Indicator ind: stock.getEventList()){
+				if(ind.getVisible())
+					ind.addToPlot(plot);
+			}
+			
 			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
 			imageDisplayer.setImage(image);
 		}

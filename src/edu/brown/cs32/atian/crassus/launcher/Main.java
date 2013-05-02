@@ -39,6 +39,7 @@ public class Main {
 		UIManager.getDefaults().put("Button.background",Color.WHITE);//make JButtons less ugly
 		UIManager.getDefaults().put("OptionPane.background", Color.WHITE);//change dialog box color
 		UIManager.getDefaults().put("Panel.background", Color.WHITE);//
+		UIManager.getDefaults().put("RadioButton.background", Color.WHITE);
 		gui = new CrassusGUI(stocks);
 		gui.launch();
 	
