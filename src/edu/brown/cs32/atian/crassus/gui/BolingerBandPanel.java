@@ -13,10 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.brown.cs32.atian.crassus.backend.BollingerBands;
-import edu.brown.cs32.atian.crassus.backend.Indicator;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.indicators.BollingerBands;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 public class BolingerBandPanel extends JPanel
 {

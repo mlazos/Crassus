@@ -7,6 +7,8 @@ package edu.brown.cs32.atian.crassus.backend;
 import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 import edu.brown.cs32.atian.crassus.gui.TimeFrame;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
