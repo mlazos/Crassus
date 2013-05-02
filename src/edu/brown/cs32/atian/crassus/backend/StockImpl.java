@@ -82,6 +82,8 @@ public class StockImpl implements Stock {
             cal.add(Calendar.MONTH, -1);
         } else if(_timeFrame==TimeFrame.YEARLY) {
             cal.add(Calendar.YEAR, -1);
+        } else if(_timeFrame==TimeFrame.FIVE_YEAR) {
+            cal.add(Calendar.YEAR, -5);
         }
         
         return cal.getTime();        
