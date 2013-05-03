@@ -3,9 +3,6 @@ package edu.brown.cs32.atian.crassus.indicators;
 import java.awt.Color;
 import java.util.*;
 
-import org.jfree.data.time.Second;
-import org.jfree.data.time.TimeSeries;
-
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;

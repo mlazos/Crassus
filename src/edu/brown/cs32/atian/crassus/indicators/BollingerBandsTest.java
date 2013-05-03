@@ -40,10 +40,10 @@ public class BollingerBandsTest {
 		data.add(new StockTimeFrameData("q", 0, 0, 0, 91.19, 0, 0, false)); 
 		data.add(new StockTimeFrameData("r", 0, 0, 0, 91.12, 0, 0, false)); 
 		data.add(new StockTimeFrameData("s", 0, 0, 0, 91.17, 0, 0, false)); 
-		data.add(new StockTimeFrameData("t", 0, 0, 0, 91.25, 0, 0, false)); 
-		data.add(new StockTimeFrameData("u", 0, 0, 0, 91.24, 0, 0, false)); 
-		data.add(new StockTimeFrameData("v", 0, 0, 0, 91.17, 0, 0, false)); 
-		data.add(new StockTimeFrameData("x", 0, 0, 0, 91.05, 0, 0, false)); 
+		data.add(new StockTimeFrameData("1", 0, 0, 0, 91.25, 0, 0, false)); 
+		data.add(new StockTimeFrameData("2", 0, 0, 0, 91.24, 0, 0, false)); 
+		data.add(new StockTimeFrameData("3", 0, 0, 0, 91.17, 0, 0, false)); 
+		data.add(new StockTimeFrameData("4", 0, 0, 0, 91.05, 0, 0, false)); 
 		bb = new BollingerBands(data, 20, 2, null);
 	}
 	
@@ -85,31 +85,31 @@ public class BollingerBandsTest {
 		assertTrue(lowerBand.size() == 4);
 		
 		assertTrue(Math.abs(upperBand.get(0).getValue()) - 91.908284 < 0.00001);
-		assertTrue(upperBand.get(0).getTimeLabel().equals("t"));
+		assertTrue(upperBand.get(0).getTimeLabel().equals("1"));
 		assertTrue(Math.abs(middleBand.get(0).getValue()) - 90.2945 < 0.00001);
-		assertTrue(middleBand.get(0).getTimeLabel().equals("t"));
+		assertTrue(middleBand.get(0).getTimeLabel().equals("1"));
 		assertTrue(Math.abs(lowerBand.get(0).getValue()) - 88.680716 < 0.00001);
-		assertTrue(lowerBand.get(0).getTimeLabel().equals("t"));
+		assertTrue(lowerBand.get(0).getTimeLabel().equals("1"));
 
 		assertTrue(Math.abs(upperBand.get(1).getValue()) - 91.90994 < 0.00001);
-		assertTrue(upperBand.get(1).getTimeLabel().equals("u"));
+		assertTrue(upperBand.get(1).getTimeLabel().equals("2"));
 		assertTrue(Math.abs(middleBand.get(1).getValue()) - 90.421 < 0.00001);
-		assertTrue(middleBand.get(1).getTimeLabel().equals("u"));
+		assertTrue(middleBand.get(1).getTimeLabel().equals("2"));
 		assertTrue(Math.abs(lowerBand.get(1).getValue()) - 88.93506 < 0.00001);
-		assertTrue(lowerBand.get(1).getTimeLabel().equals("u"));
+		assertTrue(lowerBand.get(1).getTimeLabel().equals("2"));
 
 		assertTrue(Math.abs(upperBand.get(2).getValue() - 91.9084) < 0.00001);
-		assertTrue(upperBand.get(2).getTimeLabel().equals("v"));
+		assertTrue(upperBand.get(2).getTimeLabel().equals("3"));
 		assertTrue(Math.abs(middleBand.get(2).getValue() - 90.5270) < 0.00001);
-		assertTrue(middleBand.get(2).getTimeLabel().equals("v"));
+		assertTrue(middleBand.get(2).getTimeLabel().equals("3"));
 		assertTrue(Math.abs(lowerBand.get(2).getValue() - 89.145594) < 0.00001);
-		assertTrue(lowerBand.get(2).getTimeLabel().equals("v"));
+		assertTrue(lowerBand.get(2).getTimeLabel().equals("3"));
 
 		assertTrue(Math.abs(upperBand.get(3).getValue()) - 91.88199 < 0.00001);
-		assertTrue(upperBand.get(3).getTimeLabel().equals("x"));
+		assertTrue(upperBand.get(3).getTimeLabel().equals("4"));
 		assertTrue(Math.abs(middleBand.get(3).getValue()) - 90.6175 < 0.00001);
-		assertTrue(middleBand.get(3).getTimeLabel().equals("x"));
+		assertTrue(middleBand.get(3).getTimeLabel().equals("4"));
 		assertTrue(Math.abs(lowerBand.get(3).getValue()) - 89.3530 < 0.00001);
-		assertTrue(lowerBand.get(3).getTimeLabel().equals("x"));
+		assertTrue(lowerBand.get(3).getTimeLabel().equals("4"));
 	}
 }
