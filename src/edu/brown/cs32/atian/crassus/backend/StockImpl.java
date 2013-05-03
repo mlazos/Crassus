@@ -332,5 +332,15 @@ public class StockImpl implements Stock {
         
         return stType;
     }
+
+    private int selectedIndicatorIndex = -1;
+    @Override
+    public void setSelectedIndicatorIndex(int i){
+    	selectedIndicatorIndex = i;
+    }
+	@Override
+	public int getSelectedIndicatorIndex() {
+		return selectedIndicatorIndex;
+	}
     
 }

@@ -22,12 +22,12 @@ public class PivotPointTest {
 	    //        double close, int volume, double adjustedClose)
 		
 		List<StockTimeFrameData> data = new ArrayList<>();
-		data.add(new StockTimeFrameData("a", 434.15, 434.15, 429.09, 429.8, 0, 0, false)); 
-		data.add(new StockTimeFrameData("b", 433.72, 437.99, 431.2, 434.33, 0, 0, false)); 
-		data.add(new StockTimeFrameData("c", 428.1, 437.06, 426.01, 435.69, 0, 0, false)); 
-		data.add(new StockTimeFrameData("d", 426.36, 428.5, 422.75, 426.98, 0, 0, false));	
-		data.add(new StockTimeFrameData("e", 424.85, 427.95, 422.49, 426.21, 0, 0, false)); 
-		data.add(new StockTimeFrameData("f", 424.5, 424.95, 419.68, 423.2, 0, 0, false)); 
+		data.add(new StockTimeFrameData("1", 434.15, 434.15, 429.09, 429.8, 0, 0, false)); 
+		data.add(new StockTimeFrameData("2", 433.72, 437.99, 431.2, 434.33, 0, 0, false)); 
+		data.add(new StockTimeFrameData("3", 428.1, 437.06, 426.01, 435.69, 0, 0, false)); 
+		data.add(new StockTimeFrameData("4", 426.36, 428.5, 422.75, 426.98, 0, 0, false));	
+		data.add(new StockTimeFrameData("5", 424.85, 427.95, 422.49, 426.21, 0, 0, false)); 
+		data.add(new StockTimeFrameData("6", 424.5, 424.95, 419.68, 423.2, 0, 0, false)); 
 
 		
 		ppStandard = new PivotPoints(data, "standard", null);
@@ -55,25 +55,25 @@ public class PivotPointTest {
 		assertTrue(pivotPoints.size() == 5);
 		
 		assertTrue(Math.abs(pivotPoints.get(0).getValue() - 431.0133333) < 0.00001);
-		assertTrue(pivotPoints.get(0).getTimeLabel().equals("b"));
+		assertTrue(pivotPoints.get(0).getTimeLabel().equals("2"));
 		
 		assertTrue(Math.abs(support1.get(0).getValue() - 427.87666) < 0.00001);
-		assertTrue(support1.get(0).getTimeLabel().equals("b"));
+		assertTrue(support1.get(0).getTimeLabel().equals("2"));
 		
 		assertTrue(Math.abs(support2.get(0).getValue() - 425.95333) < 0.00001);
-		assertTrue(support2.get(0).getTimeLabel().equals("b"));
+		assertTrue(support2.get(0).getTimeLabel().equals("2"));
 		
 		assertTrue(Math.abs(support3.get(0).getValue() - 422.816666) < 0.00001);
-		assertTrue(support3.get(0).getTimeLabel().equals("b"));
+		assertTrue(support3.get(0).getTimeLabel().equals("2"));
 		
 		assertTrue(Math.abs(resistance1.get(0).getValue() - 432.93666) < 0.00001);
-		assertTrue(resistance1.get(0).getTimeLabel().equals("b"));
+		assertTrue(resistance1.get(0).getTimeLabel().equals("2"));
 		
 		assertTrue(Math.abs(resistance2.get(0).getValue() - 436.073333) < 0.00001);
-		assertTrue(resistance2.get(0).getTimeLabel().equals("b"));
+		assertTrue(resistance2.get(0).getTimeLabel().equals("2"));
 		
 		assertTrue(Math.abs(resistance3.get(0).getValue() - 437.996666) < 0.00001);
-		assertTrue(resistance3.get(0).getTimeLabel().equals("b"));
+		assertTrue(resistance3.get(0).getTimeLabel().equals("2"));
 	}
 	
 	@Test
@@ -96,13 +96,13 @@ public class PivotPointTest {
 		assertTrue(pivotPoints.size() == 5);
 		
 		assertTrue(Math.abs(pivotPoints.get(2).getValue() - 433.955) < 0.00001);
-		assertTrue(pivotPoints.get(2).getTimeLabel().equals("d"));
+		assertTrue(pivotPoints.get(2).getTimeLabel().equals("4"));
 		
 		assertTrue(Math.abs(support1.get(2).getValue() - 430.85) < 0.00001);
-		assertTrue(support1.get(2).getTimeLabel().equals("d"));
+		assertTrue(support1.get(2).getTimeLabel().equals("4"));
 		
 		assertTrue(Math.abs(resistance1.get(2).getValue() - 441.9) < 0.00001);
-		assertTrue(resistance1.get(2).getTimeLabel().equals("d"));
+		assertTrue(resistance1.get(2).getTimeLabel().equals("4"));
 	}
 	@Test
 	public void testPivotPointFibonacci() {
@@ -124,25 +124,25 @@ public class PivotPointTest {
 		assertTrue(pivotPoints.size() == 5);
 		
 		assertTrue(Math.abs(pivotPoints.get(4).getValue() - 425.550) < 0.00001);
-		assertTrue(pivotPoints.get(4).getTimeLabel().equals("f"));
+		assertTrue(pivotPoints.get(4).getTimeLabel().equals("6"));
 		
 		assertTrue(Math.abs(support1.get(4).getValue() - 423.464280) < 0.00001);
-		assertTrue(support1.get(4).getTimeLabel().equals("f"));
+		assertTrue(support1.get(4).getTimeLabel().equals("6"));
 		
 		assertTrue(Math.abs(support2.get(4).getValue() - 422.17572) < 0.00001);
-		assertTrue(support2.get(4).getTimeLabel().equals("f"));
+		assertTrue(support2.get(4).getTimeLabel().equals("6"));
 		
 		assertTrue(Math.abs(support3.get(4).getValue() - 420.0900) < 0.00001);
-		assertTrue(support3.get(4).getTimeLabel().equals("f"));
+		assertTrue(support3.get(4).getTimeLabel().equals("6"));
 		
 		assertTrue(Math.abs(resistance1.get(4).getValue() - 427.63572) < 0.00001);
-		assertTrue(resistance1.get(4).getTimeLabel().equals("f"));
+		assertTrue(resistance1.get(4).getTimeLabel().equals("6"));
 		
 		assertTrue(Math.abs(resistance2.get(4).getValue() - 428.92428) < 0.00001);
-		assertTrue(resistance2.get(4).getTimeLabel().equals("f"));
+		assertTrue(resistance2.get(4).getTimeLabel().equals("6"));
 		
 		assertTrue(Math.abs(resistance3.get(4).getValue() - 431.0100) < 0.00001);
-		assertTrue(resistance3.get(4).getTimeLabel().equals("f"));
+		assertTrue(resistance3.get(4).getTimeLabel().equals("6"));
 	}
 
 }

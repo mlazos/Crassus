@@ -40,9 +40,9 @@ public class PriceChannelTest {
 		data.add(new StockTimeFrameData("r", 0, 5, 1, 91.12, 0, 0, false)); 
 		data.add(new StockTimeFrameData("s", 0, 99, 9, 91.17, 0, 0, false)); 
 		data.add(new StockTimeFrameData("t", 0, 1, 1, 91.25, 0, 0, false)); 
-		data.add(new StockTimeFrameData("u", 0, 673, 0.5, 91.24, 0, 0, false)); // 0
-		data.add(new StockTimeFrameData("v", 0, 6, 0.2, 91.17, 0, 0, false)); 
-		data.add(new StockTimeFrameData("x", 0, 2, 2, 91.05, 0, 0, false)); 
+		data.add(new StockTimeFrameData("1", 0, 673, 0.5, 91.24, 0, 0, false)); // 0
+		data.add(new StockTimeFrameData("2", 0, 6, 0.2, 91.17, 0, 0, false)); 
+		data.add(new StockTimeFrameData("3", 0, 2, 2, 91.05, 0, 0, false)); 
 		pc = new PriceChannel(data, 20, null);
 	}
 
@@ -57,30 +57,30 @@ public class PriceChannelTest {
 		assertTrue(centreLine.size() == 3);
 		
 		assertTrue(upperChannel.get(0).getValue() == 99);
-		assertTrue(upperChannel.get(0).getTimeLabel().equals("u"));
+		assertTrue(upperChannel.get(0).getTimeLabel().equals("1"));
 		
 		assertTrue(upperChannel.get(1).getValue() == 673);
-		assertTrue(upperChannel.get(1).getTimeLabel().equals("v"));
+		assertTrue(upperChannel.get(1).getTimeLabel().equals("2"));
 		
 		assertTrue(upperChannel.get(2).getValue() == 673);
-		assertTrue(upperChannel.get(2).getTimeLabel().equals("x"));
+		assertTrue(upperChannel.get(2).getTimeLabel().equals("3"));
 		
 		assertTrue(lowerChannel.get(0).getValue() == 1);
-		assertTrue(lowerChannel.get(0).getTimeLabel().equals("u"));
+		assertTrue(lowerChannel.get(0).getTimeLabel().equals("1"));
 		
 		assertTrue(lowerChannel.get(1).getValue() == 0.5);
-		assertTrue(lowerChannel.get(1).getTimeLabel().equals("v"));
+		assertTrue(lowerChannel.get(1).getTimeLabel().equals("2"));
 		
 		assertTrue(lowerChannel.get(2).getValue() == 0.2);
-		assertTrue(lowerChannel.get(2).getTimeLabel().equals("x"));
+		assertTrue(lowerChannel.get(2).getTimeLabel().equals("3"));
 		
 		assertTrue(centreLine.get(0).getValue() == 50);
-		assertTrue(centreLine.get(0).getTimeLabel().equals("u"));
+		assertTrue(centreLine.get(0).getTimeLabel().equals("1"));
 		
 		assertTrue(centreLine.get(1).getValue() == 336.75);
-		assertTrue(centreLine.get(1).getTimeLabel().equals("v"));
+		assertTrue(centreLine.get(1).getTimeLabel().equals("2"));
 		
 		assertTrue(centreLine.get(2).getValue() == 336.6);
-		assertTrue(centreLine.get(2).getTimeLabel().equals("x"));
+		assertTrue(centreLine.get(2).getTimeLabel().equals("3"));
 	}
 }

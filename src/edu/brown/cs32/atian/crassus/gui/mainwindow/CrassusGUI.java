@@ -25,6 +25,7 @@ import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.plot.CrassusPlotPane;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator.CrassusIndicatorTablePane;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock.CrassusStockTablePane;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
@@ -116,7 +117,7 @@ public class CrassusGUI implements GUI {
 		stockBox = new CrassusStockTablePane(frame,stocks,undoables);
 		stockBox.setChangeStockListener(new CompoundChangeStockListener());
 
-		eventBox = new CrassusIndicatorTablePane(frame);
+		eventBox = new CrassusIndicatorTablePane(frame,undoables);
 		
 		//make plot pane
 		plotPane = new CrassusPlotPane(undoables);

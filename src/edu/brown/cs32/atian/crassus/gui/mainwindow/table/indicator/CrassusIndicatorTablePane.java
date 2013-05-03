@@ -26,21 +26,48 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindowFrame;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SelectUndoable;
+import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 @SuppressWarnings("serial")
 public class CrassusIndicatorTablePane extends JPanel {
+	
+	public class ChangeIndicatorListener implements ListSelectionListener {
+		
+		private int oldIndex=-1;
+		private Indicator oldIndicator = null;
+		
+		@Override 
+		public void valueChanged(ListSelectionEvent arg0) {
+			int index = table.getSelectedRow();
+			
+			Indicator indicator;
+			if(index==-1)
+				indicator = null;
+			else
+				indicator = _stock.getEventList().get(index);
+			
+			if(oldIndicator!=indicator && selector.shouldRegisterSelection()){
+				undoables.push(new SelectUndoable(oldIndex, index, selector));
+			}
+			_stock.setSelectedIndicatorIndex(index);
+			oldIndex = index;
+			oldIndicator=indicator;
+		}
+	}
 
 	public class NewIndicatorListener implements WindowCloseListener {
 		@Override public void windowClosedWithEvent(Indicator ind) {
-			ind.setActive(true);
-			ind.setVisible(true);
-			model.addIndicator(ind);
+			addIndicator(ind);
 		}
 		@Override public void windowClosedWithCancel() {}
 	}
@@ -75,11 +102,16 @@ public class CrassusIndicatorTablePane extends JPanel {
 	private CrassusIndicatorTableModel model;
 	CrassusIndicatorTableRenderer renderer;
 	private CrassusIndicatorTableEditor editor;
+	
+	private CrassusTableRowSelector selector;
+	private UndoableStack undoables;
+	
 	private JFrame _frame;
 	private Stock _stock;
 
-	public CrassusIndicatorTablePane(JFrame frame){
+	public CrassusIndicatorTablePane(JFrame frame, UndoableStack undoables){
 		_frame = frame;
+		this.undoables = undoables;
 		
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
@@ -88,7 +120,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 		table.setBackground(Color.WHITE);
 		table.setTableHeader(null);//Disable table header
 		
-		model = new CrassusIndicatorTableModel();
+		selector = new CrassusTableRowSelector(table);
+		model = new CrassusIndicatorTableModel(selector);
 		table.setModel(model);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
@@ -111,6 +144,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 			if(i<2)
 				column.setCellEditor(editor);
 		}
+		
+		table.getSelectionModel().addListSelectionListener(new ChangeIndicatorListener());
 		
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBackground(Color.WHITE);
@@ -163,26 +198,32 @@ public class CrassusIndicatorTablePane extends JPanel {
 		this.add(buttonAndLine, BorderLayout.SOUTH);
 	}
 	
+	public void addIndicator(Indicator ind) {
+		ind.setActive(true);
+		ind.setVisible(true);
+		int previousIndex = table.getSelectedRow();
+		model.addLastIndicator(ind);
+		undoables.push(new AddIndicatorUndoable(model, ind, previousIndex, selector));
+	}
+
 	public void removeSelectedIndicator() {
 		if(table.getRowCount()==0)
 			return;
 		
 		int index = table.getSelectedRow();
-		if(table.getRowCount()>1){
-			if(index == table.getRowCount()-1)
-				table.setRowSelectionInterval(index-1,index-1);
-			else
-				table.setRowSelectionInterval(index+1,index+1);
-		}
-		model.removeIndicator(index);
+		Indicator ind = model.removeIndicator(index);
 		editor.indicatorWasRemoved();
+		undoables.push(new RemoveIndicatorUndoable(model, ind, index, selector));
 	}
 
 	public void changeToStock(Stock stock){
+		
 		_stock = stock;
-		table.clearSelection();
+		int indicatorIndex = stock.getSelectedIndicatorIndex();
 		model.changeToStock(stock);
 		renderer.changeToStock(stock);
 		editor.changeToStock(stock);
+		selector.select(indicatorIndex);
+		
 	}
 }

@@ -1,26 +1,20 @@
 package edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock;
 
-import java.util.Stack;
-
 import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
-import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
-import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")
 public class CrassusStockTableModel extends AbstractTableModel {
 	
 	private StockList _stocks;
-	private UndoableStack undoables;
 	
 	private CrassusTableRowSelector selector;
 	
-	public CrassusStockTableModel(StockList stocks, UndoableStack undoables, CrassusTableRowSelector selector){
+	public CrassusStockTableModel(StockList stocks, CrassusTableRowSelector selector){
 		this._stocks = stocks;
-		this.undoables = undoables;
 		this.selector = selector;
 	}
 
