@@ -52,28 +52,25 @@ public class CrassusGUI implements GUI {
 
 	public class CompoundChangeStockListener implements CrassusChangeStockListener {
 		@Override public void changeToStock(Stock stock) {
-			if(stock==null && stockInfoStateNormal){
-				frame.remove(stockInfo);
-				frame.add(nullStockInfo,BorderLayout.CENTER);
-				stockInfoStateNormal = false;
-				frame.revalidate();
-				frame.setVisible(true);
-				frame.repaint();
-			}
-			else if(!stockInfoStateNormal){
-				frame.remove(nullStockInfo);
-				frame.add(stockInfo,BorderLayout.CENTER);
-				stockInfoStateNormal = true;
-				frame.revalidate();
-				frame.setVisible(true);
-				frame.repaint();
-			}
+//			if(stock==null && stockInfoStateNormal){
+//				frame.remove(stockInfo);
+//				frame.add(nullStockInfo,BorderLayout.CENTER);
+//				stockInfoStateNormal = false;
+//				frame.revalidate();
+//				frame.setVisible(true);
+//				frame.repaint();
+//			}
+//			else if(!stockInfoStateNormal){
+//				frame.remove(nullStockInfo);
+//				frame.add(stockInfo,BorderLayout.CENTER);
+//				stockInfoStateNormal = true;
+//				frame.revalidate();
+//				frame.setVisible(true);
+//				frame.repaint();
+//			}
 			
 			plotPane.changeToStock(stock);
 			eventBox.changeToStock(stock);
-			
-			//frame.getContentPane().revalidate();
-			//frame.repaint();
 		}
 	}
 
@@ -132,19 +129,19 @@ public class CrassusGUI implements GUI {
 		stockInfo.add(eventBox, BorderLayout.EAST);
 		stockInfo.add(plotPane,BorderLayout.CENTER);
 
-		nullStockInfo = new JPanel();
-		nullStockInfo.setBackground(Color.WHITE);
-		nullStockInfo.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createEmptyBorder(20,20,20,20),
-				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
-		nullStockInfo.setLayout(new BorderLayout());
-		JPanel greyPanel = new JPanel();
-		greyPanel.setBackground(new Color(210,210,210));
-		nullStockInfo.add(greyPanel, BorderLayout.CENTER);
+//		nullStockInfo = new JPanel();
+//		nullStockInfo.setBackground(Color.WHITE);
+//		nullStockInfo.setBorder(BorderFactory.createCompoundBorder(
+//				BorderFactory.createEmptyBorder(20,20,20,20),
+//				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+//		nullStockInfo.setLayout(new BorderLayout());
+//		JPanel greyPanel = new JPanel();
+//		greyPanel.setBackground(new Color(210,210,210));
+//		nullStockInfo.add(greyPanel, BorderLayout.CENTER);
 		
 		frame.add(stockBox, BorderLayout.WEST);
-		frame.add(nullStockInfo,BorderLayout.CENTER);
-		frame.setMinimumSize(new Dimension(1050,500));
+		frame.add(stockInfo,BorderLayout.CENTER);
+		frame.setMinimumSize(new Dimension(1080,500));
 	}
 	
 	@Override

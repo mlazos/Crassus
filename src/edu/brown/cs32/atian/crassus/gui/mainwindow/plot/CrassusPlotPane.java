@@ -81,7 +81,8 @@ public class CrassusPlotPane extends JPanel {
 				timeFreq.addItem("Minutely");
 			}
 			
-			stock.setTimeFrame(timeframeFromIndex(index));
+			if(stock!=null)
+				stock.setTimeFrame(timeframeFromIndex(index));
 			
 			timeFreq.addActionListener(timeFreqListener);
 			
@@ -155,16 +156,16 @@ public class CrassusPlotPane extends JPanel {
 		
 		this.addComponentListener(new ResizeListener());
 	}
-	
+
 	public void changeToStock(Stock stock){
+		this.stock = stock;
 		if(stock!=null){
-			this.stock = stock;
 			this.stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
 			this.stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
-			refresh();
 		}
+		refresh();
 	}
-	
+
 	private TimeFrame timeframeFromIndex(int index){
 		switch(index){
 		case 0:
@@ -206,7 +207,10 @@ public class CrassusPlotPane extends JPanel {
 	
 	public void refresh(){
 		//check width of imageDisplayer because when pane is swapped out it will be zero, plot object flips out
-		if(stock!=null && imageDisplayer.getWidth()!=0){
+		if(stock==null || imageDisplayer.getWidth()==0){
+			imageDisplayer.setImage(null);
+		}
+		else{
 			PlotWrapper plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
 			plot.setAxesTitles("Time", "Price");
 			stock.addToPlot(plot);
@@ -221,9 +225,7 @@ public class CrassusPlotPane extends JPanel {
 			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
 			imageDisplayer.setImage(image);
 		}
-		else{
-			imageDisplayer.setImage(null);
-		}
+	
 		imageDisplayer.revalidate();
 		imageDisplayer.repaint();
 	}

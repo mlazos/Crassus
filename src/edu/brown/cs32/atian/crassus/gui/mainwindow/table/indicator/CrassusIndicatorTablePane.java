@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -54,12 +55,14 @@ public class CrassusIndicatorTablePane extends JPanel {
 			if(index==-1)
 				indicator = null;
 			else
-				indicator = _stock.getEventList().get(index);
+				indicator = stock.getEventList().get(index);
 			
 			if(oldIndicator!=indicator && selector.shouldRegisterSelection()){
 				undoables.push(new SelectUndoable(oldIndex, index, selector));
 			}
-			_stock.setSelectedIndicatorIndex(index);
+			if(stock!=null)
+				stock.setSelectedIndicatorIndex(index);
+			
 			oldIndex = index;
 			oldIndicator=indicator;
 		}
@@ -74,15 +77,13 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 	public class PlusButtonListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			EventWindowFrame eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
-			eventWindow.display();
+			showNewIndicatorDialog();
 		}
 	}
 	
 	public class CtrlIAction extends AbstractAction {
 		@Override public void actionPerformed(ActionEvent e) {
-			EventWindowFrame eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), _stock);
-			eventWindow.display();
+			showNewIndicatorDialog();
 		}
 	}
 
@@ -107,7 +108,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 	private UndoableStack undoables;
 	
 	private JFrame _frame;
-	private Stock _stock;
+	private Stock stock;
 
 	public CrassusIndicatorTablePane(JFrame frame, UndoableStack undoables){
 		_frame = frame;
@@ -135,7 +136,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		
 		for(int i=0; i<3; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
-			int colWidth = (i==2) ? 120 : 26;
+			int colWidth = (i==2) ? 150 : 26;
 			column.setPreferredWidth(colWidth);
 			column.setMaxWidth(colWidth);
 			column.setResizable(false);
@@ -152,7 +153,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(200,250));
+		scrollPane.setPreferredSize(new Dimension(230,250));
 		
 		JLabel title = new JLabel("Indicators",JLabel.CENTER);
 		title.setFont(new Font("SansSerif",Font.BOLD,18));
@@ -198,6 +199,16 @@ public class CrassusIndicatorTablePane extends JPanel {
 		this.add(buttonAndLine, BorderLayout.SOUTH);
 	}
 	
+	public void showNewIndicatorDialog() {
+		if(stock==null){
+			JOptionPane.showMessageDialog(_frame, "You must first have a stock ticker to use indicators.");
+		}
+		else{
+			EventWindowFrame eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), stock);
+			eventWindow.display();
+		}
+	}
+
 	public void addIndicator(Indicator ind) {
 		ind.setActive(true);
 		ind.setVisible(true);
@@ -218,12 +229,18 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 	public void changeToStock(Stock stock){
 		
-		_stock = stock;
-		int indicatorIndex = stock.getSelectedIndicatorIndex();
+		this.stock = stock;
+		
+		int indicatorIndex=0;
+		if(stock!=null)
+			indicatorIndex = stock.getSelectedIndicatorIndex();
+		
 		model.changeToStock(stock);
 		renderer.changeToStock(stock);
 		editor.changeToStock(stock);
-		selector.select(indicatorIndex);
+		
+		if(stock!=null)
+			selector.select(indicatorIndex);
 		
 	}
 }
