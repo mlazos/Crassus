@@ -246,10 +246,21 @@ public class PlotWrapper implements StockPlot
     		Color seriesColor) {
         TimeSeries series = new TimeSeries(seriesName);
         
+        List<Long> dateValues = new ArrayList<>();
+        
         for(IndicatorDatum datum : indicatorPoints) {
              //  return time represented by a second value 
              long tmp = datum.getTime() * 1000;    // from second to Millisecond
              Calendar calendar = Calendar.getInstance();
+             
+/*             if (dateValues.contains(tmp)) {
+            	 System.out.println("date [" + tmp + "] already got!!! size=" + dateValues.size());
+            	 System.out.println(dateValues);
+            	 System.exit(0);
+             }
+             dateValues.add(tmp);*/
+             
+             
              calendar.setTimeInMillis(tmp);
              Date date = calendar.getTime();  
              
@@ -257,7 +268,17 @@ public class PlotWrapper implements StockPlot
              calendarStart.setTime(startTime);
 
              if(calendarStart.before(calendar)) {
-                series.add(new Second(date) , datum.getValue());
+            	/*System.out.println("============================================================");
+            	System.out.println("dat timeLabel="+datum.getTimeLabel());
+            	System.out.println("============================================================\n");*/
+            	try {
+                series.addOrUpdate(new Second(date) , datum.getValue());
+                
+            	} catch (org.jfree.data.general.SeriesException e) {
+            		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<EXCEPTION<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            		System.out.println("dat timeLabel="+datum.getTimeLabel() + ", dat value="+datum.getValue());
+            		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<EXCEPTION<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            	}
              }
         }
         
