@@ -2,7 +2,6 @@ package edu.brown.cs32.atian.crassus.gui.mainwindow;
 
 import javax.swing.JComboBox;
 
-import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SharedState;
 import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 
 public class DropdownSelectionUndoable implements Undoable {

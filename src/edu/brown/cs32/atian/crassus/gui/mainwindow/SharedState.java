@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui.mainwindow.table;
+package edu.brown.cs32.atian.crassus.gui.mainwindow;
 
 public class SharedState {
 
