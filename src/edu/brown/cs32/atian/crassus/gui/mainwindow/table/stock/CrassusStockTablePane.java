@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.Stack;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
@@ -42,7 +41,6 @@ import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SelectUndoable;
 import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialog;
 import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialogCloseListener;
-import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")
@@ -130,7 +128,7 @@ public class CrassusStockTablePane extends JPanel {
 		table.getTableHeader().setFont(new Font("SansSerif",Font.BOLD,12));
 		
 		selector = new CrassusTableRowSelector(table);
-		model = new CrassusStockTableModel(stocks,undoables,selector);
+		model = new CrassusStockTableModel(stocks,selector);
 		table.setModel(model);
 		
 		table.setShowGrid(false);

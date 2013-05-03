@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui.mainwindow;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.plot;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -79,9 +79,6 @@ public class CrassusPlotPane extends JPanel {
 			case 0:
 				timeFreq.addItem("Minutely");
 			}
-			
-			timeFreq.showPopup();
-			timeFreq.hidePopup();
 			
 			stock.setTimeFrame(timeframeFromIndex(index));
 			

@@ -20,7 +20,7 @@ public class AddStockUndoable implements Undoable {
 	
 	@Override
 	public void undo() {
-		selector.deselectLast();
+		selector.select(previousIndex);
 		model.removeLastStock();
 	}
 
