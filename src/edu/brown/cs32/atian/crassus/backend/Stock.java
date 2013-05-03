@@ -46,4 +46,7 @@ public interface Stock {
     Date getStartTime();
     
     StockEventType isTriggered();
+
+	void setSelectedIndicatorIndex(int i);
+    int getSelectedIndicatorIndex();
 }

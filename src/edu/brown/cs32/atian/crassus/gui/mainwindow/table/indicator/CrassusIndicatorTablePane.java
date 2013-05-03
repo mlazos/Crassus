@@ -42,14 +42,24 @@ import edu.brown.cs32.atian.crassus.indicators.Indicator;
 public class CrassusIndicatorTablePane extends JPanel {
 	
 	public class ChangeIndicatorListener implements ListSelectionListener {
+		
 		private int oldIndex=-1;
 		private Indicator oldIndicator = null;
-		@Override public void valueChanged(ListSelectionEvent arg0) {
+		
+		@Override 
+		public void valueChanged(ListSelectionEvent arg0) {
 			int index = table.getSelectedRow();
-			Indicator indicator = _stock.getEventList().get(index);
+			
+			Indicator indicator;
+			if(index==-1)
+				indicator = null;
+			else
+				indicator = _stock.getEventList().get(index);
+			
 			if(oldIndicator!=indicator && selector.shouldRegisterSelection()){
 				undoables.push(new SelectUndoable(oldIndex, index, selector));
 			}
+			_stock.setSelectedIndicatorIndex(index);
 			oldIndex = index;
 			oldIndicator=indicator;
 		}
@@ -207,10 +217,13 @@ public class CrassusIndicatorTablePane extends JPanel {
 	}
 
 	public void changeToStock(Stock stock){
+		
 		_stock = stock;
-		table.clearSelection();
+		int indicatorIndex = stock.getSelectedIndicatorIndex();
 		model.changeToStock(stock);
 		renderer.changeToStock(stock);
 		editor.changeToStock(stock);
+		selector.select(indicatorIndex);
+		
 	}
 }

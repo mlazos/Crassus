@@ -119,6 +119,7 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 
 	public void changeToStock(Stock stock) {
 		this.stock = stock;
+		selector.clearSelection();
 		this.fireTableDataChanged();
 	}
 

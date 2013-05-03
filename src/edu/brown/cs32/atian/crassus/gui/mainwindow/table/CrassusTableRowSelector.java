@@ -48,4 +48,10 @@ public class CrassusTableRowSelector {
 		deselect(table.getRowCount()-1);
 	}
 
+	public void clearSelection() {
+		shouldRegisterSelection = false;
+		table.clearSelection();
+		shouldRegisterSelection = true;
+	}
+
 }
