@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock;
 
 import java.util.Stack;
 
@@ -6,8 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusTableRowSelector;
-import edu.brown.cs32.atian.crassus.gui.undoable.RemoveStockUndoable;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 

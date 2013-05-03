@@ -1,6 +1,7 @@
-package edu.brown.cs32.atian.crassus.gui.undoable;
+package edu.brown.cs32.atian.crassus.gui.mainwindow;
 
-import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusTableRowSelector;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
+import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 
 public class SelectUndoable implements Undoable {
 

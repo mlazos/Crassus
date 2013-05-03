@@ -20,7 +20,7 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.gui.PlotWrapper;
 import edu.brown.cs32.atian.crassus.gui.TimeFrame;
-import edu.brown.cs32.atian.crassus.gui.undoable.DropdownSelectionUndoable;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SharedState;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")

@@ -25,8 +25,8 @@ import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.indicatortable.CrassusIndicatorTablePane;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable.CrassusStockTablePane;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator.CrassusIndicatorTablePane;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock.CrassusStockTablePane;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 /**

@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

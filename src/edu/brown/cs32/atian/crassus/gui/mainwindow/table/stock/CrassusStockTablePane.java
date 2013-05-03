@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -38,12 +38,10 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusChangeStockListener;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusTableRowSelector;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.SelectUndoable;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialog;
 import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialogCloseListener;
-import edu.brown.cs32.atian.crassus.gui.undoable.AddStockUndoable;
-import edu.brown.cs32.atian.crassus.gui.undoable.RemoveStockUndoable;
-import edu.brown.cs32.atian.crassus.gui.undoable.SelectUndoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 

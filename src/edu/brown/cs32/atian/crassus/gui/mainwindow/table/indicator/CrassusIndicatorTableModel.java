@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui.mainwindow.indicatortable;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 
 import javax.swing.table.AbstractTableModel;
 
