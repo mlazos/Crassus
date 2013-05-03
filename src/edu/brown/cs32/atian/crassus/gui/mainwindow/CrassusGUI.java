@@ -12,13 +12,11 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,7 +27,6 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.indicatortable.CrassusIndicatorTablePane;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable.CrassusStockTablePane;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable.CrassusStockTablePane.CtrlTAction;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 /**
@@ -96,7 +93,7 @@ public class CrassusGUI implements GUI {
 		
 		frame = new JFrame("Crassus");
 		
-		undoables = new UndoableStack();
+		undoables = new UndoableStack(32);
 
 		frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK),
@@ -122,7 +119,7 @@ public class CrassusGUI implements GUI {
 		eventBox = new CrassusIndicatorTablePane(frame);
 		
 		//make plot pane
-		plotPane = new CrassusPlotPane();
+		plotPane = new CrassusPlotPane(undoables);
 		
 		
 		stockInfo = new JPanel();

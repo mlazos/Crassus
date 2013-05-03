@@ -38,6 +38,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 	public class NewIndicatorListener implements WindowCloseListener {
 		@Override public void windowClosedWithEvent(Indicator ind) {
+			ind.setActive(true);
+			ind.setVisible(true);
 			model.addIndicator(ind);
 		}
 		@Override public void windowClosedWithCancel() {}

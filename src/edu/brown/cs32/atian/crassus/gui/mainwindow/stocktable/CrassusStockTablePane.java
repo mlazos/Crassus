@@ -43,6 +43,7 @@ import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialog;
 import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialogCloseListener;
 import edu.brown.cs32.atian.crassus.gui.undoable.AddStockUndoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.RemoveStockUndoable;
+import edu.brown.cs32.atian.crassus.gui.undoable.SelectUndoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
@@ -50,7 +51,8 @@ import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 public class CrassusStockTablePane extends JPanel {
 
 	public class ChangeStockListenerForwarder implements ListSelectionListener {
-		Stock lastStock;
+		private Stock lastStock;
+		int lastIndex = -1;
 		@Override public void valueChanged(ListSelectionEvent e) {
 			if(listener!=null){
 				int index = table.getSelectedRow();
@@ -58,12 +60,17 @@ public class CrassusStockTablePane extends JPanel {
 					if(lastStock!=null)
 						listener.changeToStock(null);
 					lastStock = null;
+					lastIndex = index;
 				}
 				else{
 					Stock nextStock = model.getStock(table.getSelectedRow());
-					if(lastStock!=nextStock)
+					if(lastStock!=nextStock){
 						listener.changeToStock(nextStock);
+						if(selector.shouldRegisterSelection())
+							undoables.push(new SelectUndoable(lastIndex, index, selector));
+					}
 					lastStock = nextStock;
+					lastIndex = index;
 				}
 			}
 		}

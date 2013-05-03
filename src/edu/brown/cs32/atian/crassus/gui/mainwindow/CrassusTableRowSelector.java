@@ -5,14 +5,21 @@ import javax.swing.JTable;
 public class CrassusTableRowSelector {
 
 	private JTable table;
+	private boolean shouldRegisterSelection = true;
 	
 	public CrassusTableRowSelector(JTable table){
 		this.table = table;
 	}
 	
+	public boolean shouldRegisterSelection(){
+		return shouldRegisterSelection;
+	}
+	
 	public void select(int i){
 		if(i!=-1 && i<table.getRowCount()){
+			shouldRegisterSelection = false;
 			table.setRowSelectionInterval(i,i);
+			shouldRegisterSelection = true;
 		}
 	}
 
@@ -20,19 +27,6 @@ public class CrassusTableRowSelector {
 		select(table.getRowCount()-1);
 	}
 	
-	public void deselectCurrentSelection(){
-		if(table.getRowCount()==0)
-			return;
-		
-		int index = table.getSelectedRow();
-		if(table.getRowCount()>1){
-			if(index == table.getRowCount()-1)
-				table.setRowSelectionInterval(index-1,index-1);
-			else
-				table.setRowSelectionInterval(index+1,index+1);
-		}
-	}
-
 	public void deselect(int index) {
 		if(index != table.getSelectedRow())
 			return;
@@ -41,10 +35,12 @@ public class CrassusTableRowSelector {
 			return;
 		
 		if(table.getRowCount()>1){
+			shouldRegisterSelection = false;
 			if(index == table.getRowCount()-1)
 				table.setRowSelectionInterval(index-1,index-1);
 			else
 				table.setRowSelectionInterval(index+1,index+1);
+			shouldRegisterSelection = true;
 		}
 	}
 

@@ -20,26 +20,45 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.gui.PlotWrapper;
 import edu.brown.cs32.atian.crassus.gui.TimeFrame;
-import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.gui.undoable.DropdownSelectionUndoable;
+import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")
 public class CrassusPlotPane extends JPanel {
 
+	private SharedState dropdownsShouldRespond = new SharedState(true);
+	private int timeFreqOldIndex=0;
+
+	private int timeScaleOldIndex=0;
+	
 	public class TimeFreqChangeListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent e) {
-			if(stock==null)
-				return;
+			int index = timeFreq.getSelectedIndex();
 			
-			stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
+			if(dropdownsShouldRespond.getState())
+				undoables.push(new DropdownSelectionUndoable(dropdownsShouldRespond, 
+						timeFreq, timeFreqOldIndex, index, 
+						timeframe, timeScaleOldIndex, timeframe.getSelectedIndex()));
+			
+			if(stock==null){
+				timeFreqOldIndex = index;
+				return;
+			}
+			
+			stock.setCurrFreq(timeFreqFromIndex(index));
 			refresh();
+			
+			timeFreqOldIndex = index;
 		}
 	}
 
 	public class TimeScaleChangeListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
+			int index = timeframe.getSelectedIndex();
+			
 			timeFreq.removeActionListener(timeFreqListener);//must be done to keep timeFreq from going bannanas; added back at the end of function
 			timeFreq.removeAllItems();
-			switch(timeframe.getSelectedIndex()){
+			switch(index){
 			case 4:
 				timeFreq.addItem("Daily");
 				timeFreq.addItem("Weekly");
@@ -65,11 +84,16 @@ public class CrassusPlotPane extends JPanel {
 			timeFreq.showPopup();
 			timeFreq.hidePopup();
 			
-			stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
+			stock.setTimeFrame(timeframeFromIndex(index));
 			
 			timeFreq.addActionListener(timeFreqListener);
-			timeFreq.setSelectedIndex(0);//force timeFreq to update. This will make 'refresh' unnecessary
-			refresh();
+			
+			if(dropdownsShouldRespond.getState()){
+				timeFreq.setSelectedIndex(0);//force timeFreq to update. This will make 'refresh' unnecessary
+				refresh();
+			}
+			
+			timeScaleOldIndex = index;
 		}
 	}
 
@@ -86,7 +110,11 @@ public class CrassusPlotPane extends JPanel {
 	private TimeFreqChangeListener timeFreqListener;
 	private Stock stock;
 	
-	public CrassusPlotPane(){
+	private UndoableStack undoables;
+	
+	public CrassusPlotPane(UndoableStack undoables){
+		this.undoables = undoables;
+		
 		this.setBackground(Color.WHITE);
 		this.setPreferredSize(new Dimension(300,300));
 		this.setLayout(new BorderLayout());

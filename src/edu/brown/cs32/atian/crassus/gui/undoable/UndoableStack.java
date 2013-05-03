@@ -5,8 +5,13 @@ import java.util.LinkedList;
 
 public class UndoableStack {
 	
-	Deque<Undoable> undoables = new LinkedList<>();
-	Deque<Undoable> redoables = new LinkedList<>();
+	private Deque<Undoable> undoables = new LinkedList<>();
+	private Deque<Undoable> redoables = new LinkedList<>();
+	private int maximumCapacity;
+	
+	public UndoableStack(int maximumCapacity){
+		this.maximumCapacity = maximumCapacity;
+	}
 	
 	public void undo(){
 		if(undoables.isEmpty())
@@ -29,5 +34,7 @@ public class UndoableStack {
 	public void push(Undoable u){
 		redoables.clear();
 		undoables.push(u);
+		if(undoables.size()>maximumCapacity)
+			undoables.removeLast();
 	}
 }
