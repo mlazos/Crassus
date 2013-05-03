@@ -80,7 +80,6 @@ public class EventWindowFrame implements EventWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			System.out.println("selection made");
 			@SuppressWarnings("unchecked")
 			JComboBox<JPanel> selectEvent = (JComboBox<JPanel>)e.getSource();
 			JPanel newPanel = (JPanel)selectEvent.getSelectedItem();

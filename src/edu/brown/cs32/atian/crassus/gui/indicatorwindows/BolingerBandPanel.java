@@ -31,6 +31,8 @@ public class BolingerBandPanel extends JPanel
 	private JDialog parent;
 	private JTextField periods;
 	private JTextField bandWidth;
+	private String periodstt = "<html>The number of days when calculating the standard deviation and simple moving average.</html>";
+	private String bandWidthtt = "<html>The number of standard deviations for the outer bands.</html>";
 	
 	
 	public BolingerBandPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
@@ -42,14 +44,20 @@ public class BolingerBandPanel extends JPanel
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
 		JLabel periodsLabel = new JLabel("Number of Periods:");
+		periodsLabel.setToolTipText(periodstt);
 		JLabel bandWidthLabel = new JLabel("Bandwidth:");
+		bandWidthLabel.setToolTipText(bandWidthtt);
 		periods = new JTextField();
 		periods.setInputVerifier(inputValidator);
 		periods.setSize(50, 20);
+		periods.setToolTipText(periodstt);
 		periods.setPreferredSize(new Dimension(50, 20));
+		periods.setText("20");
 		bandWidth = new JTextField();
+		bandWidth.setToolTipText(bandWidthtt);
 		bandWidth.setInputVerifier(inputValidator);
 		bandWidth.setSize(50, 20);
+		bandWidth.setText("2");
 		bandWidth.setPreferredSize(new Dimension(50,20));
 		
 		JPanel periodsInput = new JPanel();

@@ -20,15 +20,14 @@ import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
 public class StochOscillPanel extends JPanel {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 12154087L;
 	
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
 	private JTextField period;
+	private String periodtt = "<html>The number of days to use when calculating the high-low range.</html>";
 
 	public StochOscillPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
@@ -40,10 +39,13 @@ public class StochOscillPanel extends JPanel {
 		
 		//top panel
 		JLabel periodLabel = new JLabel("Period:");
+		periodLabel.setToolTipText(periodtt);
 		
 		JTextField period = new JTextField();
 		period.setInputVerifier(numberVerifier);
 		period.setSize(50, 20);
+		period.setToolTipText(periodtt);
+		period.setText("20");
 		period.setPreferredSize(new Dimension(50, 20));
 		
 		JPanel periodInput = new JPanel();
