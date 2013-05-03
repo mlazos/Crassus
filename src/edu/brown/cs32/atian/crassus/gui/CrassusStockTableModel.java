@@ -6,16 +6,22 @@ import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.undoable.RemoveStockUndoable;
+import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
+import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")
 public class CrassusStockTableModel extends AbstractTableModel {
 	
 	private StockList _stocks;
-	private Stack<Undoable> undoables;
+	private UndoableStack undoables;
 	
-	public CrassusStockTableModel(StockList stocks, Stack<Undoable> undoables){
-		_stocks = stocks;
+	private CrassusTableRowSelector selector;
+	
+	public CrassusStockTableModel(StockList stocks, UndoableStack undoables, CrassusTableRowSelector selector){
+		this._stocks = stocks;
 		this.undoables = undoables;
+		this.selector = selector;
 	}
 
 	@Override
@@ -64,22 +70,29 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		}
 	}
 
-	public void addStock(Stock stock) {
+	public void addLastStock(Stock stock) {
 		_stocks.add(stock);
 		this.fireTableRowsInserted(_stocks.getStockList().size()-1, _stocks.getStockList().size()-1);
-		//undoables.add(new UndoableStockTableChange(this, stock, _stocks.getStockList().size()-1, true));
+		selector.select(_stocks.getStockList().size()-1);
 	}
 	
 	public void addStock(int i, Stock stock) {
 		_stocks.getStockList().add(i,stock);
-		//undoables.add(new UndoableStockTableChange(this, stock, i, true));
+		this.fireTableRowsInserted(i, i);
+		selector.select(i);
 	}
 
+	public Stock removeLastStock() {
+		int i = _stocks.getStockList().size()-1;
+		return removeStock(i);
+	}
+	
 	public Stock removeStock(int i) {
 		if(i!=-1){
+			selector.deselect(i);
 			Stock stock = _stocks.getStockList().remove(i);
 			this.fireTableRowsDeleted(i,i);
-			//undoables.add(new UndoableStockTableChange(this, stock, i, false));
+			//undoables.push(new RemoveStockUndoable(this, stock, i, selector));
 			return stock;
 		}
 		else return null;
@@ -92,5 +105,6 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	public Stock getStock(int index) {
 		return _stocks.getStockList().get(index);
 	}
+
 
 }
