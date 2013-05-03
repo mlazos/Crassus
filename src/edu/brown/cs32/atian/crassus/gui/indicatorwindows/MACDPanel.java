@@ -45,6 +45,7 @@ public class MACDPanel extends JPanel
 		JLabel longLabel = new JLabel("Longer Period:");
 		
 		signalP = new JTextField();
+		signalP.setToolTipText()
 		signalP.setInputVerifier(inputValidator);
 		signalP.setSize(50, 20);
 		signalP.setPreferredSize(new Dimension(50, 20));
