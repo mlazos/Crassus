@@ -20,15 +20,13 @@ import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 
 public class RSIPanel extends JPanel 
 {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 6684347084049152488L;
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
 	private JTextField period;
+	private String periodtt = "<html>The number of days to use when calculating the RSI.</html>";
 
 	public RSIPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
@@ -40,10 +38,13 @@ public class RSIPanel extends JPanel
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
 		JLabel periodLabel = new JLabel("Period:");
+		periodLabel.setToolTipText(periodtt);
 		
 		period = new JTextField();
 		period.setInputVerifier(inputValidator);
 		period.setSize(50, 20);
+		period.setToolTipText(periodtt);
+		period.setText("14");
 		period.setPreferredSize(new Dimension(50, 20));
 		
 		JPanel periodInput = new JPanel();

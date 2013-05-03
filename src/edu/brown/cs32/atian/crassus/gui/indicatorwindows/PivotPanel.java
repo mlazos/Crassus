@@ -29,6 +29,9 @@ public class PivotPanel extends JPanel {
 	private JRadioButton stan;
 	private JRadioButton fibo;
 	private JRadioButton dem;
+	private String stantt = "<html>Standard begins with a base pivot calcuated <br> from the simple average of the previous period's high, low and close.</html>";
+	private String fibott = "<html>Fibonacci begins with a base pivot calculated <br> from the simple average of the previous period's high, low and close, <br> but fibonacci multiples of the high-low differential are added to <br> calculate resistance levels and subtracted to form support levels.</html>";
+	private String demtt = "<html>Demark uses a different base pivot depending on the <br> relationship between the previous period's high and low.</html>";
 	
 	
 	public PivotPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
@@ -44,18 +47,21 @@ public class PivotPanel extends JPanel {
 		JPanel standard = new JPanel();
 		standard.setLayout(new FlowLayout());
 		stan = new JRadioButton("Standard");
+		stan.setToolTipText(stantt);
 		radioButtons.add(stan);
 		standard.add(stan);
 		
 		JPanel fib = new JPanel();
 		fib.setLayout(new FlowLayout());
 		fibo = new JRadioButton("Fibonacci");
+		fibo.setToolTipText(fibott);
 		radioButtons.add(fibo);
 		fib.add(fibo);
 		
 		JPanel demark = new JPanel();
 		demark.setLayout(new FlowLayout());
 		dem = new JRadioButton("Demark");
+		dem.setToolTipText(demtt);
 		radioButtons.add(dem);
 		demark.add(dem);
 		

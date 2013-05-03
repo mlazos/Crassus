@@ -21,15 +21,13 @@ import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 public class PriceChannelPanel extends JPanel 
 {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
 	private WindowCloseListener closeListener;
 	private Stock stock;
 	private JDialog parent;
 	private JTextField lookBack;
+	private String lookBacktt = "<html>The number of days to use for <br> finding the high and low.</html>";
+	
 	
 	public PriceChannelPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
@@ -40,10 +38,12 @@ public class PriceChannelPanel extends JPanel
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
 		JLabel lookBackLabel = new JLabel("Look Back Period:");
-		
+		lookBackLabel.setToolTipText(lookBacktt);
 		lookBack = new JTextField();
 		lookBack.setInputVerifier(inputValidator);
 		lookBack.setSize(50, 20);
+		lookBack.setToolTipText(lookBacktt);
+		lookBack.setText("20");
 		lookBack.setPreferredSize(new Dimension(50, 20));
 		
 		JPanel lookBackInput = new JPanel();

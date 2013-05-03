@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.undo.UndoManager;
 
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 import edu.brown.cs32.atian.crassus.indicators.MACD;
@@ -18,11 +20,14 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 
+/**
+ * 
+ * @author mlazos
+ *This is the window for MACD indicator.
+ */
 public class MACDPanel extends JPanel 
 {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private WindowCloseListener closeListener;
 	private JDialog parent;
@@ -30,6 +35,9 @@ public class MACDPanel extends JPanel
 	private JTextField signalP;
 	private JTextField shortP;
 	private JTextField longP;
+	private String signalPtt = "<html>The number of days used to calculate the moving average of the difference <br> between the shorter and longer moving averages</html>";
+	private String longPtt = "<html>The number of days used to calculate <br> the shorter period moving average.</html>";
+	private String shortPtt = "<html>The number of days used to calculate <br> the longer period moving average.</html>";
 	
 	public MACDPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
@@ -37,26 +45,50 @@ public class MACDPanel extends JPanel
 		this.parent = parent;
 		this.stock = stock;
 		
+		final String undo = "undo";
+		final String redo = "redo";
+		final KeyStroke undoKey = KeyStroke.getKeyStroke("control Z");
+		final KeyStroke redoKey = KeyStroke.getKeyStroke("control Y");
+		final UndoManager undoM = new UndoManager();
+		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		
 		//top panel
 		JLabel signalLabel = new JLabel("Signal Period:");
+		signalLabel.setToolTipText(signalPtt);
 		JLabel shortLabel = new JLabel("Shorter Period:");
+		shortLabel.setToolTipText(shortPtt);
 		JLabel longLabel = new JLabel("Longer Period:");
+		longLabel.setToolTipText(longPtt);
 		
 		signalP = new JTextField();
-		signalP.setToolTipText()
 		signalP.setInputVerifier(inputValidator);
+		signalP.setText("12");
+		signalP.setToolTipText(signalPtt);
 		signalP.setSize(50, 20);
 		signalP.setPreferredSize(new Dimension(50, 20));
+		signalP.getDocument().addUndoableEditListener(new IndicatorUndoableEditListener(undoM));
+		signalP.getActionMap().put(undo, new UndoAction(undoM));
+		signalP.getInputMap().put(undoKey, undo);
+		signalP.getActionMap().put(redo, new RedoAction(undoM));
+		signalP.getInputMap().put(redoKey, redo);
 		
 		shortP = new JTextField();
 		shortP.setInputVerifier(inputValidator);
+		shortP.setText("9");
+		shortP.setToolTipText(shortPtt);
 		shortP.setSize(50, 20);
 		shortP.setPreferredSize(new Dimension(50,20));
+		shortP.getDocument().addUndoableEditListener(new IndicatorUndoableEditListener(undoM));
+		shortP.getActionMap().put(undo, new UndoAction(undoM));
+		shortP.getInputMap().put(undoKey, undo);
+		shortP.getActionMap().put(redo, new RedoAction(undoM));
+		shortP.getInputMap().put(redoKey, redo);
 		
 		longP = new JTextField();
 		longP.setInputVerifier(inputValidator);
+		longP.setText("26");
+		longP.setToolTipText(longPtt);
 		longP.setSize(50, 20);
 		longP.setPreferredSize(new Dimension(50,20));
 		
