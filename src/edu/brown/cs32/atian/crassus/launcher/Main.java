@@ -9,8 +9,8 @@ import javax.swing.UIManager;
 
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.backend.StockListImpl;
-import edu.brown.cs32.atian.crassus.gui.CrassusGUI;
-import edu.brown.cs32.atian.crassus.gui.GUI;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusGUI;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.GUI;
 
 public class Main {
 

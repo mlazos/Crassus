@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.indicatortable;
 
 import java.io.File;
 import java.io.IOException;

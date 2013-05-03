@@ -1,8 +1,8 @@
 package edu.brown.cs32.atian.crassus.gui.undoable;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
-import edu.brown.cs32.atian.crassus.gui.CrassusStockTableModel;
-import edu.brown.cs32.atian.crassus.gui.CrassusTableRowSelector;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusTableRowSelector;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable.CrassusStockTableModel;
 
 public class AddStockUndoable implements Undoable {
 

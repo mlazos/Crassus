@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,6 +18,8 @@ import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
+import edu.brown.cs32.atian.crassus.gui.PlotWrapper;
+import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 @SuppressWarnings("serial")

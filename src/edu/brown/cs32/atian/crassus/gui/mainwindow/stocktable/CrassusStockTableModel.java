@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.stocktable;
 
 import java.util.Stack;
 
@@ -6,6 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.gui.undoable.RemoveStockUndoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
@@ -77,6 +78,9 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	}
 	
 	public void addStock(int i, Stock stock) {
+		if(i==-1)
+			return;
+		
 		_stocks.getStockList().add(i,stock);
 		this.fireTableRowsInserted(i, i);
 		selector.select(i);
@@ -88,14 +92,13 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	}
 	
 	public Stock removeStock(int i) {
-		if(i!=-1){
-			selector.deselect(i);
-			Stock stock = _stocks.getStockList().remove(i);
-			this.fireTableRowsDeleted(i,i);
-			//undoables.push(new RemoveStockUndoable(this, stock, i, selector));
-			return stock;
-		}
-		else return null;
+		if(i==-1)
+			return null;
+
+		selector.deselect(i);
+		Stock stock = _stocks.getStockList().remove(i);
+		this.fireTableRowsDeleted(i,i);
+		return stock;
 	}
 
 	public void refresh() {

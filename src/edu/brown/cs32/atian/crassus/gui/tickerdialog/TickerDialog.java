@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.tickerdialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
