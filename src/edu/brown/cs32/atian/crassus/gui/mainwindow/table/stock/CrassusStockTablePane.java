@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,20 +37,38 @@ import javax.swing.table.TableColumn;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusChangeStockListener;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SelectUndoable;
+import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialog;
+import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialogCloseListener;
+import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
+import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")
 public class CrassusStockTablePane extends JPanel {
 
 	public class ChangeStockListenerForwarder implements ListSelectionListener {
-		Stock lastStock;
+		private Stock lastStock;
+		int lastIndex = -1;
 		@Override public void valueChanged(ListSelectionEvent e) {
-			if(_listener!=null){
+			if(listener!=null){
 				int index = table.getSelectedRow();
-				if(index!=-1){
+				if(index==-1){
+					if(lastStock!=null)
+						listener.changeToStock(null);
+					lastStock = null;
+					lastIndex = index;
+				}
+				else{
 					Stock nextStock = model.getStock(table.getSelectedRow());
-					if(lastStock!=nextStock)
-						_listener.changeToStock(nextStock);
+					if(lastStock!=nextStock){
+						listener.changeToStock(nextStock);
+						if(selector.shouldRegisterSelection())
+							undoables.push(new SelectUndoable(lastIndex, index, selector));
+					}
 					lastStock = nextStock;
+					lastIndex = index;
 				}
 			}
 		}
@@ -87,17 +105,20 @@ public class CrassusStockTablePane extends JPanel {
 		}
 	}
 
-	private JFrame _frame;
+	private JFrame frame;
 	private JTable table;
 	private CrassusStockTableModel model;
-	private CrassusChangeStockListener _listener;
+	private CrassusChangeStockListener listener;
+	private CrassusTableRowSelector selector;
+	
+	private UndoableStack undoables;
 	
 	private StockList stocks;
 	
-	public CrassusStockTablePane(JFrame frame, StockList stocks, Stack<Undoable> undoables){
-		_frame = frame;
-		
+	public CrassusStockTablePane(JFrame frame, StockList stocks, UndoableStack undoables){
+		this.frame = frame;
 		this.stocks = stocks;
+		this.undoables = undoables;
 		
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
@@ -108,8 +129,10 @@ public class CrassusStockTablePane extends JPanel {
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setFont(new Font("SansSerif",Font.BOLD,12));
 		
-		model = new CrassusStockTableModel(stocks,undoables);
+		selector = new CrassusTableRowSelector(table);
+		model = new CrassusStockTableModel(stocks,undoables,selector);
 		table.setModel(model);
+		
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
 		table.setFillsViewportHeight(true);//makes extra space below table entries white
@@ -189,7 +212,7 @@ public class CrassusStockTablePane extends JPanel {
 	
 
 	public void launchTickerCreator() {
-		TickerDialog tickerFrame = new TickerDialog(_frame);
+		TickerDialog tickerFrame = new TickerDialog(frame);
 		tickerFrame.setTickerDialogCloseListener(new NewTickerListener());
 		tickerFrame.setVisible(true);
 	}
@@ -202,7 +225,7 @@ public class CrassusStockTablePane extends JPanel {
 			
 			for(Stock other: stocks.getStockList()){
 				if(symbol.equals(other.getTicker())){
-					JOptionPane.showMessageDialog(_frame, "\'"+symbol+"\' is already in your ticker-table");
+					JOptionPane.showMessageDialog(frame, "\'"+symbol+"\' is already in your ticker-table");
 					int index = stocks.getStockList().indexOf(other);
 					table.setRowSelectionInterval(index,index);
 					return;
@@ -211,36 +234,24 @@ public class CrassusStockTablePane extends JPanel {
 			
 			Stock stock = new StockImpl(symbol);
 			stock.refresh();
-			model.addStock(stock);
-			table.setRowSelectionInterval(model.getRowCount()-1, model.getRowCount()-1);
+			int previousIndex = table.getSelectedRow();
+			model.addLastStock(stock);
+			undoables.push(new AddStockUndoable(model, stock, previousIndex, selector));
+			//table.setRowSelectionInterval(model.getRowCount()-1, model.getRowCount()-1);
 			
 		}catch(IllegalArgumentException e){
-			JOptionPane.showMessageDialog(_frame,"\'"+symbol+"\' is not a valid ticker symbol");
+			JOptionPane.showMessageDialog(frame,"\'"+symbol+"\' is not a valid ticker symbol");
 		}
 	}
 
 	public void removeSelectedTicker() {
-		if(table.getRowCount()==0)
-			return;
-		
 		int index = table.getSelectedRow();
-		if(table.getRowCount()>1){
-			if(index == table.getRowCount()-1)
-				table.setRowSelectionInterval(index-1,index-1);
-			else
-				table.setRowSelectionInterval(index+1,index+1);
-			
-			_listener.changeToStock(model.getStock(table.getSelectedRow()));
-		}
-		else{
-			_listener.changeToStock(null);
-		}
-		
-		model.removeStock(index);
+		Stock stock = model.removeStock(index);
+		undoables.push(new RemoveStockUndoable(model, stock, index, selector));
 	}
 
 	public void setChangeStockListener(CrassusChangeStockListener listener){
-		_listener = listener;
+		this.listener = listener;
 	}
 
 	public void refresh() {

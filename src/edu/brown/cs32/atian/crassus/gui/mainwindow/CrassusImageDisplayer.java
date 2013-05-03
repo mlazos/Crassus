@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

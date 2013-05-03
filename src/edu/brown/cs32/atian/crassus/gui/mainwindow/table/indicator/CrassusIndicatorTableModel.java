@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -7,8 +7,6 @@ import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 @SuppressWarnings("serial")
 public class CrassusIndicatorTableModel extends AbstractTableModel {
-	
-	//private boolean[][] tempBooleanHolder = new boolean[20][2];
 	
 	private Stock stock;
 	

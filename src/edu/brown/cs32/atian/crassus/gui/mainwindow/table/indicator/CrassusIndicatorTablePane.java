@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,6 +29,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableColumn;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindowFrame;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
@@ -37,6 +38,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 	public class NewIndicatorListener implements WindowCloseListener {
 		@Override public void windowClosedWithEvent(Indicator ind) {
+			ind.setActive(true);
+			ind.setVisible(true);
 			model.addIndicator(ind);
 		}
 		@Override public void windowClosedWithCancel() {}

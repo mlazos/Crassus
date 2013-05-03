@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

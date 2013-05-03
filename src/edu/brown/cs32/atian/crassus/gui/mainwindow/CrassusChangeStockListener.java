@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui;
+package edu.brown.cs32.atian.crassus.gui.mainwindow;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 
