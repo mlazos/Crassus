@@ -211,7 +211,7 @@ public class CrassusStockTablePane extends JPanel {
 	
 
 	public void launchTickerCreator() {
-		TickerDialog tickerFrame = new TickerDialog(frame);
+		TickerDialog tickerFrame = new TickerDialog(frame, stocks);
 		tickerFrame.setTickerDialogCloseListener(new NewTickerListener());
 		tickerFrame.setVisible(true);
 	}
