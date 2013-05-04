@@ -32,7 +32,6 @@ public class UndoableStack {
 	}
 	
 	public void push(Undoable u){
-		System.out.println("received undoable: "+u);
 		
 		redoables.clear();
 		undoables.push(u);
