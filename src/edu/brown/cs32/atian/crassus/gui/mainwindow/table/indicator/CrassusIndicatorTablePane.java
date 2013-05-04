@@ -143,8 +143,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 			column.setResizable(false);
 			
 			column.setCellRenderer(renderer);
-			if(i<2)
-				column.setCellEditor(editor);
+//			if(i<2)
+//				column.setCellEditor(editor);
 		}
 		
 		table.getSelectionModel().addListSelectionListener(new ChangeIndicatorListener());

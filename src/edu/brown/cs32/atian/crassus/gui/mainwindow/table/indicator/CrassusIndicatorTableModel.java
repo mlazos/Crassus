@@ -71,13 +71,16 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 	
 	@Override
 	public boolean isCellEditable(int row, int col){
-		return col <= 1;
+		return false;
+		//return col <= 1;
 	}
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		if(stock==null || row >= stock.getEventList().size())
 			return;
+		
+		System.out.println("setting value");
 		
 		switch(col){
 		case 0:
