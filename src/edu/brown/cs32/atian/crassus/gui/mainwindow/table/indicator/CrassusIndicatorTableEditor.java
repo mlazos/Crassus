@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")
 public class CrassusIndicatorTableEditor extends AbstractCellEditor implements TableCellEditor {
@@ -20,11 +21,16 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 	private CrassusCheckBoxAlert cba;
 	private Stock stock;
 	
+	private UndoableStack undoables;
+	private CrassusIndicatorTableModel model;
+	
 	boolean usingEye;
 	
-	public CrassusIndicatorTableEditor(){
+	public CrassusIndicatorTableEditor(CrassusIndicatorTableModel model, UndoableStack undoables){
 		cbe = new CrassusCheckBoxEye();
 		cba = new CrassusCheckBoxAlert();
+		this.undoables = undoables;
+		this.model = model;
 	}
 	
 	@Override
@@ -43,8 +49,9 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		usingEye = (column==0);
 		
 		if (value instanceof Boolean) {
-            boolean selected = (boolean) value;
+            boolean selected = (Boolean) value;
             cb.setSelected(selected);
+            undoables.push(new CheckBoxUndoable(selected,table,model,row,column));
         }
 
 		if(row%5==0)//(stocks.getStockList().get(row).isTriggered() == StockEventType.BUY)

@@ -132,7 +132,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		table.setRowHeight(26);
 		table.setIntercellSpacing(new Dimension(0,2));
 		
-		editor = new CrassusIndicatorTableEditor();
+		editor = new CrassusIndicatorTableEditor(model,undoables);
 		renderer = new CrassusIndicatorTableRenderer();
 		
 		for(int i=0; i<3; i++){
@@ -237,8 +237,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 			indicatorIndex = stock.getSelectedIndicatorIndex();
 		
 		model.changeToStock(stock);
-		renderer.changeToStock(stock);
 		editor.changeToStock(stock);
+		renderer.changeToStock(stock);
 		
 		if(stock!=null)
 			selector.select(indicatorIndex);
