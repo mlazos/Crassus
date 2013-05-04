@@ -65,6 +65,9 @@ public class AutoCorrect {
                 String[] words = input.split("\t");
                 if (words.length >= keyIndex + 1) {
                     String streetName = words[keyIndex];
+                    if(streetName.contains("^")) {
+                        continue;
+                    }
                     allStreetNames.add(streetName);
                     //wordWriter.write(streetName + "\n");
                 }
