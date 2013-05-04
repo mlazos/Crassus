@@ -17,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.brown.cs32.atian.crassus.gui.CrassusButton;
+
 /**
  * @author Matthew
  *
@@ -66,10 +68,10 @@ public class TickerDialog extends JDialog {
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.setBackground(Color.WHITE);
 		
-		JButton okButton = new JButton("OK");
+		JButton okButton = new CrassusButton("OK");
 		okButton.addActionListener(new OkListener());
 		buttonPanel.add(okButton);
-		JButton cancelButton = new JButton("CANCEL");
+		JButton cancelButton = new CrassusButton("CANCEL");
 		cancelButton.addActionListener(new CancelListener());
 		buttonPanel.add(cancelButton);
 

@@ -32,6 +32,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.gui.CrassusButton;
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindowFrame;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
@@ -166,7 +167,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
 		
 
-		JButton addButton = new JButton("+");
+		JButton addButton = new CrassusButton("+");
 		addButton.addActionListener(new PlusButtonListener());
 		addButton.setToolTipText("add new indicator");
 		addButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -174,7 +175,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 				"CTRL I");
 		addButton.getActionMap().put("CTRL I", new CtrlIAction());
 		
-		JButton removeButton = new JButton("-");
+		JButton removeButton = new CrassusButton("-");
 		removeButton.addActionListener(new MinusButtonListener());
 		removeButton.setToolTipText("remove selected indicator");
 		removeButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(

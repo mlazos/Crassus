@@ -104,9 +104,9 @@ public class CrassusGUI implements GUI {
 		frame.getRootPane().getActionMap().put("CTRL Y", new CtrlYAction());
 		
 		try {
-			BufferedImage img = ImageIO.read(new File("icons/programIcon.png"));
+			BufferedImage img = ImageIO.read(new File("img/crassus.png"));
 			frame.setIconImage(img);
-		} catch (IOException e) {}//not a disaster, can be ignored....
+		} catch (IOException e) {e.printStackTrace();}//not a disaster, can be ignored....
 		
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

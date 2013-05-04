@@ -36,6 +36,7 @@ import javax.swing.table.TableColumn;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.CrassusButton;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusChangeStockListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SelectUndoable;
@@ -175,7 +176,7 @@ public class CrassusStockTablePane extends JPanel {
 				BorderFactory.createEmptyBorder(20,20,20,20),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
 		
-		JButton addButton = new JButton("+");
+		JButton addButton = new CrassusButton("+");
 		addButton.addActionListener(new PlusButtonListener());
 		addButton.setToolTipText("add new ticker");
 		addButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -183,7 +184,7 @@ public class CrassusStockTablePane extends JPanel {
 				"CTRL T");
 		addButton.getActionMap().put("CTRL T", new CtrlTAction());
 		
-		JButton removeButton = new JButton("-");
+		JButton removeButton = new CrassusButton("-");
 		removeButton.addActionListener(new MinusButtonListener());
 		removeButton.setToolTipText("remove selected ticker");
 		removeButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
