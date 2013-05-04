@@ -75,6 +75,11 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		this.undoables = undoables;
 	}
 	
+	@Override 
+	public boolean shouldSelectCell(EventObject event) {
+		return false;
+	}
+	
 	@Override
 	public Object getCellEditorValue() {
 		if(usingEye)
@@ -109,11 +114,18 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		panel.add(cb,BorderLayout.CENTER);
 		panel.setBackground(cb.getBackground());
 
-		
-		if(column==0)
-			panel.setBorder(BorderFactory.createMatteBorder(3,3,3,0,Color.BLACK));
-		else if(column==1)
-			panel.setBorder(BorderFactory.createMatteBorder(3,0,3,0,Color.BLACK));
+		if(column==0){
+			if(isSelected)
+				panel.setBorder(BorderFactory.createMatteBorder(3,3,3,0,Color.BLACK));
+			else
+				panel.setBorder(BorderFactory.createEmptyBorder(3,3,3,0));
+		}
+		else if(column==1){
+			if(isSelected)
+				panel.setBorder(BorderFactory.createMatteBorder(3,0,3,0,Color.BLACK));
+			else
+				panel.setBorder(BorderFactory.createEmptyBorder(3,0,3,0));
+		}
 		
         return panel;
 	}
