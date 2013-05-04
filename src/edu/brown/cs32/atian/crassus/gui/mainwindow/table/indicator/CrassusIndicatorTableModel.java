@@ -3,6 +3,7 @@ package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
@@ -12,8 +13,11 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 	private Stock stock;
 	private CrassusTableRowSelector selector;
 	
-	public CrassusIndicatorTableModel(CrassusTableRowSelector selector){
+	private CrassusPlotIsObsoleteListener listener;
+	
+	public CrassusIndicatorTableModel(CrassusTableRowSelector selector, CrassusPlotIsObsoleteListener listener){
 		this.selector = selector;
+		this.listener = listener;
 	}
 
 	@Override
@@ -93,6 +97,9 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		stock.getEventList().add(i,ind);
 		this.fireTableRowsInserted(i, i);
 		selector.select(i);
+		
+		if(ind.getVisible())
+			listener.informPlotIsObsolete();
 	}
 
 	public void addLastIndicator(Indicator ind) {
@@ -100,6 +107,9 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		int i = stock.getEventList().size()-1;
 		this.fireTableRowsInserted(i,i);
 		selector.select(i);
+		
+		if(ind.getVisible())
+			listener.informPlotIsObsolete();
 	}
 
 	public Indicator removeIndicator(int i) {
@@ -109,11 +119,15 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		selector.deselect(i);
 		Indicator ind = stock.getEventList().remove(i);
 		this.fireTableRowsDeleted(i, i);
+		
+		if(!ind.getVisible()) 
+			listener.informPlotIsObsolete();
+		
 		return ind;
 	}
 
-	public void removeLastIndicator() {
-		removeIndicator(stock.getEventList().size()-1);
+	public Indicator removeLastIndicator() {
+		return removeIndicator(stock.getEventList().size()-1);
 	}
 
 	public void changeToStock(Stock stock) {

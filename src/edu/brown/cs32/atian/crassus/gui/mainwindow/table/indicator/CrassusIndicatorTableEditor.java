@@ -3,6 +3,8 @@ package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
@@ -12,19 +14,52 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 @SuppressWarnings("serial")
 public class CrassusIndicatorTableEditor extends AbstractCellEditor implements TableCellEditor {
 
+	public class EyeBoxListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			indicator.setVisible(cbe.isSelected());
+			if(listener!=null)
+				listener.informPlotIsObsolete();
+			
+		}
+
+	}
+
+	public class AlertBoxListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			indicator.setActive(cba.isSelected());
+			
+		}
+
+	}
+
 	private CrassusCheckBoxEye cbe;
 	private CrassusCheckBoxAlert cba;
 	private Stock stock;
+	private Indicator indicator;
 	
-	boolean usingEye;
+	private boolean usingEye;
 	
-	public CrassusIndicatorTableEditor(){
+	private CrassusPlotIsObsoleteListener listener;
+	
+	public CrassusIndicatorTableEditor(CrassusPlotIsObsoleteListener listener){
 		cbe = new CrassusCheckBoxEye();
+		cbe.addActionListener(new EyeBoxListener());
 		cba = new CrassusCheckBoxAlert();
+		cba.addActionListener(new AlertBoxListener());
+		
+		this.listener = listener;
 	}
 	
 	@Override
@@ -41,6 +76,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 
 		JCheckBox cb = (column==0) ? cbe : cba;
 		usingEye = (column==0);
+		indicator = stock.getEventList().get(row);
 		
 		if (value instanceof Boolean) {
             boolean selected = (boolean) value;
@@ -53,7 +89,6 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 			cb.setBackground(new Color(255,150,150));
 		else
 			cb.setBackground(Color.WHITE);
-
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(cb,BorderLayout.CENTER);

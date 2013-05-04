@@ -35,6 +35,7 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.gui.CrassusButton;
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindowFrame;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SelectUndoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
@@ -111,7 +112,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 	private JFrame _frame;
 	private Stock stock;
 
-	public CrassusIndicatorTablePane(JFrame frame, UndoableStack undoables){
+	public CrassusIndicatorTablePane(JFrame frame, UndoableStack undoables, CrassusPlotIsObsoleteListener listener){
 		_frame = frame;
 		this.undoables = undoables;
 		
@@ -123,7 +124,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		table.setTableHeader(null);//Disable table header
 		
 		selector = new CrassusTableRowSelector(table);
-		model = new CrassusIndicatorTableModel(selector);
+		model = new CrassusIndicatorTableModel(selector, listener);
 		table.setModel(model);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//allow only one row to be selected at a time
@@ -132,7 +133,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		table.setRowHeight(26);
 		table.setIntercellSpacing(new Dimension(0,2));
 		
-		editor = new CrassusIndicatorTableEditor();
+		editor = new CrassusIndicatorTableEditor(listener);
 		renderer = new CrassusIndicatorTableRenderer();
 		
 		for(int i=0; i<3; i++){

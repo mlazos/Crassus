@@ -216,7 +216,7 @@ public class CrassusPlotPane extends JPanel {
 			stock.addToPlot(plot);
 			
 			for (Indicator ind: stock.getEventList()){
-				
+				System.out.println("stock: "+stock.getTicker()+", indicator: "+ind.getName()+", visibility: "+ind.getVisible());
 				if (ind.getVisible()) {
 					ind.addToPlot(plot);
 				}

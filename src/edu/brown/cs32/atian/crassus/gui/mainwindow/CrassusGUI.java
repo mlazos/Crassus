@@ -36,39 +36,37 @@ import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
  */
 public class CrassusGUI implements GUI {
 	
+	public class RefreshPlotListener implements CrassusPlotIsObsoleteListener {
+		
+		@Override
+		public void informPlotIsObsolete() {
+			plotPane.refresh();
+		}
+
+	}
+
 	@SuppressWarnings("serial")
 	public class CtrlZAction extends AbstractAction implements Action {
-		@Override public void actionPerformed(ActionEvent e) {
+		
+		@Override 
+		public void actionPerformed(ActionEvent e) {
 			undoables.undo();
 		}
 	}
 
 	@SuppressWarnings("serial")
 	public class CtrlYAction extends AbstractAction implements Action {
-		@Override public void actionPerformed(ActionEvent e) {
+		
+		@Override 
+		public void actionPerformed(ActionEvent e) {
 			undoables.redo();
 		}
 	}
 
 	public class CompoundChangeStockListener implements CrassusChangeStockListener {
-		@Override public void changeToStock(Stock stock) {
-//			if(stock==null && stockInfoStateNormal){
-//				frame.remove(stockInfo);
-//				frame.add(nullStockInfo,BorderLayout.CENTER);
-//				stockInfoStateNormal = false;
-//				frame.revalidate();
-//				frame.setVisible(true);
-//				frame.repaint();
-//			}
-//			else if(!stockInfoStateNormal){
-//				frame.remove(nullStockInfo);
-//				frame.add(stockInfo,BorderLayout.CENTER);
-//				stockInfoStateNormal = true;
-//				frame.revalidate();
-//				frame.setVisible(true);
-//				frame.repaint();
-//			}
-			
+		
+		@Override 
+		public void changeToStock(Stock stock) {
 			plotPane.changeToStock(stock);
 			eventBox.changeToStock(stock);
 		}
@@ -114,7 +112,7 @@ public class CrassusGUI implements GUI {
 		stockBox = new CrassusStockTablePane(frame,stocks,undoables);
 		stockBox.setChangeStockListener(new CompoundChangeStockListener());
 
-		eventBox = new CrassusIndicatorTablePane(frame,undoables);
+		eventBox = new CrassusIndicatorTablePane(frame,undoables, new RefreshPlotListener());
 		
 		//make plot pane
 		plotPane = new CrassusPlotPane(undoables);
