@@ -149,6 +149,8 @@ public class TickerDialog extends JDialog {
         tickerSugg = new JComboBox<String>();
         //tickerSugg.setSize(new Dimension(25, 15));
         tickerSugg.setMinimumSize(new Dimension(25, 15));
+        tickerSugg.setBackground(Color.WHITE);
+        tickerSugg.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
         KeyListener u1 = new UserInpListener(this.text, this.tickerSugg);
         this.text.addKeyListener(u1);
