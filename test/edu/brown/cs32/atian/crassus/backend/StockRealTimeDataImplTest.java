@@ -60,10 +60,10 @@ public class StockRealTimeDataImplTest {
 
         StockTimeFrameData firstData = allRealTimeData.get(0);
         
-        double open = instance.getOpenPrice();
+        String open = instance.getOpenPrice();
         System.out.println("Open: " + open);
         
-        double price = instance.getCurrPrice();
+        String price = instance.getCurrPrice();
         System.out.println("price: " + price);        
         
         long tmp = (Long.parseLong(firstData.getTime()));

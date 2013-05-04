@@ -190,9 +190,9 @@ public class StockImplTest {
         
         Stock s = new StockImpl("GOOG");
         s.initialize();
-        double open = s.getStockRealTimeData().getOpenPrice();
+        String open = s.getStockRealTimeData().getOpenPrice();
         System.out.println("Open: " + open);
-        double price = s.getStockRealTimeData().getCurrPrice();
+        String price = s.getStockRealTimeData().getCurrPrice();
         System.out.println("price: " + price); 
         
         s.refresh();
