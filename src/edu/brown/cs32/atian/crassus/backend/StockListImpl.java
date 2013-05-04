@@ -4,7 +4,9 @@
  */
 package edu.brown.cs32.atian.crassus.backend;
 
+import edu.brown.cs32.atian.crassus.backend.AutoComplete.AutoCorrect;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,12 +15,29 @@ import java.util.ArrayList;
 public class StockListImpl implements StockList {
     
     private ArrayList<Stock> _stocks;
+    String _stockListFile = "StockList-byTicker.tsv";
+    AutoCorrect _autoCorrectTicker = null;
+    AutoCorrect _autoCorrectCompName = null;
     
     public StockListImpl() {
         _stocks = new ArrayList<Stock>();
+        _autoCorrectTicker = new AutoCorrect();
+        _autoCorrectTicker.initializer(_stockListFile, "Symbol");
+//        _autoCorrectCompName = new AutoCorrect();
+//        _autoCorrectCompName.initializer(_stockListFile, "Name");        
     }
     
+    @Override    
+    public List<String> getTickerSuggestion(String tickerPrefix) {
+        List<String> result = _autoCorrectTicker.Searcher(tickerPrefix);
+        return result;
+    }     
 
+//    @Override    
+//    public List<String> getCompanyNameSuggestion(String tickerPrefix) {
+//        return _autoCorrectCompName.Searcher(tickerPrefix);
+//    }
+    
     @Override
     public ArrayList<Stock> getStockList() {
         return _stocks;
