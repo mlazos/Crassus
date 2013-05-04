@@ -61,7 +61,7 @@ public class TickerDialog extends JDialog {
         //JTextArea suggestions;
         JTextField userInp;
         JComboBox<String> suggBox;
-
+        
         public UserInpListener(JTextField f, JComboBox<String> b) {
             //this.suggestions = a;
             this.userInp = f;
@@ -79,28 +79,57 @@ public class TickerDialog extends JDialog {
          */
         @Override
         public void keyReleased(KeyEvent e) {
+        	if(e.getKeyCode()==KeyEvent.VK_DOWN||e.getKeyCode()==KeyEvent.VK_UP||e.getKeyCode()==KeyEvent.VK_LEFT){
+				System.out.println("exiting key released");
+        		//don't do anything for arrow keys
+			}
             //suggestions.setText("");
 
-            String inputString = userInp.getText();
+            //String inputString = userInp.getText();
+            String inputString = suggBox.getEditor().getItem().toString();
             
             inputString = inputString.trim();
             if (inputString.length() == 0) {
                 String sug[] = {""};
-                suggBox.setModel(new DefaultComboBoxModel<String>(sug));
+
+                //suggBox.removeActionListener(itemCListener);//this is done so we don't respond by changing the text field
+                //suggBox.setModel(new DefaultComboBoxModel<String>(sug));
+                DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) suggBox.getModel();
+            	model.removeAllElements();
+            	for(String sugElem: sug){
+            		model.addElement(sugElem);
+            	}
+                
                 suggBox.hidePopup();
                 suggBox.setVisible(true);
+
+                suggBox.getEditor().setItem(inputString);
+                
+                //suggBox.addActionListener(itemCListener);
+                
                 return;
             }
             //if inupt string is empty i.e. text box is empty, then dont call methods, to avoid error
             if (inputString.length() > 0) {
-                        List<String> tickerSugg = stockList.getTickerSuggestion(inputString);
-                        String sug[] = new String[tickerSugg.size()];
-                                tickerSugg.toArray(sug);
-                        suggBox.setModel(new DefaultComboBoxModel<String>(sug));
+            	List<String> tickerSugg = stockList.getTickerSuggestion(inputString);
+            	String sug[] = new String[tickerSugg.size()];
+            	tickerSugg.toArray(sug);
 
-                        suggBox.showPopup();
-                        suggBox.setVisible(true);
-                    
+            	//suggBox.removeActionListener(itemCListener);//this is done so we don't respond by changing the text field
+            	//suggBox.setModel(new DefaultComboBoxModel<String>(sug));
+            	DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) suggBox.getModel();
+            	model.removeAllElements();
+            	for(String sugElem: sug){
+            		model.addElement(sugElem);
+            	}
+            	
+            	
+            	suggBox.showPopup();
+            	suggBox.setVisible(true);
+            	
+            	suggBox.getEditor().setItem(inputString);
+            	
+            	//suggBox.addActionListener(itemCListener);
 
             }
 
@@ -123,7 +152,8 @@ public class TickerDialog extends JDialog {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            userInp.setText(suggBox.getSelectedItem().toString());
+            //userInp.setText(suggBox.getSelectedItem().toString());
+        	//suggBox.getEditor().setItem(suggBox.getSelectedItem().toString());
         }
     }
     
@@ -131,6 +161,8 @@ public class TickerDialog extends JDialog {
     private JComboBox<String> tickerSugg;
     private TickerDialogCloseListener listener;
     private StockList stockList;
+    
+    private ItemCListener itemCListener;
 
     public TickerDialog(JFrame frame, StockList stockList) {
         super(frame, "Add Ticker");
@@ -138,22 +170,26 @@ public class TickerDialog extends JDialog {
 
         this.setLayout(new BorderLayout());
 
-        text = new JTextField();
-        text.setMinimumSize(new Dimension(50, 15));
-        text.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(10, 10, 0, 10),
-                BorderFactory.createEtchedBorder()));
-        text.addActionListener(new OkListener());
-        this.add(text, BorderLayout.NORTH);
+//        text = new JTextField();
+//        text.setMinimumSize(new Dimension(50, 15));
+//        text.setBorder(BorderFactory.createCompoundBorder(
+//        		BorderFactory.createEmptyBorder(10, 10, 0, 10),
+//        		BorderFactory.createEtchedBorder()));
+//        text.addActionListener(new OkListener());
+//        this.add(text, BorderLayout.NORTH);
 
         tickerSugg = new JComboBox<String>();
         //tickerSugg.setSize(new Dimension(25, 15));
         tickerSugg.setMinimumSize(new Dimension(25, 15));
-
+        
+        tickerSugg.setEditable(true);
+        
         KeyListener u1 = new UserInpListener(this.text, this.tickerSugg);
-        this.text.addKeyListener(u1);
-        ItemCListener cblisteners1 = new ItemCListener(this.text, this.tickerSugg);
-        this.tickerSugg.addActionListener(cblisteners1);
+        //this.text.addKeyListener(u1);
+        tickerSugg.getEditor().getEditorComponent().addKeyListener(u1);
+        
+        itemCListener = new ItemCListener(this.text, this.tickerSugg);
+        this.tickerSugg.addActionListener(itemCListener);
         this.add(tickerSugg, BorderLayout.CENTER);
         
         JPanel buttonPanel = new JPanel();
