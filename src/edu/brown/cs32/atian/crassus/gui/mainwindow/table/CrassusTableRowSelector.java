@@ -1,6 +1,8 @@
 package edu.brown.cs32.atian.crassus.gui.mainwindow.table;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
 
 public class CrassusTableRowSelector {
 
@@ -9,6 +11,12 @@ public class CrassusTableRowSelector {
 	
 	public CrassusTableRowSelector(JTable table){
 		this.table = table;
+	}
+	
+	private void stopEditing(){
+		TableCellEditor editor = table.getCellEditor();
+		if(editor!=null)
+			editor.stopCellEditing();
 	}
 	
 	public boolean shouldRegisterSelection(){
@@ -21,12 +29,13 @@ public class CrassusTableRowSelector {
 			table.setRowSelectionInterval(i,i);
 			shouldRegisterSelection = true;
 		}
+		stopEditing();
 	}
 
 	public void selectLast() {
 		select(table.getRowCount()-1);
 	}
-	
+
 	public void deselect(int index) {
 		if(index != table.getSelectedRow())
 			return;
@@ -42,6 +51,7 @@ public class CrassusTableRowSelector {
 				table.setRowSelectionInterval(index+1,index+1);
 			shouldRegisterSelection = true;
 		}
+		stopEditing();
 	}
 
 	public void deselectLast() {
@@ -52,6 +62,8 @@ public class CrassusTableRowSelector {
 		shouldRegisterSelection = false;
 		table.clearSelection();
 		shouldRegisterSelection = true;
+		
+		stopEditing();
 	}
 
 }

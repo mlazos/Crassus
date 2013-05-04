@@ -53,6 +53,7 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 			c.setBackground(new Color(255,150,150));
 		else
 			c.setBackground(Color.WHITE);
+		
 
 		if(c instanceof JCheckBox){
 			JPanel panel = new JPanel(new BorderLayout());

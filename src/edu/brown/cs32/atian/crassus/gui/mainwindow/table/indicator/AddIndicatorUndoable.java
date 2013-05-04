@@ -20,7 +20,10 @@ public class AddIndicatorUndoable implements Undoable {
 	
 	@Override
 	public void undo() {
-		selector.select(previousIndex);
+		if(previousIndex==-1)
+			selector.clearSelection();
+		else
+			selector.select(previousIndex);
 		model.removeLastIndicator();
 	}
 
