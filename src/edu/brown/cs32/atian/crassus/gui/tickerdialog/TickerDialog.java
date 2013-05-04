@@ -82,7 +82,6 @@ public class TickerDialog extends JDialog {
             //suggestions.setText("");
 
             String inputString = userInp.getText();
-            System.out.println(inputString);
             
             inputString = inputString.trim();
             if (inputString.length() == 0) {
