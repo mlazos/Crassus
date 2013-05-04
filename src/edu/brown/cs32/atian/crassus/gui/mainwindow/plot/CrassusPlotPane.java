@@ -133,7 +133,7 @@ public class CrassusPlotPane extends JPanel {
 		timeframe.addItem("Five Years");
 		timeframe.addActionListener(new TimeScaleChangeListener());
 		
-		timeFreq = new JComboBox<>();
+		timeFreq = new JComboBox<String>();
 		timeFreq.addItem("Minutely");
 //		timeFreq.addItem("Daily");
 //		timeFreq.addItem("Weekly");

@@ -121,7 +121,7 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		Indicator ind = stock.getEventList().remove(i);
 		this.fireTableRowsDeleted(i, i);
 		
-		if(!ind.getVisible()) 
+		if(ind.getVisible()) 
 			listener.informPlotIsObsolete();
 		
 		return ind;

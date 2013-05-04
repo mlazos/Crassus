@@ -246,7 +246,7 @@ public class PlotWrapper implements StockPlot
     		Color seriesColor) {
         TimeSeries series = new TimeSeries(seriesName);
         
-        List<Long> dateValues = new ArrayList<>();
+        List<Long> dateValues = new ArrayList<Long>();
         
         for(IndicatorDatum datum : indicatorPoints) {
              //  return time represented by a second value 

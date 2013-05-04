@@ -120,7 +120,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		
-		table = new JTable();
+		table = new CrassusIndicatorTable();
 		table.setBackground(Color.WHITE);
 		table.setTableHeader(null);//Disable table header
 		

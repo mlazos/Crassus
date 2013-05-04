@@ -32,7 +32,6 @@ public class CrassusCheckBoxEye extends JCheckBox {
 		this.setIcon(blank);
 		this.setSelectedIcon(eye);
 		this.setPressedIcon(pressed);
-		this.setToolTipText("plot indicator");
 	}
 	
 }

@@ -5,8 +5,8 @@ import java.util.LinkedList;
 
 public class UndoableStack {
 	
-	private Deque<Undoable> undoables = new LinkedList<>();
-	private Deque<Undoable> redoables = new LinkedList<>();
+	private Deque<Undoable> undoables = new LinkedList<Undoable>();
+	private Deque<Undoable> redoables = new LinkedList<Undoable>();
 	private int maximumCapacity;
 	
 	public UndoableStack(int maximumCapacity){
