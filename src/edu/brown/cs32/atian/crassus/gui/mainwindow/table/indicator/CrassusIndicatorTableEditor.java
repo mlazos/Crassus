@@ -102,7 +102,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		this.row = row;
 		
 		if (value instanceof Boolean) {
-            boolean selected = (boolean) value;
+            boolean selected = (Boolean) value;
             if(column==0){
             	cbe.setSelected(selected);
             	cbe.addActionListener(eyeListener);
