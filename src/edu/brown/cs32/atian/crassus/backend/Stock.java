@@ -27,6 +27,9 @@ public interface Stock {
     
     void setCurrFreq(StockFreqType currFreq);   // MINUTELY, DAILY, WEEKLY, MONTHLY
     void setTimeFrame(TimeFrame timeFrame);
+    
+    void setTimeFrame(Date beginTime, Date endTime);
+    
     StockFreqType getCurrFreq();   // MINUTELY, DAILY, WEEKLY, MONTHLY
     TimeFrame getTimeFrame();
     
