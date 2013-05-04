@@ -91,6 +91,7 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 			stock.getEventList().get(row).setActive(((Boolean)value).booleanValue());
 			break;
 		}
+		this.fireTableCellUpdated(row, col);
 	}
 
 	public void addIndicator(int i, Indicator ind) {

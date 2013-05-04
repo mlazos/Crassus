@@ -58,12 +58,13 @@ public class CrassusIndicatorTablePane extends JPanel {
 				indicator = null;
 			else
 				indicator = stock.getEventList().get(index);
-			
+
 			if(oldIndicator!=indicator && selector.shouldRegisterSelection()){
 				undoables.push(new SelectUndoable(oldIndex, index, selector));
 			}
 			if(stock!=null)
 				stock.setSelectedIndicatorIndex(index);
+			
 			
 			oldIndex = index;
 			oldIndicator=indicator;
@@ -133,7 +134,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 		table.setRowHeight(26);
 		table.setIntercellSpacing(new Dimension(0,2));
 		
-		editor = new CrassusIndicatorTableEditor(listener);
+		editor = new CrassusIndicatorTableEditor(listener,undoables);
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		renderer = new CrassusIndicatorTableRenderer();
 		
 		for(int i=0; i<3; i++){
@@ -237,9 +239,9 @@ public class CrassusIndicatorTablePane extends JPanel {
 		if(stock!=null)
 			indicatorIndex = stock.getSelectedIndicatorIndex();
 		
+		editor.changeToStock(stock);
 		model.changeToStock(stock);
 		renderer.changeToStock(stock);
-		editor.changeToStock(stock);
 		
 		if(stock!=null)
 			selector.select(indicatorIndex);

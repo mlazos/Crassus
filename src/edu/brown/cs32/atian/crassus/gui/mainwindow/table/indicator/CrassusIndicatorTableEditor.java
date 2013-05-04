@@ -15,6 +15,7 @@ import javax.swing.table.TableCellEditor;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
+import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 @SuppressWarnings("serial")
@@ -22,13 +23,24 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 
 	public class EyeBoxListener implements ActionListener {
 
+		public void possiblyChangeState(boolean state, int otherRow){
+			if(row!=otherRow || !usingEye)
+				return;
+			System.out.println("eye-box-listener.... fucking weird");
+			cbe.removeActionListener(this);
+			cbe.setSelected(state);
+			cbe.addActionListener(this);
+		}
+		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
 			indicator.setVisible(cbe.isSelected());
-			if(listener!=null)
-				listener.informPlotIsObsolete();
-			
+			listener.informPlotIsObsolete();
+			undoables.push(new EyeBoxUndoable(cbe.isSelected(),indicator,listener,table,row,this));
+//			
+			cbe.removeActionListener(this);
+			stopCellEditing();
 		}
 
 	}
@@ -45,21 +57,30 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 	}
 
 	private CrassusCheckBoxEye cbe;
+	private EyeBoxListener eyeListener;
 	private CrassusCheckBoxAlert cba;
+	private AlertBoxListener alertListener;
 	private Stock stock;
+	
 	private Indicator indicator;
+	private JTable table;
+	private int row;
+	
+	private UndoableStack undoables;
 	
 	private boolean usingEye;
 	
 	private CrassusPlotIsObsoleteListener listener;
 	
-	public CrassusIndicatorTableEditor(CrassusPlotIsObsoleteListener listener){
+	public CrassusIndicatorTableEditor(CrassusPlotIsObsoleteListener listener, UndoableStack undoables){
 		cbe = new CrassusCheckBoxEye();
-		cbe.addActionListener(new EyeBoxListener());
+		eyeListener = new EyeBoxListener();
 		cba = new CrassusCheckBoxAlert();
+		alertListener = new AlertBoxListener();
 		cba.addActionListener(new AlertBoxListener());
 		
 		this.listener = listener;
+		this.undoables = undoables;
 	}
 	
 	@Override
@@ -77,10 +98,19 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		JCheckBox cb = (column==0) ? cbe : cba;
 		usingEye = (column==0);
 		indicator = stock.getEventList().get(row);
+		this.table = table;
+		this.row = row;
 		
 		if (value instanceof Boolean) {
             boolean selected = (boolean) value;
-            cb.setSelected(selected);
+            if(column==0){
+            	cbe.setSelected(selected);
+            	cbe.addActionListener(eyeListener);
+            }
+            else{
+            	cba.setSelected(selected);
+            	cba.addActionListener(alertListener);
+            }
         }
 
 		if(row%5==0)//(stocks.getStockList().get(row).isTriggered() == StockEventType.BUY)
