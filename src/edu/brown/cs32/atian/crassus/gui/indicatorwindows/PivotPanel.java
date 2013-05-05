@@ -19,7 +19,8 @@ import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 import edu.brown.cs32.atian.crassus.indicators.PivotPoints;
 
-public class PivotPanel extends JPanel {
+public class PivotPanel extends JPanel 
+{
 
 	/**
 	 * 

@@ -18,13 +18,20 @@ public class StockListImpl implements StockList {
     String _stockListFile = "StockList-byTicker.tsv";
     AutoCorrect _autoCorrectTicker = null;
     AutoCorrect _autoCorrectCompName = null;
+    DataSourceType _dataSourceType = DataSourceType.YAHOOFINANCE;
     
     public StockListImpl() {
         _stocks = new ArrayList<Stock>();
         _autoCorrectTicker = new AutoCorrect();
+        _autoCorrectTicker.initializer(_stockListFile, "Symbol");       
+    }
+    
+    public StockListImpl(DataSourceType dataSourceType ) {
+        _stocks = new ArrayList<Stock>();
+        _autoCorrectTicker = new AutoCorrect();
         _autoCorrectTicker.initializer(_stockListFile, "Symbol");
-//        _autoCorrectCompName = new AutoCorrect();
-//        _autoCorrectCompName.initializer(_stockListFile, "Name");        
+        
+        _dataSourceType = dataSourceType;
     }
     
     @Override    
@@ -53,7 +60,7 @@ public class StockListImpl implements StockList {
         }
         return null;
     }
-    
+    //
 
     @Override
     public void add(Stock s) {
@@ -74,5 +81,10 @@ public class StockListImpl implements StockList {
         for(Stock s : _stocks) {
             s.refresh();
         }         
+    }
+    
+    @Override    
+    public Stock createStock(String ticker) {
+        return new StockImpl(ticker,_dataSourceType);
     }
 }

@@ -38,12 +38,7 @@ public interface StockPlot {
 	
 	public void addSeries(SeriesWrapper series);
 
-	
-	/**
-	 * This function determines whether the relative strength chart should be separate from the primary chart.
-	 */
-	public void setRsOnSameChart(boolean isRsOnSameChart);
-	
+
 	
 	/**
 	 * Turn RS on or off

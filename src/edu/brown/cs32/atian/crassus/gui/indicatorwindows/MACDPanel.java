@@ -44,11 +44,7 @@ public class MACDPanel extends JPanel
 		this.closeListener = closeListener;
 		this.parent = parent;
 		this.stock = stock;
-		
-		final String undo = "undo";
-		final String redo = "redo";
-		final KeyStroke undoKey = KeyStroke.getKeyStroke("control Z");
-		final KeyStroke redoKey = KeyStroke.getKeyStroke("control Y");
+	
 		final UndoManager undoM = new UndoManager();
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
