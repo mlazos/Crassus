@@ -242,27 +242,36 @@ public class StockImpl implements Stock {
         if (this._dataSourceType != DataSourceType.DEMODATA) {
             int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 
-            if (dayOfWeek == Calendar.SATURDAY) {
+            if (dayOfWeek == Calendar.SATURDAY) {   // if Saturday 
                 cal.add(Calendar.DATE, -1);
                 cal.set(Calendar.HOUR_OF_DAY, 17);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 now = cal.getTime();    // change now to friday 5PM
-            } else if (dayOfWeek == Calendar.SUNDAY) {
+            } else if (dayOfWeek == Calendar.SUNDAY) {   // if Sunday
                 cal.add(Calendar.DATE, -2);
                 cal.set(Calendar.HOUR_OF_DAY, 17);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 now = cal.getTime();           // change now to friday 5PM  
-            }
+            } else if (dayOfWeek == Calendar.MONDAY ){    // if Monday before 9:30AM
+                
+                Calendar tmpCal = Calendar.getInstance();
+                tmpCal.setTime(now);
+                tmpCal.set(Calendar.HOUR_OF_DAY, 9);
+                tmpCal.set(Calendar.MINUTE, 30);
+                tmpCal.set(Calendar.SECOND, 0);             // set tmpCal to be Monday 9:30AM
+                        
+                if(cal.before(tmpCal))  {         // compare cal, which is now, with tmpCal (Monday 9:30AM)
+                    cal.add(Calendar.DATE, -3);
+                    cal.set(Calendar.HOUR_OF_DAY, 17);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    now = cal.getTime();             // change now to friday 5PM  
+                }
+             }            
         }
-//        else if (dayOfWeek == Calendar.MONDAY && cal.getTime().GET ){
-//            cal.add(Calendar.DATE, -3);   
-//            cal.set(Calendar.HOUR_OF_DAY, 17);
-//            cal.set(Calendar.MINUTE, 0);
-//            cal.set(Calendar.SECOND, 0);  
-//            now = cal.getTime();           // change now to friday 5PM  
-//        }
+
 
         _endTime = now;
 
@@ -423,8 +432,7 @@ public class StockImpl implements Stock {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
 
         for (Indicator ind : _events) {
-       ind.refresh(stockPriceData);
-
+        	ind.refresh(stockPriceData);
         }
     }
 
