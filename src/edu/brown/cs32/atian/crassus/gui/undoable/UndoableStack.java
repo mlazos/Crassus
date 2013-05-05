@@ -38,4 +38,9 @@ public class UndoableStack {
 		if(undoables.size()>maximumCapacity)
 			undoables.removeLast();
 	}
+
+	public void clear() {
+		undoables.clear();
+		redoables.clear();
+	}
 }

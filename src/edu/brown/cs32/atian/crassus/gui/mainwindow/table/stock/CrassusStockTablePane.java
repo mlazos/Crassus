@@ -37,11 +37,11 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.gui.CrassusButton;
+import edu.brown.cs32.atian.crassus.gui.dialogs.TickerDialog;
+import edu.brown.cs32.atian.crassus.gui.dialogs.TickerDialogCloseListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusChangeStockListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SelectUndoable;
-import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialog;
-import edu.brown.cs32.atian.crassus.gui.tickerdialog.TickerDialogCloseListener;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 
 @SuppressWarnings("serial")
@@ -107,6 +107,8 @@ public class CrassusStockTablePane extends JPanel {
 	private JFrame frame;
 	private JTable table;
 	private CrassusStockTableModel model;
+	private CrassusStockTableRenderer renderer;
+	
 	private CrassusChangeStockListener listener;
 	private CrassusTableRowSelector selector;
 	
@@ -139,22 +141,15 @@ public class CrassusStockTablePane extends JPanel {
 		
 		table.setIntercellSpacing(new Dimension(0,2));
 		
+		renderer =  new CrassusStockTableRenderer(stocks);
+		
 		for(int i=0; i<5; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
 			column.setPreferredWidth(50);
 			column.setMaxWidth(50);
 			column.setResizable(false);
 			
-			if(i==0){
-				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks,model);
-				renderer.setHorizontalAlignment(SwingConstants.CENTER);
-				column.setCellRenderer(renderer);
-			}
-			else{
-				DefaultTableCellRenderer renderer = new CrassusStockTableRenderer(stocks,model);
-				renderer.setHorizontalAlignment(SwingConstants.RIGHT);
-				column.setCellRenderer(renderer);
-			}
+			column.setCellRenderer(renderer);
 		}
 		
 		table.getSelectionModel().addListSelectionListener(new ChangeStockListenerForwarder());
@@ -254,6 +249,14 @@ public class CrassusStockTablePane extends JPanel {
 
 	public void refresh() {
 		model.refresh();
+	}
+
+
+	public void changeStockListTo(StockList stocks) {
+		this.stocks = stocks;
+		renderer.changeStockListTo(stocks);
+		model.changeStockListTo(stocks);
+		selector.select(0);
 	}
 	
 }

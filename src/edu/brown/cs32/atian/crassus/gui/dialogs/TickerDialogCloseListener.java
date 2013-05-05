@@ -1,4 +1,4 @@
-package edu.brown.cs32.atian.crassus.gui.tickerdialog;
+package edu.brown.cs32.atian.crassus.gui.dialogs;
 
 public interface TickerDialogCloseListener {
 

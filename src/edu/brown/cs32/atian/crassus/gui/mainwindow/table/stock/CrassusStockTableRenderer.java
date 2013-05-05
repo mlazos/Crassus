@@ -22,49 +22,10 @@ import edu.brown.cs32.atian.crassus.backend.StockList;
 @SuppressWarnings("serial")
 public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 
-	public class DeleteStockListener implements ActionListener {
-		private Stock s;
-		public DeleteStockListener(Stock s){this.s = s;}
-		@Override public void actionPerformed(ActionEvent arg0) {
-			System.out.println("going to try deleting stock");
-			int index = stocks.getStockList().indexOf(s);
-			model.removeStock(index);
-		}
-	}
-
-	public class RightClickListener extends MouseAdapter{
-		private Stock s;
-		
-		public RightClickListener(Stock s){
-			this.s = s;
-		}
-		
-		@Override public void mousePressed(MouseEvent e){
-			showPopup(e);
-		}
-		
-		@Override public void mouseReleased(MouseEvent e){
-			showPopup(e);
-		}
-		
-		private void showPopup(MouseEvent e){
-			System.out.println("in right click listener");
-			if(e.isPopupTrigger()){
-				JPopupMenu menu = new JPopupMenu();
-				JMenuItem delete = new JMenuItem("delete");
-				delete.addActionListener(new DeleteStockListener(s));
-				menu.add(delete);
-				menu.show(e.getComponent(),e.getX(),e.getY());
-			}
-		}
-	}
-
 	private StockList stocks;
-	private CrassusStockTableModel model;
 	
-	public CrassusStockTableRenderer(StockList stocks, CrassusStockTableModel model){
+	public CrassusStockTableRenderer(StockList stocks){
 		this.stocks = stocks;
-		this.model = model;
 	}
 	
 	@Override
@@ -109,14 +70,11 @@ public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 				+"52-week low:  "+s.getStockRealTimeData().getWeek52Low()+"<br>"
 				+"percent change: "+s.getStockRealTimeData().getChgAndPertChg()+"</html>");
 		
-//		panel.addMouseListener(new RightClickListener(s));
-//
-//		JPopupMenu menu = new JPopupMenu();
-//		JMenuItem delete = new JMenuItem("delete");
-//		delete.addActionListener(new DeleteStockListener(s));
-//		menu.add(delete);
-//		panel.setComponentPopupMenu(menu);
-		
 		return panel;
+	}
+	
+
+	public void changeStockListTo(StockList stocks) {
+		this.stocks = stocks;
 	}
 }

@@ -1,7 +1,7 @@
 /**
  *
  */
-package edu.brown.cs32.atian.crassus.gui.tickerdialog;
+package edu.brown.cs32.atian.crassus.gui.dialogs;
 
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import java.awt.BorderLayout;

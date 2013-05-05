@@ -41,6 +41,9 @@ public class Main {
 		UIManager.getDefaults().put("OptionPane.background", Color.WHITE);//change dialog box color
 		UIManager.getDefaults().put("Panel.background", Color.WHITE);//
 		UIManager.getDefaults().put("RadioButton.background", Color.WHITE);
+		
+		UIManager.getDefaults().put("MenuItem.background",new Color(240,240,255));
+		UIManager.getDefaults().put("MenuBar.background",new Color(240,240,255));
 		gui = new CrassusGUI(stocks);
 		gui.launch();
 	

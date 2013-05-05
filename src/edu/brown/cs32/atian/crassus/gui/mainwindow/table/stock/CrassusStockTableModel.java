@@ -9,12 +9,12 @@ import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector
 @SuppressWarnings("serial")
 public class CrassusStockTableModel extends AbstractTableModel {
 	
-	private StockList _stocks;
+	private StockList stocks;
 	
 	private CrassusTableRowSelector selector;
 	
 	public CrassusStockTableModel(StockList stocks, CrassusTableRowSelector selector){
-		this._stocks = stocks;
+		this.stocks = stocks;
 		this.selector = selector;
 	}
 
@@ -43,44 +43,44 @@ public class CrassusStockTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return _stocks.getStockList().size();
+		return stocks.getStockList().size();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
 		switch(col){
 		case 0://ticker
-			return _stocks.getStockList().get(row).getTicker();
+			return stocks.getStockList().get(row).getTicker();
 		case 1://price
-			return _stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice();
+			return stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice();
 		case 2://open
-			return _stocks.getStockList().get(row).getStockRealTimeData().getOpenPrice();
+			return stocks.getStockList().get(row).getStockRealTimeData().getOpenPrice();
 		case 3://high
-			return _stocks.getStockList().get(row).getStockRealTimeData().getTodayHigh();
+			return stocks.getStockList().get(row).getStockRealTimeData().getTodayHigh();
 		case 4://low
-			return _stocks.getStockList().get(row).getStockRealTimeData().getTodayLow();
+			return stocks.getStockList().get(row).getStockRealTimeData().getTodayLow();
 		default:
 			return "ERR";
 		}
 	}
 
 	public void addLastStock(Stock stock) {
-		_stocks.add(stock);
-		this.fireTableRowsInserted(_stocks.getStockList().size()-1, _stocks.getStockList().size()-1);
-		selector.select(_stocks.getStockList().size()-1);
+		stocks.add(stock);
+		this.fireTableRowsInserted(stocks.getStockList().size()-1, stocks.getStockList().size()-1);
+		selector.select(stocks.getStockList().size()-1);
 	}
 	
 	public void addStock(int i, Stock stock) {
 		if(i==-1)
 			return;
 		
-		_stocks.getStockList().add(i,stock);
+		this.stocks.getStockList().add(i,stock);
 		this.fireTableRowsInserted(i, i);
 		selector.select(i);
 	}
 
 	public Stock removeLastStock() {
-		int i = _stocks.getStockList().size()-1;
+		int i = stocks.getStockList().size()-1;
 		return removeStock(i);
 	}
 	
@@ -89,17 +89,22 @@ public class CrassusStockTableModel extends AbstractTableModel {
 			return null;
 
 		selector.deselect(i);
-		Stock stock = _stocks.getStockList().remove(i);
+		Stock stock = stocks.getStockList().remove(i);
 		this.fireTableRowsDeleted(i,i);
 		return stock;
 	}
 
 	public void refresh() {
-		this.fireTableRowsUpdated(0,_stocks.getStockList().size()-1);
+		this.fireTableRowsUpdated(0,stocks.getStockList().size()-1);
 	}
 
 	public Stock getStock(int index) {
-		return _stocks.getStockList().get(index);
+		return stocks.getStockList().get(index);
+	}
+
+	public void changeStockListTo(StockList stocks) {
+		this.stocks = stocks;
+		this.fireTableDataChanged();
 	}
 
 
