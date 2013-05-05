@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.undo.UndoManager;
 
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
@@ -35,17 +37,18 @@ public class RSIPanel extends JPanel
 		this.parent = parent;
 		this.stock = stock;
 		
+		final String undo = "undo";
+		final String redo = "redo";
+		final KeyStroke undoKey = KeyStroke.getKeyStroke("control Z");
+		final KeyStroke redoKey = KeyStroke.getKeyStroke("control Y");
+		final UndoManager undoM = new UndoManager();
+		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
 		JLabel periodLabel = new JLabel("Period:");
 		periodLabel.setToolTipText(periodtt);
 		
-		period = new JTextField();
-		period.setInputVerifier(inputValidator);
-		period.setSize(50, 20);
-		period.setToolTipText(periodtt);
-		period.setText("14");
-		period.setPreferredSize(new Dimension(50, 20));
+		period = new CrassusTextField("14", periodtt, inputValidator, undoM);
 		
 		JPanel periodInput = new JPanel();
 		periodInput.setLayout(new FlowLayout());

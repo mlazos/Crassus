@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.undo.UndoManager;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
@@ -41,24 +43,20 @@ public class BolingerBandPanel extends JPanel
 		this.parent = parent;
 		this.stock = stock;
 		
+		
+		final UndoManager undoM = new UndoManager();
+		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
 		JLabel periodsLabel = new JLabel("Number of Periods:");
 		periodsLabel.setToolTipText(periodstt);
 		JLabel bandWidthLabel = new JLabel("Bandwidth:");
 		bandWidthLabel.setToolTipText(bandWidthtt);
-		periods = new JTextField();
-		periods.setInputVerifier(inputValidator);
-		periods.setSize(50, 20);
-		periods.setToolTipText(periodstt);
-		periods.setPreferredSize(new Dimension(50, 20));
-		periods.setText("20");
-		bandWidth = new JTextField();
-		bandWidth.setToolTipText(bandWidthtt);
-		bandWidth.setInputVerifier(inputValidator);
-		bandWidth.setSize(50, 20);
-		bandWidth.setText("2");
-		bandWidth.setPreferredSize(new Dimension(50,20));
+		
+		periods = new CrassusTextField("20", periodstt, inputValidator, undoM);
+		
+		bandWidth = new CrassusTextField("2", bandWidthtt, inputValidator, undoM);
+		
 		
 		JPanel periodsInput = new JPanel();
 		periodsInput.setLayout(new FlowLayout());

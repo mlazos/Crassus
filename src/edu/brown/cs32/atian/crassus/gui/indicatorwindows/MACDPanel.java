@@ -61,36 +61,10 @@ public class MACDPanel extends JPanel
 		JLabel longLabel = new JLabel("Longer Period:");
 		longLabel.setToolTipText(longPtt);
 		
-		signalP = new JTextField();
-		signalP.setInputVerifier(inputValidator);
-		signalP.setText("12");
-		signalP.setToolTipText(signalPtt);
-		signalP.setSize(50, 20);
-		signalP.setPreferredSize(new Dimension(50, 20));
-		signalP.getDocument().addUndoableEditListener(new IndicatorUndoableEditListener(undoM));
-		signalP.getActionMap().put(undo, new UndoAction(undoM));
-		signalP.getInputMap().put(undoKey, undo);
-		signalP.getActionMap().put(redo, new RedoAction(undoM));
-		signalP.getInputMap().put(redoKey, redo);
+		signalP = new CrassusTextField("12", signalPtt, inputValidator, undoM);
+		shortP = new CrassusTextField("9", shortPtt, inputValidator, undoM);
+		longP = new CrassusTextField("26", longPtt, inputValidator, undoM);
 		
-		shortP = new JTextField();
-		shortP.setInputVerifier(inputValidator);
-		shortP.setText("9");
-		shortP.setToolTipText(shortPtt);
-		shortP.setSize(50, 20);
-		shortP.setPreferredSize(new Dimension(50,20));
-		shortP.getDocument().addUndoableEditListener(new IndicatorUndoableEditListener(undoM));
-		shortP.getActionMap().put(undo, new UndoAction(undoM));
-		shortP.getInputMap().put(undoKey, undo);
-		shortP.getActionMap().put(redo, new RedoAction(undoM));
-		shortP.getInputMap().put(redoKey, redo);
-		
-		longP = new JTextField();
-		longP.setInputVerifier(inputValidator);
-		longP.setText("26");
-		longP.setToolTipText(longPtt);
-		longP.setSize(50, 20);
-		longP.setPreferredSize(new Dimension(50,20));
 		
 		JPanel signalInput = new JPanel();
 		signalInput.setLayout(new FlowLayout());
