@@ -105,7 +105,7 @@ public class DotCrassusFileGui {
 		
 		if(fcResult == JFileChooser.APPROVE_OPTION){
 			
-			File file = fc.getSelectedFile();
+			File file = new File(ExtensionUtils.setExtension("crassus",fc.getSelectedFile().getAbsolutePath()));
 			
 			try{
 				
@@ -136,5 +136,6 @@ public class DotCrassusFileGui {
 		
 		return fileNew();
 	}
+	
 
 }

@@ -82,13 +82,13 @@ public class CrassusStockTablePane extends JPanel {
 
 	public class PlusButtonListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			launchTickerCreator();
+			showNewTickerDialog();
 		}
 	}
 
 	public class CtrlTAction extends AbstractAction {
 		@Override public void actionPerformed(ActionEvent e) {
-			launchTickerCreator();
+			showNewTickerDialog();
 		}
 	}
 
@@ -204,7 +204,7 @@ public class CrassusStockTablePane extends JPanel {
 	}
 	
 
-	public void launchTickerCreator() {
+	public void showNewTickerDialog() {
 		TickerDialog tickerFrame = new TickerDialog(frame, stocks);
 		tickerFrame.setTickerDialogCloseListener(new NewTickerListener());
 		tickerFrame.setVisible(true);
