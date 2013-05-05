@@ -33,22 +33,17 @@ public class BollingerBands implements Indicator {
 	private boolean isVisible;
 	private final double START_AMT = 10000;
 	private double percentMade;
-	private Date startTime;
-	private Date endTime;
 	
-	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth,
-			Date startTime, Date endTime) throws IllegalArgumentException {
+	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
 		
 		this.data = data;
 		this.period = period;
 		this.bandWidth = bandWidth;
-		this.startTime = startTime;
-		this.endTime = endTime;
 		middleBand = new ArrayList<IndicatorDatum>();
 		upperBand = new ArrayList<IndicatorDatum>();
 		lowerBand = new ArrayList<IndicatorDatum>();
-		refresh(data, startTime, endTime);
+		refresh(data);
 	}
 	
 	/**
@@ -131,8 +126,9 @@ public class BollingerBands implements Indicator {
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot) {
+	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
+		System.out.println("Bollinger Indicator size of points=" + middleBand.size());
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperBand, "Upper Band", startTime, endTime, Color.red);
 		SeriesWrapper middleSeries = stockPlot.getTimeSeries(middleBand, "Middle Band", startTime, endTime, Color.blue);
 		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerBand, "Lower Band", startTime, endTime, Color.GREEN);
@@ -196,10 +192,8 @@ public class BollingerBands implements Indicator {
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
+	public void refresh(List<StockTimeFrameData> data) {
 		this.data = data;
-		this.startTime = startTime;
-		this.endTime = endTime;
 		updateBollingerBands();
 	}
 

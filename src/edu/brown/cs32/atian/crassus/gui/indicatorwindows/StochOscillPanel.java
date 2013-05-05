@@ -102,8 +102,7 @@ public class StochOscillPanel extends JPanel {
 			{
 				try
 				{
-					Indicator ind = new StochasticOscillator(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg),
-							stock.getStartTime(), stock.getEndTime());
+					Indicator ind = new StochasticOscillator(stock.getStockPriceData(stock.getCurrFreq()), Integer.parseInt(periodArg));
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}

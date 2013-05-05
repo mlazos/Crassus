@@ -30,9 +30,9 @@ public class PivotPointTest {
 		data.add(new StockTimeFrameData("6", 424.5, 424.95, 419.68, 0, 0, 423.2, false)); 
 
 		
-		ppStandard = new PivotPoints(data, "standard", null, null);
-		ppDemark = new PivotPoints(data, "demark", null, null);
-		ppFibonacci = new PivotPoints(data, "fibonacci", null, null);
+		ppStandard = new PivotPoints(data, "standard");
+		ppDemark = new PivotPoints(data, "demark");
+		ppFibonacci = new PivotPoints(data, "fibonacci");
 	}
 
 	@Test

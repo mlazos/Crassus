@@ -218,7 +218,7 @@ public class CrassusPlotPane extends JPanel {
 			
 			for (Indicator ind: stock.getEventList()){
 				if (ind.getVisible()) {
-					ind.addToPlot(plot);
+					ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
 				}
 			}
 			

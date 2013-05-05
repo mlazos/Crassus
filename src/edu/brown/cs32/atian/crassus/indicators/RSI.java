@@ -31,17 +31,13 @@ public class RSI implements Indicator {
 	private int period;
 	private boolean isActive;
 	private boolean isVisible;
-	private Date startTime;
-	private Date endTime;
 	
-	public RSI(List<StockTimeFrameData> data, int period, Date startTime, Date endTime) {
+	public RSI(List<StockTimeFrameData> data, int period) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
-		this.startTime = startTime;
-		this.endTime = endTime;
 		this.data = data;
 		this.period = period;
 		this.RSIPoints = new ArrayList<IndicatorDatum>();
-		refresh(data, startTime, endTime);
+		refresh(data);
 	}
 	
 	List<IndicatorDatum> getRSIPoints() {
@@ -142,7 +138,7 @@ public class RSI implements Indicator {
 
 	@Override
 	// TODO get the second plot window!
-	public void addToPlot(StockPlot stockPlot) {
+	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(RSIPoints, "Relative Strength Index", startTime, endTime, Color.red);
 		
@@ -153,10 +149,8 @@ public class RSI implements Indicator {
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
+	public void refresh(List<StockTimeFrameData> data) {
 		this.data = data;
-		this.endTime = endTime;
-		this.startTime = startTime;
 		updateRSI();
 	}
 

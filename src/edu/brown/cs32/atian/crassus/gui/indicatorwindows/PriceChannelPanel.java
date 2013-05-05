@@ -96,8 +96,8 @@ public class PriceChannelPanel extends JPanel
 			{
 				try
 				{
-					Indicator ind = new PriceChannel(stock.getStockPriceData(StockFreqType.DAILY), 
-							Integer.parseInt(lookBackArg), stock.getStartTime(), stock.getEndTime());
+					Indicator ind = new PriceChannel(stock.getStockPriceData(stock.getCurrFreq()), 
+							Integer.parseInt(lookBackArg));
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}

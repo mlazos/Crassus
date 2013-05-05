@@ -37,18 +37,14 @@ public class StochasticOscillator implements Indicator {
 	private List<IndicatorDatum> signalLine;
     private boolean isActive;
     private boolean isVisible;
-    private Date startTime;
-    private Date endTime;
 	
-	public StochasticOscillator(List<StockTimeFrameData> data, int period, Date startTime, Date endTime) {
+	public StochasticOscillator(List<StockTimeFrameData> data, int period) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
-		this.startTime = startTime;
-		this.endTime = endTime;
 		this.data = data;
 		this.period = period;
 		this.stocOscillator = new ArrayList<>();
 		this.signalLine  = new ArrayList<>();
-		refresh(data, startTime, endTime);
+		refresh(data);
 	}
 	
 	public List<IndicatorDatum> getStocOscillator() {
@@ -126,16 +122,14 @@ public class StochasticOscillator implements Indicator {
 	}
 	
 	@Override
-	public void addToPlot(StockPlot stockPlot) {
+	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
+	public void refresh(List<StockTimeFrameData> data) {
 		this.data = data;
-		this.startTime = startTime;
-		this.endTime = endTime;
 		updateStochasticOscillator();
 	}
 

@@ -128,8 +128,8 @@ public class MACDPanel extends JPanel
 			{
 				try
 				{
-					Indicator ind = new MACD(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(signalPArg), 
-							Integer.parseInt(shortPArg), Integer.parseInt(longPArg), stock.getStartTime(), stock.getEndTime());
+					Indicator ind = new MACD(stock.getStockPriceData(stock.getCurrFreq()), Integer.parseInt(signalPArg), 
+							Integer.parseInt(shortPArg), Integer.parseInt(longPArg));
 					parent.dispose();
 					closeListener.windowClosedWithEvent(ind);
 				}
