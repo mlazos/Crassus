@@ -47,9 +47,9 @@ public interface Stock {
     void addToPlot(StockPlot stockPlot);   
     
     Date getStartTime();
+    Date getEndTime();    
     
     StockEventType isTriggered();
-
-	void setSelectedIndicatorIndex(int i);
+    void setSelectedIndicatorIndex(int i);
     int getSelectedIndicatorIndex();
 }

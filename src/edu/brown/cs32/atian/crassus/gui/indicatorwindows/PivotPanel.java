@@ -19,7 +19,8 @@ import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 import edu.brown.cs32.atian.crassus.indicators.PivotPoints;
 
-public class PivotPanel extends JPanel {
+public class PivotPanel extends JPanel 
+{
 
 	/**
 	 * 
@@ -128,7 +129,8 @@ public class PivotPanel extends JPanel {
 			
 			try
 			{
-				Indicator ind = new PivotPoints(stock.getStockPriceData(StockFreqType.DAILY), currentButton, stock.getStartTime());
+				Indicator ind = new PivotPoints(stock.getStockPriceData(StockFreqType.DAILY), currentButton, 
+						stock.getStartTime(), stock.getEndTime());
 				closeListener.windowClosedWithEvent(ind);
 				parent.dispose();
 				

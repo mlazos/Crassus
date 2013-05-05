@@ -16,7 +16,7 @@ public interface Indicator {
 	/**
 	 * Refreshes the indicator data values.
 	 */
-	void refresh(List<StockTimeFrameData> data, Date startTime);
+	void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime);
 	
 	/*
 	 * Tests the indicator against data which should have been

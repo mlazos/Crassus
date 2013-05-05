@@ -21,17 +21,16 @@ public class RSITest {
 	    //        double close, int volume, double adjustedClose)
 		
 		List<StockTimeFrameData> data = new ArrayList<>();
-		data.add(new StockTimeFrameData("a", 0, 0, 0, 88.71, 0, 0, false)); 
-		data.add(new StockTimeFrameData("b", 0, 0, 0, 89.05, 0, 0, false)); 
-		data.add(new StockTimeFrameData("c", 0, 0, 0, 89.24, 0, 0, false)); 
-		data.add(new StockTimeFrameData("d", 0, 0, 0, 89.19, 0, 0, false));	
-		data.add(new StockTimeFrameData("e", 0, 0, 0, 89.51, 0, 0, false)); 
-		data.add(new StockTimeFrameData("f", 0, 0, 0, 88.69, 0, 0, false)); 
-		data.add(new StockTimeFrameData("g", 0, 0, 0, 88.9, 0, 0, false)); 	
-		data.add(new StockTimeFrameData("h", 0, 0, 0, 89.2, 0, 0, false)); 
-		rsi = new RSI(data, 4, null);
+		data.add(new StockTimeFrameData("1", 0, 0, 0, 0, 0, 88.71, false)); 
+		data.add(new StockTimeFrameData("2", 0, 0, 0, 0, 0, 89.05, false)); 
+		data.add(new StockTimeFrameData("3", 0, 0, 0, 0, 0, 89.24, false)); 
+		data.add(new StockTimeFrameData("4", 0, 0, 0, 0, 0, 89.19, false));	
+		data.add(new StockTimeFrameData("5", 0, 0, 0, 0, 0, 89.51, false)); 
+		data.add(new StockTimeFrameData("6", 0, 0, 0, 0, 0, 88.69, false)); 
+		data.add(new StockTimeFrameData("7", 0, 0, 0, 0, 0, 88.9, false)); 	
+		data.add(new StockTimeFrameData("8", 0, 0, 0, 0, 0, 89.2, false)); 
+		rsi = new RSI(data, 4, null, null);
 	}
-	
 	
 	@Test
 	public void test() {

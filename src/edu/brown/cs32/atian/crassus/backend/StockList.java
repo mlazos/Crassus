@@ -18,5 +18,6 @@ public interface StockList {
     void delete(String ticker);
     void refreshAll();
     List<String> getTickerSuggestion(String tickerPrefix);    
+    Stock createStock(String ticker);
 //    List<String> getCompanyNameSuggestion(String tickerPrefix);       
 }

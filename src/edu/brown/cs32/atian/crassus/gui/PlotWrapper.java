@@ -37,7 +37,6 @@ public class PlotWrapper implements StockPlot
 	private List<Color> seriesColors = new ArrayList<Color>();
 	private List<Color> rsSeriesColors = new ArrayList<Color>();
 	private boolean isRsOn = false;
-	private boolean isRsOnSameChart = false;
 	private boolean primaryChartGenerated = false;
 	private boolean rsChartGenerated = false;
 	private String xAxisTitle = "X";
@@ -74,17 +73,10 @@ public class PlotWrapper implements StockPlot
 		this.rsSeriesColors.add(series.getColor());
 	}
 
-	//set whether the relative strength chart should be separate from the primary chart
-	@Override
-	public void setRsOnSameChart(boolean isRsOnSameChart) 
-	{
-		this.isRsOnSameChart = isRsOnSameChart;
-	}
-
 	@Override
 	public boolean isRsOn() 
 	{
-		return isRsOnSameChart;
+		return isRsOn;
 	}
 
 	@Override
@@ -102,32 +94,7 @@ public class PlotWrapper implements StockPlot
 		
 		JFreeChart chart;
 		
-		if(isRsOnSameChart)
-		{
-		
-			//fill colors list with all the colors from the stored lists
-			List<Color> chartColors = new ArrayList<Color>(seriesColors);
-			chartColors.addAll(rsSeriesColors);
-			
-			TimeSeriesCollection chartSeries = new TimeSeriesCollection();
-			
-			//fill chartSeries with all neccessary series
-			for(int i = 0; i < series.getSeriesCount(); i++)
-			{
-				chartSeries.addSeries(series.getSeries(i));
-			}
-			
-			for(int i = 0; i < rsSeries.getSeriesCount(); i++)
-			{
-				chartSeries.addSeries(rsSeries.getSeries(i));
-			}
-			
-			chart = generateChart(stockName, chartSeries, chartColors);
-		}
-		else
-		{
-			chart = generateChart(stockName, series, seriesColors);
-		}
+		chart = generateChart(stockName, series, seriesColors);
 		
 		primaryChart = chart;
 		
@@ -138,7 +105,7 @@ public class PlotWrapper implements StockPlot
 	@Override
 	public BufferedImage getRsBufferedImage(int width, int height) 
 	{
-		if(!isRsOn || isRsOnSameChart)
+		if(!isRsOn)
 		{
 			throw new Error("This method can only be called if RSI is not on the primary and RSI is set to on.");
 		}
@@ -243,7 +210,7 @@ public class PlotWrapper implements StockPlot
 	
 	@Override
     public  SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime,
-    		Color seriesColor) {
+    		Date endTime, Color seriesColor) {
         TimeSeries series = new TimeSeries(seriesName);
         
         List<Long> dateValues = new ArrayList<Long>();
@@ -266,8 +233,10 @@ public class PlotWrapper implements StockPlot
              
              Calendar calendarStart = Calendar.getInstance();
              calendarStart.setTime(startTime);
+             Calendar calendarEnd = Calendar.getInstance();
+             calendarStart.setTime(endTime);
 
-             if(calendarStart.before(calendar)) {
+             if(calendarStart.before(calendar) && calendar.before(calendarEnd)) {
             	/*System.out.println("============================================================");
             	System.out.println("dat timeLabel="+datum.getTimeLabel());
             	System.out.println("============================================================\n");*/
