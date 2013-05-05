@@ -61,6 +61,7 @@ public class CrassusGUI implements GUI {
 					eventBox.changeToStock(stocks.getStockList().get(0));
 				}
 			}
+			undoables.clear();
 		}
 	}
 

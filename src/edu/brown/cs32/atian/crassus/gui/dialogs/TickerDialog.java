@@ -137,14 +137,18 @@ public class TickerDialog extends JDialog {
         searchbox = new JComboBox<String>();
         searchbox.setMinimumSize(new Dimension(25, 15));
         searchbox.setBackground(Color.WHITE);
-        searchbox.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        //searchbox.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         model = new DefaultComboBoxModel<String>();
         searchbox.setEditable(true);
         searchbox.setModel(model);
         cbe = searchbox.getEditor();
         cbe.getEditorComponent().addKeyListener(new UserTypedListener());
  
-        this.add(searchbox, BorderLayout.CENTER);
+        JPanel searchboxSpacing = new JPanel();
+        searchboxSpacing.setLayout(new BorderLayout());
+        searchboxSpacing.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+        searchboxSpacing.add(searchbox,BorderLayout.CENTER);
+        this.add(searchboxSpacing, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
