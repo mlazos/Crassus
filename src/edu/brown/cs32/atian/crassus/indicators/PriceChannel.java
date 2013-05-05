@@ -1,11 +1,13 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
+import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /**
@@ -40,15 +42,17 @@ public class PriceChannel implements Indicator {
 	private boolean isActive;
 	private boolean isVisible;
 	private Date startTime;
+	private Date endTime;
 	
-	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod, Date startTime) {
+	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod, Date startTime, Date endTime) {
 		this.data = data;
 		this.lookBackPeriod = lookBackPeriod;
 		this.startTime = startTime;
+		this.endTime = endTime;
 		upperChannel = new ArrayList<IndicatorDatum>();
 		lowerChannel = new ArrayList<IndicatorDatum>();
 		centreLine = new ArrayList<IndicatorDatum>();
-		refresh(data, startTime);
+		refresh(data, startTime, endTime);
 	}
 	
 	List<IndicatorDatum> getUpperChannel() {
@@ -135,14 +139,21 @@ public class PriceChannel implements Indicator {
 	
 	@Override
 	public void addToPlot(StockPlot stockPlot) {
-		// TODO Auto-generated method stub
+
+		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperChannel, "Upper Channel", startTime, endTime, Color.pink);
+		SeriesWrapper middleSeries = stockPlot.getTimeSeries(centreLine, "Centre Line", startTime, endTime, Color.cyan);
+		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerChannel, "Lower Channel", startTime, endTime, Color.green);
 		
+		stockPlot.addSeries(upperSeries);
+		stockPlot.addSeries(middleSeries);
+		stockPlot.addSeries(lowerSeries);
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
 		this.data = data;
 		this.startTime = startTime;
+		this.endTime = endTime;
 		updatePriceChannel();
 	}
 

@@ -210,7 +210,7 @@ public class PlotWrapper implements StockPlot
 	
 	@Override
     public  SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime,
-    		Color seriesColor) {
+    		Date endTime, Color seriesColor) {
         TimeSeries series = new TimeSeries(seriesName);
         
         List<Long> dateValues = new ArrayList<Long>();
@@ -233,8 +233,10 @@ public class PlotWrapper implements StockPlot
              
              Calendar calendarStart = Calendar.getInstance();
              calendarStart.setTime(startTime);
+             Calendar calendarEnd = Calendar.getInstance();
+             calendarStart.setTime(endTime);
 
-             if(calendarStart.before(calendar)) {
+             if(calendarStart.before(calendar) && calendar.before(calendarEnd)) {
             	/*System.out.println("============================================================");
             	System.out.println("dat timeLabel="+datum.getTimeLabel());
             	System.out.println("============================================================\n");*/

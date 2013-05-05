@@ -43,7 +43,7 @@ public class PriceChannelTest {
 		data.add(new StockTimeFrameData("1", 0, 673, 0.5, 91.24, 0, 0, false)); // 0
 		data.add(new StockTimeFrameData("2", 0, 6, 0.2, 91.17, 0, 0, false)); 
 		data.add(new StockTimeFrameData("3", 0, 2, 2, 91.05, 0, 0, false)); 
-		pc = new PriceChannel(data, 20, null);
+		pc = new PriceChannel(data, 20, null, null);
 	}
 
 	@Test

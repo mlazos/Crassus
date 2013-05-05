@@ -1,11 +1,13 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
+import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /**
@@ -41,11 +43,12 @@ public class PivotPoints implements Indicator {
 	private boolean isVisible;
 	private boolean isActive;
 	private Date startTime;
+	private Date endTime;
 	
-	
-	public PivotPoints(List<StockTimeFrameData> data, String pivotOption, Date startTime) {
+	public PivotPoints(List<StockTimeFrameData> data, String pivotOption, Date startTime, Date endTime) {
 		this.data = data;
 		this.startTime = startTime;
+		this.endTime = endTime;
 		pivotPoints = new ArrayList<IndicatorDatum>();
 		support1 = new ArrayList<IndicatorDatum>();
 		support2 = new ArrayList<IndicatorDatum>();
@@ -62,12 +65,29 @@ public class PivotPoints implements Indicator {
         } else  {
             pivotType = 0;
         }
-		refresh(data, startTime);
+		refresh(data, startTime, endTime);
 	}
 
 	@Override
 	public void addToPlot(StockPlot stockPlot) {
-		// TODO Auto-generated method stub
+		
+		SeriesWrapper p = stockPlot.getTimeSeries(pivotPoints, "Pivot Line", startTime, endTime, Color.magenta);
+
+		SeriesWrapper s1 = stockPlot.getTimeSeries(support1, "Support Line 1", startTime, endTime, Color.red);
+		SeriesWrapper s2 = stockPlot.getTimeSeries(support2, "Support Line 2", startTime, endTime, Color.blue);
+		SeriesWrapper s3 = stockPlot.getTimeSeries(support3, "Support Line 3", startTime, endTime, Color.GREEN);
+		
+		SeriesWrapper r1 = stockPlot.getTimeSeries(resistance1, "Resistance Line 1", startTime, endTime, Color.pink);
+		SeriesWrapper r2 = stockPlot.getTimeSeries(resistance2, "Resistance Line 2", startTime, endTime, Color.cyan);
+		SeriesWrapper r3 = stockPlot.getTimeSeries(resistance3, "Resistance Line 3", startTime, endTime, Color.green);
+		
+		stockPlot.addSeries(p);
+		stockPlot.addSeries(s1);
+		stockPlot.addSeries(s2);
+		stockPlot.addSeries(s3);
+		stockPlot.addSeries(r1);
+		stockPlot.addSeries(r2);
+		stockPlot.addSeries(r3);
 	}
 	
 	List<IndicatorDatum> getPivotPoints() {
@@ -118,7 +138,7 @@ public class PivotPoints implements Indicator {
 			StockTimeFrameData previous = data.get(i - 1);
 			String currTimeLabel = data.get(i).getTime();
 			long currTime = data.get(i).getTimeInNumber();
-			double pivot = (previous.getHigh() + previous.getClose() + previous.getLow()) / 3;
+			double pivot = (previous.getHigh() + previous.getAdjustedClose() + previous.getLow()) / 3;
 			double high = previous.getHigh();
 			double low = previous.getLow();
 			
@@ -165,11 +185,11 @@ public class PivotPoints implements Indicator {
 			String currTimeLabel = data.get(i).getTime();
 			long currTime = data.get(i).getTimeInNumber();
 			
-			double pivot = (previous.getHigh() + previous.getClose() + previous.getLow()) / 3;
+			double pivot = (previous.getHigh() + previous.getAdjustedClose() + previous.getLow()) / 3;
 			double high = previous.getHigh();
 			double low = previous.getLow();
 			
-			double close = previous.getClose();
+			double close = previous.getAdjustedClose();
 			double open = previous.getOpen();
 			double x;
 			if (close < open) {
@@ -192,8 +212,9 @@ public class PivotPoints implements Indicator {
 	
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
 		this.data = data;
+		this.endTime = endTime;
 		this.startTime = startTime;
 		if (pivotType == 2) updateDemark();
 		else updatePivot();

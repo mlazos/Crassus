@@ -6,6 +6,7 @@ package edu.brown.cs32.atian.crassus.gui.dialogs;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -137,7 +138,7 @@ public class TickerDialog extends JDialog {
         searchbox = new JComboBox<String>();
         searchbox.setMinimumSize(new Dimension(25, 15));
         searchbox.setBackground(Color.WHITE);
-        //searchbox.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
         model = new DefaultComboBoxModel<String>();
         searchbox.setEditable(true);
         searchbox.setModel(model);

@@ -1,5 +1,6 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,21 +33,26 @@ public class StochasticOscillator implements Indicator {
 
 	private List<StockTimeFrameData> data;
 	private int period;
-	private int SMAPeriod;
 	private List<IndicatorDatum> stocOscillator;
 	private List<IndicatorDatum> signalLine;
     private boolean isActive;
     private boolean isVisible;
     private Date startTime;
+    private Date endTime;
 	
-	public StochasticOscillator(List<StockTimeFrameData> data, int period, Date startTime) {
+	public StochasticOscillator(List<StockTimeFrameData> data, int period, Date startTime, Date endTime) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
 		this.startTime = startTime;
+		this.endTime = endTime;
 		this.data = data;
 		this.period = period;
-		this.SMAPeriod = 3;
-		
-		refresh(data, startTime);
+		this.stocOscillator = new ArrayList<>();
+		this.signalLine  = new ArrayList<>();
+		refresh(data, startTime, endTime);
+	}
+	
+	public List<IndicatorDatum> getStocOscillator() {
+		return stocOscillator;
 	}
 	
 	@Override
@@ -95,39 +101,23 @@ public class StochasticOscillator implements Indicator {
 		return highLow;
 	}
 	
-	/**
-	 * Calculates the SMA from start index to end index of data
-	 * inclusively.
-	 * 
-	 * @param startIndex	int start index 
-	 * @param endIndex		int end index
-	 * @return				double simple moving average of given close values
-	 * @throws ArrayIndexOutOfBoundsException	if array index of data is out of bounds
-	 */
-	private double calcSMA(int startIndex, int endIndex) throws ArrayIndexOutOfBoundsException {
-		
-		double sum = 0;
-		for (int i = startIndex; i <= endIndex; i++) {
-			sum += data.get(i).getClose();
-		}
-		
-		return sum / (endIndex - startIndex + 1);
-	}
-	
 	private void updateStochasticOscillator() {
 		
 		for (int i = (period - 1); i < data.size(); i++) {
 			
-			double[] highLow = getHighLow(i - period - 1, i);
+			double[] highLow = getHighLow(i - period + 1, i);
 			double high = highLow[0];
 			double low = highLow[1];
-			double D = calcSMA(i - SMAPeriod - 1, i);
 			
-			double K = (data.get(i).getClose() - low) / (high - low) * 100;
-			
-			signalLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), D));
+			double K = (data.get(i).getAdjustedClose() - low) / (high - low) * 100;
 			stocOscillator.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), K));
 		}
+		
+		for (int i = 2; i < stocOscillator.size(); i++) {		// calc SMA of K
+			double D = (stocOscillator.get(i).getValue() + stocOscillator.get(i-1).getValue() + stocOscillator.get(i-2).getValue()) / 3;
+			signalLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), D));
+		}
+		
 	}
 	
 	@Override
@@ -142,9 +132,10 @@ public class StochasticOscillator implements Indicator {
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
 		this.data = data;
 		this.startTime = startTime;
+		this.endTime = endTime;
 		updateStochasticOscillator();
 	}
 
