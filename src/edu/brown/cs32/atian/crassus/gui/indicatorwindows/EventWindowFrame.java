@@ -15,6 +15,13 @@ import javax.swing.border.EmptyBorder;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
+import edu.brown.cs32.atian.crassus.indicators.BollingerBands;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.MACD;
+import edu.brown.cs32.atian.crassus.indicators.PivotPoints;
+import edu.brown.cs32.atian.crassus.indicators.PriceChannel;
+import edu.brown.cs32.atian.crassus.indicators.RSI;
+import edu.brown.cs32.atian.crassus.indicators.StochasticOscillator;
 
 public class EventWindowFrame implements EventWindow {
 
@@ -72,6 +79,69 @@ public class EventWindowFrame implements EventWindow {
 		frame.add(currentPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
+	
+	public EventWindowFrame(JFrame parent, WindowCloseListener closeListener, Stock stock, Indicator prevIndicator)
+	{
+		frame = new JDialog(parent,"Bolinger Band Event");
+		frame.setModal(true);
+		frame.setResizable(false);
+		
+		
+		
+		if(prevIndicator instanceof BollingerBands)
+		{
+			BollingerBands bb = (BollingerBands)prevIndicator;
+		}else if(prevIndicator instanceof PriceChannel)
+		{
+			PriceChannel pc = (PriceChannel)(prevIndicator);
+		}else if(prevIndicator instanceof MACD)
+		{
+			MACD macd = (MACD)prevIndicator;
+		}else if(prevIndicator instanceof RSI)
+		{
+			RSI rsi = (RSI)prevIndicator;
+		}else if(prevIndicator instanceof PivotPoints)
+		{
+			
+		}else if(prevIndicator instanceof StochasticOscillator)
+		{
+			
+		}
+		
+		
+		currentPanel = new BolingerBandPanel(closeListener, frame, stock);
+		
+		//add dropdown to main Frame
+		JPanel[] eventList = {new BolingerBandPanel(closeListener, frame, stock), 
+							  new MACDPanel(closeListener, frame, stock), 
+							  new PivotPanel(closeListener, frame, stock), 
+							  new PriceChannelPanel(closeListener, frame, stock), 
+							  new RSIPanel(closeListener, frame, stock), 
+							  new StochOscillPanel(closeListener, frame, stock)};
+		
+		frame.setSize(350, eventList[0].getHeight() + 70);
+		frame.setMinimumSize(new Dimension(350, eventList[0].getHeight() + 70));
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setLayout(new BorderLayout());
+		
+		
+		JComboBox<JPanel> selectEvent = new JComboBox<JPanel>(eventList);
+		selectEvent.addActionListener(new WindowChanger());
+		JPanel dropDownPanel = new JPanel();
+		dropDownPanel.setMinimumSize(new Dimension(250,20));
+		dropDownPanel.setMaximumSize(new Dimension(250,20));
+		dropDownPanel.add(selectEvent);
+		dropDownPanel.setBorder(new EmptyBorder(20,20,20,20));
+
+		
+		
+		frame.add(dropDownPanel, BorderLayout.NORTH);
+		frame.add(currentPanel, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	}
+	
+	
+	
 	
 	class WindowChanger implements ActionListener
 	{
