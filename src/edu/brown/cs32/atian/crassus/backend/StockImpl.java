@@ -50,6 +50,8 @@ public class StockImpl implements Stock {
     TimeFrame _timeFrame = TimeFrame.DAILY;  
     StockFreqType _currFreq = StockFreqType.MINUTELY;    // be default se use daily
     Date _startTime;
+    Date _endTime;
+    boolean _autoRefresh = true;
     
     public StockImpl(String ticker) {
         _ticker = ticker;
@@ -60,7 +62,8 @@ public class StockImpl implements Stock {
         _realTime = new StockRealTimeDataImpl(_ticker);
         _events = new ArrayList<Indicator>();        
  
-        _startTime = computeStartTime();
+        //_startTime = computeStartTime();
+        setStartAndEndTime();
                 
         // if getCompanyName() return same string as ticker that the ticker is invalid
         _companyName = getCompanyName();
@@ -69,25 +72,6 @@ public class StockImpl implements Stock {
         }
     }
 
-    private Date computeStartTime() {       
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new java.util.Date());  
-        
-        if(_timeFrame==TimeFrame.DAILY) {            ;
-            cal.add(Calendar.DATE, -1);
-        } else if(_timeFrame==TimeFrame.WEEKLY) {
-            cal.add(Calendar.DATE, -7);
-        } else if(_timeFrame==TimeFrame.MONTHLY) {
-            cal.add(Calendar.MONTH, -1);
-        } else if(_timeFrame==TimeFrame.YEARLY) {
-            cal.add(Calendar.YEAR, -1);
-        } else if(_timeFrame==TimeFrame.FIVE_YEAR) {
-            cal.add(Calendar.YEAR, -5);
-        }
-        
-        return cal.getTime();        
-    }
     
     @Override
     public boolean initialize() {   // false mean it fails to get data from data source
@@ -181,13 +165,62 @@ public class StockImpl implements Stock {
         this.refreshStockPrice();
         this.refreshIndicator();
     }
+
+    private void setStartAndEndTime() {       
+
+        Calendar cal = Calendar.getInstance();
+
+        Date now = new java.util.Date();        
+        cal.setTime(now);   
+        
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        
+        if( dayOfWeek == Calendar.SATURDAY ) { 
+            cal.add(Calendar.DATE, -1);   
+            cal.set(Calendar.HOUR_OF_DAY, 17);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);  
+            now = cal.getTime();    // change now to friday 5PM
+        } else if (dayOfWeek == Calendar.SUNDAY){
+            cal.add(Calendar.DATE, -2);   
+            cal.set(Calendar.HOUR_OF_DAY, 17);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);  
+            now = cal.getTime();           // change now to friday 5PM  
+        }
+
+        _endTime = now;
+        
+        if(_timeFrame==TimeFrame.DAILY) {            ;
+            cal.add(Calendar.DATE, -1);            
+        } else if(_timeFrame==TimeFrame.WEEKLY) {
+            cal.add(Calendar.DATE, -7);
+        } else if(_timeFrame==TimeFrame.MONTHLY) {
+            cal.add(Calendar.MONTH, -1);
+        } else if(_timeFrame==TimeFrame.YEARLY) {
+            cal.add(Calendar.YEAR, -1);
+        } else if(_timeFrame==TimeFrame.FIVE_YEAR) {
+            cal.add(Calendar.YEAR, -5);
+        }        
+        _startTime = cal.getTime();     
+       
+ 
+    }
     
     @Override
     public void setTimeFrame(TimeFrame timeFrame) {      
         _timeFrame = timeFrame;
-        _startTime = computeStartTime();
+         setStartAndEndTime();
+         _autoRefresh = true;         
     }
-     
+
+    @Override
+    public void setTimeFrame(Date startTime, Date endTime) {      
+        _startTime = startTime;
+        _endTime = endTime;
+         _autoRefresh = false;        
+    }
+    
     @Override
     public StockFreqType getCurrFreq()   { // MINUTELY, DAILY, WEEKLY, MONTHLY 
             return this._currFreq;
@@ -273,7 +306,10 @@ public class StockImpl implements Stock {
     public void refresh() {
         refreshStockPrice();
         refreshIndicator();
-        _startTime = computeStartTime();
+        //_startTime = computeStartTime();
+        if(this._autoRefresh) {
+            setStartAndEndTime();
+        }
     }
     
     @Override
@@ -291,8 +327,10 @@ public class StockImpl implements Stock {
              
              Calendar calendarStart = Calendar.getInstance();
              calendarStart.setTime(this._startTime);
+             Calendar calendarEnd = Calendar.getInstance();
+             calendarEnd.setTime(this._endTime);             
 
-             if(calendarStart.before(calendar)) {
+             if(calendarStart.before(calendar) && calendar.before(calendarEnd)) {
                 series.add(new Second(date) , tf.getAdjustedClose());
              }
         }
@@ -319,6 +357,10 @@ public class StockImpl implements Stock {
     public Date getStartTime() {
     	return _startTime;
     }
+    
+    public Date getEndTime() {
+    	return _endTime;
+    }    
     
     public StockEventType isTriggered() {
         StockEventType stType = StockEventType.NONE;

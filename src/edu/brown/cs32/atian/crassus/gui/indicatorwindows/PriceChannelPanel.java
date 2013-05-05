@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.undo.UndoManager;
 
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 import edu.brown.cs32.atian.crassus.indicators.PriceChannel;
@@ -35,16 +37,13 @@ public class PriceChannelPanel extends JPanel
 		this.parent = parent;
 		this.stock = stock;
 		
+		final UndoManager undoM = new UndoManager();
+		
 		NumberVerifier inputValidator = new NumberVerifier(this);
 		//top panel
 		JLabel lookBackLabel = new JLabel("Look Back Period:");
 		lookBackLabel.setToolTipText(lookBacktt);
-		lookBack = new JTextField();
-		lookBack.setInputVerifier(inputValidator);
-		lookBack.setSize(50, 20);
-		lookBack.setToolTipText(lookBacktt);
-		lookBack.setText("20");
-		lookBack.setPreferredSize(new Dimension(50, 20));
+		lookBack = new CrassusTextField("20", lookBacktt, inputValidator, undoM);
 		
 		JPanel lookBackInput = new JPanel();
 		lookBackInput.setLayout(new FlowLayout());

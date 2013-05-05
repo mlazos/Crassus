@@ -126,7 +126,7 @@ public class CrassusPlotPane extends JPanel {
 		this.add(imageDisplayer, BorderLayout.CENTER);
 		
 		timeframe = new JComboBox<String>();
-		timeframe.addItem("Today");
+		timeframe.addItem("One Day");
 		timeframe.addItem("One Week");
 		timeframe.addItem("One Month");
 		timeframe.addItem("One Year");
