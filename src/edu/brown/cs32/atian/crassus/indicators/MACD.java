@@ -38,24 +38,26 @@ public class MACD implements Indicator {
 	private int longPeriod;
 	private List<IndicatorDatum> MACDLine;
 	private List<IndicatorDatum> signalLine;
-	private List<IndicatorDatum> MACDHistogram;
 	private boolean isActive;
 	private boolean isVisible;
 	private Date startTime;
+	private Date endTime;
 	
 	public MACD(List<StockTimeFrameData> data, int signalPeriod, int shorterPeriod, int longerPeriod,
-			Date startTime) {
+			Date startTime, Date endTime) throws IllegalArgumentException {
+		if (shorterPeriod > longerPeriod) throw new IllegalArgumentException("ERROR: shorter period must not be greater than longer period");
+		
 		this.data = data;
 		this.signalPeriod = signalPeriod;
 		this.shortPeriod = shorterPeriod;
 		this.longPeriod = longerPeriod;
 		this.startTime = startTime;
+		this.endTime = endTime;
 		
 		MACDLine = new ArrayList<IndicatorDatum>();
 		signalLine = new ArrayList<IndicatorDatum>();
-		MACDHistogram = new ArrayList<IndicatorDatum>();
 		
-		refresh(data, startTime);
+		refresh(data, startTime, endTime);
 	}
 	
 	@Override
@@ -75,11 +77,19 @@ public class MACD implements Indicator {
 		this.isActive = isActive;
 	}
 	
+	List<IndicatorDatum> getSignalLine() {
+		return signalLine;
+	}
+	
+	List<IndicatorDatum> getMACDLine() {
+		return MACDLine;
+	}
+	
 	@Override
 	public String getName() {
 		return "MACD";
 	}
-	
+
 	/**
 	 * Calculates the SMA from start index to end index of data
 	 * inclusively.
@@ -93,7 +103,7 @@ public class MACD implements Indicator {
 		
 		double sum = 0;
 		for (int i = startIndex; i <= endIndex; i++) {
-			sum += data.get(i).getClose();
+			sum += data.get(i).getAdjustedClose();
 		}
 		
 		return sum / (endIndex - startIndex + 1);
@@ -121,22 +131,22 @@ public class MACD implements Indicator {
 	 * @param c		int
 	 * @return
 	 */
-	private int max(int a, int b, int c) {
-		int currMax = a;
-		if (b > currMax) {
-			currMax = b;
+	private int min(int a, int b, int c) {
+		int currMin = a;
+		if (b < currMin) {
+			currMin = b;
 		}
 		
-		if (c > currMax) {
-			currMax = c;
+		if (c < currMin) {
+			currMin = c;
 		}
-		return currMax;
+		return currMin;
 	}
 	
 	/**
 	 * Updates the MACD.
 	 */
-	private void updateMACD() {
+	/*private void updateMACD() {
 
 		int maxPeriod = max(signalPeriod, shortPeriod, longPeriod);
 		int startIndex = (maxPeriod - 1);
@@ -153,11 +163,12 @@ public class MACD implements Indicator {
 		double prevShortEMA = firstShortEMA;
 		double prevLongEMA = firstLongEMA;
 		for (int i = maxPeriod; i < data.size(); i++) {
-			double close = data.get(i).getClose();
+			double close = data.get(i).getAdjustedClose();
 			double currSigEMA = calcEMA(prevSigEMA, signalPeriod, close);
 			double currShortEMA = calcEMA(prevShortEMA, shortPeriod, close);
 			double currLongEMA = calcEMA(prevLongEMA, longPeriod, close);
 			
+			System.out.println(String.format("currshortEMA=[%s], currLongEMA=[%s]", currShortEMA,currLongEMA));
 			double MACDPoint = currShortEMA - currLongEMA;
 			double MACDHistPoint = MACDPoint - currSigEMA;
 			
@@ -171,7 +182,62 @@ public class MACD implements Indicator {
 			prevShortEMA = currShortEMA;
 			prevLongEMA =  currLongEMA;
 		}
+	}*/
+	
+	private void updateMACD() {
+
+		int startIndex = (min(signalPeriod, shortPeriod, longPeriod) - 1);
+		double prevSigEMA = 0;
+		double prevShortEMA = 0;
+		double currShortEMA = 0;
+		double prevLongEMA = 0;
+		double currLongEMA;
+		for (int i = startIndex; i < data.size(); i++) {
+			
+
+			if (i >= signalPeriod - 1) {
+				if (i == signalPeriod - 1) {
+					double firstSignalEMA = calcSMA(i - signalPeriod + 1, i);
+					signalLine.add(new IndicatorDatum(data.get(startIndex).getTime(), data.get(startIndex).getTimeInNumber(), firstSignalEMA));
+					prevSigEMA = firstSignalEMA;
+				} else {
+					double currSigEMA = calcEMA(prevSigEMA, signalPeriod, data.get(i).getAdjustedClose());
+					signalLine.add(new IndicatorDatum(data.get(startIndex).getTime(), data.get(startIndex).getTimeInNumber(), currSigEMA));
+					prevSigEMA = currSigEMA;		// save prev EMA values for next EMA calculation
+				}
+			}
+			
+			if (i >= shortPeriod - 1) {
+				if (i == shortPeriod - 1) {
+					double firstShortEMA = calcSMA(i - shortPeriod + 1, i);
+					prevShortEMA = firstShortEMA;
+					currShortEMA = firstShortEMA;
+				} else {
+					currShortEMA = calcEMA(prevShortEMA, shortPeriod, data.get(i).getAdjustedClose());
+					prevShortEMA = currShortEMA;
+				}
+			}
+			
+			if (i >= longPeriod - 1) {
+				if (i == longPeriod - 1) {
+					double firstLongEMA = calcSMA(i - longPeriod + 1, i);
+					prevLongEMA = firstLongEMA;
+					currLongEMA = firstLongEMA;
+					MACDLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), currShortEMA - currLongEMA));
+				} else {
+					currLongEMA = calcEMA(prevLongEMA, longPeriod, data.get(i).getAdjustedClose());
+					MACDLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), currShortEMA - currLongEMA));
+					prevLongEMA = currLongEMA;
+				}
+			}
+
+			
+			//System.out.println(String.format("currshortEMA=[%s], currLongEMA=[%s]", currShortEMA,currLongEMA));
+
+		}
 	}
+	
+	
 
 	@Override
 	public void addToPlot(StockPlot stockPlot) {
@@ -180,8 +246,9 @@ public class MACD implements Indicator {
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
 		this.data = data;
+		this.endTime = endTime;
 		this.startTime = startTime;
 		updateMACD();
 	}

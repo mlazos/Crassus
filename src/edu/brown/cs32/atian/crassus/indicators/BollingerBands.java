@@ -34,19 +34,21 @@ public class BollingerBands implements Indicator {
 	private final double START_AMT = 10000;
 	private double percentMade;
 	private Date startTime;
+	private Date endTime;
 	
 	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth,
-			Date startTime) throws IllegalArgumentException {
+			Date startTime, Date endTime) throws IllegalArgumentException {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
 		
 		this.data = data;
 		this.period = period;
 		this.bandWidth = bandWidth;
 		this.startTime = startTime;
+		this.endTime = endTime;
 		middleBand = new ArrayList<IndicatorDatum>();
 		upperBand = new ArrayList<IndicatorDatum>();
 		lowerBand = new ArrayList<IndicatorDatum>();
-		refresh(data, startTime);
+		refresh(data, startTime, endTime);
 	}
 	
 	/**
@@ -102,7 +104,7 @@ public class BollingerBands implements Indicator {
 		
 		double sum = 0;
 		for (int i = startIndex; i <= endIndex; i++) {
-			double diff = data.get(i).getClose() - movingAvg;
+			double diff = data.get(i).getAdjustedClose() - movingAvg;
 			sum +=  (diff * diff);
 		}
 		
@@ -122,7 +124,7 @@ public class BollingerBands implements Indicator {
 		
 		double sum = 0;
 		for (int i = startIndex; i <= endIndex; i++) {
-			sum += data.get(i).getClose();
+			sum += data.get(i).getAdjustedClose();
 		}
 		
 		return sum / (endIndex - startIndex + 1);
@@ -131,9 +133,9 @@ public class BollingerBands implements Indicator {
 	@Override
 	public void addToPlot(StockPlot stockPlot) {
 
-		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperBand, "Upper Band", startTime, Color.red);
-		SeriesWrapper middleSeries = stockPlot.getTimeSeries(middleBand, "Middle Band", startTime, Color.blue);
-		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerBand, "Lower Band", startTime, Color.GREEN);
+		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperBand, "Upper Band", startTime, endTime, Color.red);
+		SeriesWrapper middleSeries = stockPlot.getTimeSeries(middleBand, "Middle Band", startTime, endTime, Color.blue);
+		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerBand, "Lower Band", startTime, endTime, Color.GREEN);
 		
 		stockPlot.addSeries(upperSeries);
 		stockPlot.addSeries(middleSeries);
@@ -155,16 +157,17 @@ public class BollingerBands implements Indicator {
 			
 			double upperBandValue = avg + (bandWidth * stdDev);
 			double lowerBandValue = avg - (bandWidth * stdDev);
-			double currClose = data.get(i).getClose();
+			double currClose = data.get(i).getAdjustedClose();
 			
-			if ((currClose > upperBandValue - epsilon) || (currClose < upperBandValue + epsilon) || (i == data.size() - 1)) {
+			if (((currClose > upperBandValue - epsilon) && (currClose < upperBandValue + epsilon)) || (i == data.size() - 1)) {
 				if (currEvent.equals(StockEventType.BUY)) {		// if we have already bought then sell now or sell at whatever price is 
 					currAmt += numStocks * currClose;			// last price
+					numStocks = 0;								// sold all the stocks
 					currEvent = StockEventType.SELL;
 				}
 			}
 			
-			if ((currClose > lowerBandValue - epsilon) || (currClose < lowerBandValue + epsilon)) {
+			if (((currClose > lowerBandValue - epsilon) && (currClose < lowerBandValue + epsilon))) {
 				numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
 				currAmt = currAmt%currClose;					// keep amount left over
 				currEvent = StockEventType.BUY;
@@ -193,9 +196,10 @@ public class BollingerBands implements Indicator {
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
 		this.data = data;
 		this.startTime = startTime;
+		this.endTime = endTime;
 		updateBollingerBands();
 	}
 

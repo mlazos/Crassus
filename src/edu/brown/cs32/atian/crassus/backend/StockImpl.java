@@ -350,14 +350,16 @@ public class StockImpl implements Stock {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
          
         for (Indicator ind : _events) {
-            ind.refresh(stockPriceData, _startTime);
+            ind.refresh(stockPriceData, _startTime, _endTime);
         }        
     }
     
+    @Override
     public Date getStartTime() {
     	return _startTime;
     }
     
+    @Override
     public Date getEndTime() {
     	return _endTime;
     }    

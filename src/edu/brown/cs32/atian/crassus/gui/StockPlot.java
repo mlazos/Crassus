@@ -66,6 +66,6 @@ public interface StockPlot {
 	
 	public BufferedImage getRsBufferedImage(int width, int height);
 	
-	public SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime, Color seriesColor);
+	public SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime, Date endTime, Color seriesColor);
 	
 }

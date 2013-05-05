@@ -22,17 +22,17 @@ public class PivotPointTest {
 	    //        double close, int volume, double adjustedClose)
 		
 		List<StockTimeFrameData> data = new ArrayList<>();
-		data.add(new StockTimeFrameData("1", 434.15, 434.15, 429.09, 429.8, 0, 0, false)); 
-		data.add(new StockTimeFrameData("2", 433.72, 437.99, 431.2, 434.33, 0, 0, false)); 
-		data.add(new StockTimeFrameData("3", 428.1, 437.06, 426.01, 435.69, 0, 0, false)); 
-		data.add(new StockTimeFrameData("4", 426.36, 428.5, 422.75, 426.98, 0, 0, false));	
-		data.add(new StockTimeFrameData("5", 424.85, 427.95, 422.49, 426.21, 0, 0, false)); 
-		data.add(new StockTimeFrameData("6", 424.5, 424.95, 419.68, 423.2, 0, 0, false)); 
+		data.add(new StockTimeFrameData("1", 434.15, 434.15, 429.09, 0, 0, 429.8, false)); 
+		data.add(new StockTimeFrameData("2", 433.72, 437.99, 431.2, 0, 0, 434.33, false)); 
+		data.add(new StockTimeFrameData("3", 428.1, 437.06, 426.01, 0, 0, 435.69, false)); 
+		data.add(new StockTimeFrameData("4", 426.36, 428.5, 422.75, 0, 0, 426.98, false));	
+		data.add(new StockTimeFrameData("5", 424.85, 427.95, 422.49, 0, 0, 426.21, false)); 
+		data.add(new StockTimeFrameData("6", 424.5, 424.95, 419.68, 0, 0, 423.2, false)); 
 
 		
-		ppStandard = new PivotPoints(data, "standard", null);
-		ppDemark = new PivotPoints(data, "demark", null);
-		ppFibonacci = new PivotPoints(data, "fibonacci", null);
+		ppStandard = new PivotPoints(data, "standard", null, null);
+		ppDemark = new PivotPoints(data, "demark", null, null);
+		ppFibonacci = new PivotPoints(data, "fibonacci", null, null);
 	}
 
 	@Test

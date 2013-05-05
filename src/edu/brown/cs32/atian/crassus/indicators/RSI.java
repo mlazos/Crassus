@@ -1,11 +1,13 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
+import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /** 
@@ -30,14 +32,16 @@ public class RSI implements Indicator {
 	private boolean isActive;
 	private boolean isVisible;
 	private Date startTime;
+	private Date endTime;
 	
-	public RSI(List<StockTimeFrameData> data, int period, Date startTime) {
+	public RSI(List<StockTimeFrameData> data, int period, Date startTime, Date endTime) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
 		this.startTime = startTime;
+		this.endTime = endTime;
 		this.data = data;
 		this.period = period;
 		this.RSIPoints = new ArrayList<IndicatorDatum>();
-		refresh(data, startTime);
+		refresh(data, startTime, endTime);
 	}
 	
 	List<IndicatorDatum> getRSIPoints() {
@@ -87,7 +91,7 @@ public class RSI implements Indicator {
 				continue;
 			}
 			
-			double currChange = data.get(i + period - 1).getClose() - data.get(i + period - 2).getClose();
+			double currChange = data.get(i + period - 1).getAdjustedClose() - data.get(i + period - 2).getAdjustedClose();
 																						// smoothing technique similar to exponential moving average calculation
 			if (currChange < 0) {														// currently a loss
 				avgLoss = ((avgLoss * (period - 1)) + Math.abs(currChange)) / period;
@@ -119,8 +123,8 @@ public class RSI implements Indicator {
 			
 			if (i == 0) continue;
 			
-			double currClose = data.get(i).getClose();
-			double prevClose = data.get(i-1).getClose();
+			double currClose = data.get(i).getAdjustedClose();
+			double prevClose = data.get(i-1).getAdjustedClose();
 			double change = currClose - prevClose;
 			
 			if (change < 0) {
@@ -137,14 +141,19 @@ public class RSI implements Indicator {
 	}
 
 	@Override
+	// TODO get the second plot window!
 	public void addToPlot(StockPlot stockPlot) {
-		// TODO Auto-generated method stub
+
+		SeriesWrapper upperSeries = stockPlot.getTimeSeries(RSIPoints, "Relative Strength Index", startTime, endTime, Color.red);
 		
+		stockPlot.addSeries(upperSeries);
+
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime) {
+	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
 		this.data = data;
+		this.endTime = endTime;
 		this.startTime = startTime;
 		updateRSI();
 	}
