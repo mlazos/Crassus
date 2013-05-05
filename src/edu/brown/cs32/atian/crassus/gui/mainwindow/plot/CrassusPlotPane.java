@@ -102,7 +102,8 @@ public class CrassusPlotPane extends JPanel {
 		@Override public void componentShown(ComponentEvent arg0) {}
 	}
 
-	private CrassusImageDisplayer imageDisplayer;
+	private CrassusImageDisplayer primaryPanel;
+	private CrassusImageDisplayer rsPanel;
 	private JComboBox<String> timeframe;
 	private JComboBox<String> timeFreq;
 	private TimeFreqChangeListener timeFreqListener;
@@ -122,8 +123,17 @@ public class CrassusPlotPane extends JPanel {
 						BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)),
 				BorderFactory.createEmptyBorder(5,5,5,5)));
 		
-		imageDisplayer = new CrassusImageDisplayer();
-		this.add(imageDisplayer, BorderLayout.CENTER);
+		JPanel imagePanel = new JPanel();
+		imagePanel.setLayout(new BorderLayout());
+		
+		primaryPanel = new CrassusImageDisplayer();
+		imagePanel.add(primaryPanel, BorderLayout.CENTER);
+		
+		rsPanel = new CrassusImageDisplayer();
+		rsPanel.setMinimumSize(new Dimension(50,100));
+		imagePanel.add(rsPanel, BorderLayout.SOUTH);
+		
+		this.add(imagePanel,BorderLayout.CENTER);
 		
 		timeframe = new JComboBox<String>();
 		timeframe.addItem("One Day");
@@ -183,7 +193,6 @@ public class CrassusPlotPane extends JPanel {
 		}
 	}
 	
-	@SuppressWarnings("incomplete-switch")
 	private StockFreqType timeFreqFromIndex(int index){
 		
 		switch(timeframeFromIndex(timeframe.getSelectedIndex())){
@@ -191,6 +200,7 @@ public class CrassusPlotPane extends JPanel {
 		case YEARLY:
 		case MONTHLY:
 			index++;//first three don't allow minutely data
+		default:
 		}
 		
 		switch(index){
@@ -207,27 +217,37 @@ public class CrassusPlotPane extends JPanel {
 	}
 	
 	public void refresh(){
-		//check width of imageDisplayer because when pane is swapped out it will be zero, plot object flips out
-		if(stock==null || imageDisplayer.getWidth()==0){
-			imageDisplayer.setImage(null);
+		//check width of primaryPanel because when pane is swapped out it will be zero, plot object flips out
+		if(stock==null || primaryPanel.getWidth()==0){
+			primaryPanel.setImage(null);
 		}
 		else{
 			PlotWrapper plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
 			plot.setAxesTitles("Time", "Price");
+//			
+//			plot.setRsOnSameChart(false);
+//			
 			stock.addToPlot(plot);
-			
+			System.out.println("checkpoint 1");
 			for (Indicator ind: stock.getEventList()){
+				System.out.println("checkpoint 2");
 				if (ind.getVisible()) {
+					System.out.println("checkpoint 3");
 					ind.addToPlot(plot);
 				}
 			}
 			
-			BufferedImage image = plot.getPrimaryBufferedImage(imageDisplayer.getWidth(), imageDisplayer.getHeight());
-			imageDisplayer.setImage(image);
+			BufferedImage primary = plot.getPrimaryBufferedImage(primaryPanel.getWidth(), primaryPanel.getHeight());
+			primaryPanel.setImage(primary);
+//			
+//			if(plot.isRsOn()){
+//				BufferedImage rs = plot.getRsBufferedImage(rsPanel.getWidth(), rsPanel.getHeight());
+//				rsPanel.setImage(rs);
+//			}
 		}
 	
-		imageDisplayer.revalidate();
-		imageDisplayer.repaint();
+		primaryPanel.revalidate();
+		primaryPanel.repaint();
 	}
 	
 }

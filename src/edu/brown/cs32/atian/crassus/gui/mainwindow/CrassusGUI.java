@@ -147,6 +147,42 @@ public class CrassusGUI implements GUI {
 		fileGui = new DotCrassusFileGui(frame,this);
 		
 		
+		try {
+			BufferedImage img = ImageIO.read(new File("img/crassus.png"));
+			frame.setIconImage(img);
+		} catch (IOException e) {}//not a disaster, can be ignored....
+		
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		stockBox = new CrassusStockTablePane(frame,undoables);
+		stockBox.setChangeStockListener(new CompoundChangeStockListener());
+
+		eventBox = new CrassusIndicatorTablePane(frame,undoables, new RefreshPlotListener());
+		
+		//make plot pane
+		plotPane = new CrassusPlotPane(undoables);
+		
+		
+		stockInfo = new JPanel();
+		stockInfo.setBackground(Color.WHITE);
+		stockInfo.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(20,20,20,20),
+				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+		stockInfo.setLayout(new BorderLayout());
+		stockInfo.add(eventBox, BorderLayout.EAST);
+		stockInfo.add(plotPane,BorderLayout.CENTER);
+		
+		frame.add(stockBox, BorderLayout.WEST);
+		frame.add(stockInfo,BorderLayout.CENTER);
+		frame.setMinimumSize(new Dimension(1080,500));
+		
+		
+		
+		
+
+		//MAKE THE FREAKING MENU
+		
 		JMenuBar menuBar = new JMenuBar();
 		
 		//ADDING FILE MENU
@@ -283,35 +319,12 @@ public class CrassusGUI implements GUI {
 		
 		//DONE SETTING UP THE MENU BAR!
 		
-		try {
-			BufferedImage img = ImageIO.read(new File("img/crassus.png"));
-			frame.setIconImage(img);
-		} catch (IOException e) {}//not a disaster, can be ignored....
-		
-		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		stockBox = new CrassusStockTablePane(frame,undoables);
-		stockBox.setChangeStockListener(new CompoundChangeStockListener());
-
-		eventBox = new CrassusIndicatorTablePane(frame,undoables, new RefreshPlotListener());
-		
-		//make plot pane
-		plotPane = new CrassusPlotPane(undoables);
 		
 		
-		stockInfo = new JPanel();
-		stockInfo.setBackground(Color.WHITE);
-		stockInfo.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createEmptyBorder(20,20,20,20),
-				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
-		stockInfo.setLayout(new BorderLayout());
-		stockInfo.add(eventBox, BorderLayout.EAST);
-		stockInfo.add(plotPane,BorderLayout.CENTER);
 		
-		frame.add(stockBox, BorderLayout.WEST);
-		frame.add(stockInfo,BorderLayout.CENTER);
-		frame.setMinimumSize(new Dimension(1080,500));
+		
+		
+		
 	}
 	
 
