@@ -24,8 +24,7 @@ public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 
 	private StockList stocks;
 	
-	public CrassusStockTableRenderer(StockList stocks){
-		this.stocks = stocks;
+	public CrassusStockTableRenderer(){
 	}
 	
 	@Override

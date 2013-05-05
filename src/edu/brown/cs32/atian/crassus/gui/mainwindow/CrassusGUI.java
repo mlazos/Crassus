@@ -19,11 +19,11 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
@@ -65,6 +65,14 @@ public class CrassusGUI implements GUI {
 		}
 	}
 
+	public class FileSaveListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			fileGui.fileSave();
+		}
+	}
+
 	public class FileSaveAsListener implements ActionListener {
 
 		@Override
@@ -79,7 +87,6 @@ public class CrassusGUI implements GUI {
 		public void informPlotIsObsolete() {
 			plotPane.refresh();
 		}
-
 	}
 
 	@SuppressWarnings("serial")
@@ -122,12 +129,13 @@ public class CrassusGUI implements GUI {
 	
 	private UndoableStack undoables;
 
-	public CrassusGUI(StockList stocks) {
+	public CrassusGUI() {
 		frame = new JFrame("Crassus");
 		
 		undoables = new UndoableStack(32);
 		
-		fileGui = new DotCrassusFileGui(stocks,frame);
+		fileGui = new DotCrassusFileGui(frame,this);
+		
 		
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -136,20 +144,24 @@ public class CrassusGUI implements GUI {
 		menuBar.add(fileMenu);
 		
 		JMenuItem mNew = new JMenuItem("New");
+		mNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.CTRL_MASK));
 		//FILL THIS IN//mNew.addActionListener();
 		fileMenu.add(mNew);
+
+		JMenuItem mOpen = new JMenuItem("Open");
+		mOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,ActionEvent.CTRL_MASK));
+		mOpen.addActionListener(new FileOpenListener());
+		fileMenu.add(mOpen);
 		
 		JMenuItem mSave = new JMenuItem("Save");
-		//action listener....
+		mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
+		mSave.addActionListener(new FileSaveListener());
 		fileMenu.add(mSave);
 		
 		JMenuItem mSaveAs = new JMenuItem("Save As");
+		mSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK|ActionEvent.ALT_MASK));
 		mSaveAs.addActionListener(new FileSaveAsListener());
 		fileMenu.add(mSaveAs);
-		
-		JMenuItem mOpen = new JMenuItem("Open");
-		mOpen.addActionListener(new FileOpenListener());
-		fileMenu.add(mOpen);
 		
 		frame.setJMenuBar(menuBar);
 
@@ -171,7 +183,7 @@ public class CrassusGUI implements GUI {
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		stockBox = new CrassusStockTablePane(frame,stocks,undoables);
+		stockBox = new CrassusStockTablePane(frame,undoables);
 		stockBox.setChangeStockListener(new CompoundChangeStockListener());
 
 		eventBox = new CrassusIndicatorTablePane(frame,undoables, new RefreshPlotListener());
@@ -199,6 +211,18 @@ public class CrassusGUI implements GUI {
 	public void launch() {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
+
+		String[] options = {"New File","Open existing File"};
+		int fileBehavior = JOptionPane.showOptionDialog(frame, 
+				"Would you like to start a new file or open an existing one?","Crassus",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, 
+				options, options[0]);
+		
+		StockList stocks;
+		if(fileBehavior == 0)
+			stocks = fileGui.fileNew();
+		else
+			stocks = fileGui.fileOpen();
 	}
 
 	@Override

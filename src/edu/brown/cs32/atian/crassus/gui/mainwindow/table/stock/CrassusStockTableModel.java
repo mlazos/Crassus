@@ -13,8 +13,7 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	
 	private CrassusTableRowSelector selector;
 	
-	public CrassusStockTableModel(StockList stocks, CrassusTableRowSelector selector){
-		this.stocks = stocks;
+	public CrassusStockTableModel(CrassusTableRowSelector selector){
 		this.selector = selector;
 	}
 
@@ -43,6 +42,8 @@ public class CrassusStockTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
+		if(stocks == null)
+			return 0;
 		return stocks.getStockList().size();
 	}
 	

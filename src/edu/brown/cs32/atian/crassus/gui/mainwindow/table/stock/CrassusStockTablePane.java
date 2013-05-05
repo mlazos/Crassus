@@ -116,9 +116,8 @@ public class CrassusStockTablePane extends JPanel {
 	
 	private StockList stocks;
 	
-	public CrassusStockTablePane(JFrame frame, StockList stocks, UndoableStack undoables){
+	public CrassusStockTablePane(JFrame frame, UndoableStack undoables){
 		this.frame = frame;
-		this.stocks = stocks;
 		this.undoables = undoables;
 		
 		this.setBackground(Color.WHITE);
@@ -131,7 +130,7 @@ public class CrassusStockTablePane extends JPanel {
 		table.getTableHeader().setFont(new Font("SansSerif",Font.BOLD,12));
 		
 		selector = new CrassusTableRowSelector(table);
-		model = new CrassusStockTableModel(stocks,selector);
+		model = new CrassusStockTableModel(selector);
 		table.setModel(model);
 		
 		table.setShowGrid(false);
@@ -141,7 +140,7 @@ public class CrassusStockTablePane extends JPanel {
 		
 		table.setIntercellSpacing(new Dimension(0,2));
 		
-		renderer =  new CrassusStockTableRenderer(stocks);
+		renderer =  new CrassusStockTableRenderer();
 		
 		for(int i=0; i<5; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);

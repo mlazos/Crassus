@@ -14,18 +14,6 @@ import edu.brown.cs32.atian.crassus.gui.mainwindow.GUI;
 
 public class Main {
 
-	public static class TimerListener implements ActionListener {
-		@Override public void actionPerformed(ActionEvent arg0) {
-			//long start = System.currentTimeMillis();
-			stocks.refreshAll();
-			//long middle = System.currentTimeMillis();
-			gui.update();
-			//long end = System.currentTimeMillis();
-			//System.out.println("refreshing stocks: "+(middle-start));
-			//System.out.println("updating GUI: "+(end-middle));
-		}
-	}
-	
 	private static GUI gui;
 	private static StockList stocks;
 
@@ -35,8 +23,6 @@ public class Main {
 	public static void main(String[] args) 
 	{
 
-		stocks = new StockListImpl();
-		
 		UIManager.getDefaults().put("Button.background",Color.WHITE);//make JButtons less ugly
 		UIManager.getDefaults().put("OptionPane.background", Color.WHITE);//change dialog box color
 		UIManager.getDefaults().put("Panel.background", Color.WHITE);//
@@ -44,12 +30,9 @@ public class Main {
 		
 		UIManager.getDefaults().put("MenuItem.background",new Color(240,240,255));
 		UIManager.getDefaults().put("MenuBar.background",new Color(240,240,255));
-		gui = new CrassusGUI(stocks);
+		gui = new CrassusGUI();
 		gui.launch();
 	
-		Timer timer = new Timer(60000, new TimerListener());
-		timer.setRepeats(true);
-		timer.start();
 	}
 
 }
