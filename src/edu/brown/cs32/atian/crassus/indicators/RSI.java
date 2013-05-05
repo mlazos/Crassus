@@ -146,6 +146,8 @@ public class RSI implements Indicator {
 
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(RSIPoints, "Relative Strength Index", startTime, endTime, Color.red);
 		
+		//stockPlot.
+		
 		stockPlot.addSeries(upperSeries);
 
 	}

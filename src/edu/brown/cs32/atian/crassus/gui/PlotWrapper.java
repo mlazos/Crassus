@@ -250,31 +250,33 @@ public class PlotWrapper implements StockPlot
         
         for(IndicatorDatum datum : indicatorPoints) {
              //  return time represented by a second value 
-             long tmp = datum.getTime() * 1000;    // from second to Millisecond
-             Calendar calendar = Calendar.getInstance();
-             
-/*             if (dateValues.contains(tmp)) {
-            	 System.out.println("date [" + tmp + "] already got!!! size=" + dateValues.size());
-            	 System.out.println(dateValues);
-            	 System.exit(0);
-             }
-             dateValues.add(tmp);*/
-             
-             
+/*             long tmp = datum.getTime() * 1000;    // from second to Millisecond
+             Calendar calendar = Calendar.getInstance();             
              calendar.setTimeInMillis(tmp);
              Date date = calendar.getTime();  
              
              Calendar calendarStart = Calendar.getInstance();
              calendarStart.setTime(startTime);
              Calendar calendarEnd = Calendar.getInstance();
-             calendarStart.setTime(endTime);
+             calendarStart.setTime(endTime);*/
+        	
+            long tmp = datum.getTime() * 1000;    // from second to Millisecond
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(tmp);
+            Date date = calendar.getTime();  
+            
+            Calendar calendarStart = Calendar.getInstance();
+            calendarStart.setTime(startTime);
+            Calendar calendarEnd = Calendar.getInstance();
+            calendarEnd.setTime(endTime);    
 
+             //if(calendarStart.before(calendar) && calendar.before(calendarEnd)) {
              if(calendarStart.before(calendar) && calendar.before(calendarEnd)) {
             	/*System.out.println("============================================================");
             	System.out.println("dat timeLabel="+datum.getTimeLabel());
             	System.out.println("============================================================\n");*/
             	try {
-                series.addOrUpdate(new Second(date) , datum.getValue());
+                series.addOrUpdate(new Second(date), datum.getValue());
                 
             	} catch (org.jfree.data.general.SeriesException e) {
             		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<EXCEPTION<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
