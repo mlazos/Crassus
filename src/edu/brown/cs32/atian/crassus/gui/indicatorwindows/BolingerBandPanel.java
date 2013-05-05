@@ -149,6 +149,6 @@ public class BolingerBandPanel extends JPanel
 	
 	public String toString()
 	{
-		return "Bolinger Band Event";
+		return "Bollinger Band Event";
 	}
 }
