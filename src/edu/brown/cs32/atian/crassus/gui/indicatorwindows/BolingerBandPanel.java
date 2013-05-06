@@ -97,7 +97,7 @@ public class BolingerBandPanel extends JPanel
 	public void setPeriods(String periods)
 	{
 		this.periods.setText(periods);
-	}j
+	}
 	
 	public void setBandWidth(String bandwidth)
 	{
