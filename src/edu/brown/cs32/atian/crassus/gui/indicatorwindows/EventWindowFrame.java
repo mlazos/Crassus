@@ -86,38 +86,35 @@ public class EventWindowFrame implements EventWindow {
 		frame.setModal(true);
 		frame.setResizable(false);
 		
-		
+		BolingerBandPanel bb = new BolingerBandPanel(closeListener, frame, stock);
+		MACDPanel mp = new MACDPanel(closeListener, frame, stock);
+		PivotPanel pp = new PivotPanel(closeListener, frame, stock);
+		PriceChannelPanel pc = new PriceChannelPanel(closeListener, frame, stock);
+		RSIPanel rsp = new RSIPanel(closeListener, frame, stock);
+		StochOscillPanel sop = new StochOscillPanel(closeListener, frame, stock);
 		
 		if(prevIndicator instanceof BollingerBands)
 		{
-			BollingerBands bb = (BollingerBands)prevIndicator;
+			currentPanel = bb;
 		}else if(prevIndicator instanceof PriceChannel)
 		{
-			PriceChannel pc = (PriceChannel)(prevIndicator);
+			currentPanel = pc;
 		}else if(prevIndicator instanceof MACD)
 		{
-			MACD macd = (MACD)prevIndicator;
+			currentPanel = mp;
 		}else if(prevIndicator instanceof RSI)
 		{
-			RSI rsi = (RSI)prevIndicator;
+			currentPanel = rsp;
 		}else if(prevIndicator instanceof PivotPoints)
 		{
-			
+			currentPanel = pp;
 		}else if(prevIndicator instanceof StochasticOscillator)
 		{
-			
+			currentPanel = sop;
 		}
 		
-		
-		currentPanel = new BolingerBandPanel(closeListener, frame, stock);
-		
 		//add dropdown to main Frame
-		JPanel[] eventList = {new BolingerBandPanel(closeListener, frame, stock), 
-							  new MACDPanel(closeListener, frame, stock), 
-							  new PivotPanel(closeListener, frame, stock), 
-							  new PriceChannelPanel(closeListener, frame, stock), 
-							  new RSIPanel(closeListener, frame, stock), 
-							  new StochOscillPanel(closeListener, frame, stock)};
+		JPanel[] eventList = {bb,pc,mp,rsp,pp,sop};
 		
 		frame.setSize(350, eventList[0].getHeight() + 70);
 		frame.setMinimumSize(new Dimension(350, eventList[0].getHeight() + 70));

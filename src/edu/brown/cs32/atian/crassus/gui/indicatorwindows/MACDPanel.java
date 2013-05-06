@@ -104,6 +104,21 @@ public class MACDPanel extends JPanel
 		
 	}
 	
+	public void setSignal(String signalPeriod)
+	{
+		this.signalP.setText(signalPeriod);
+	}
+	
+	public void setShort(String shortPeriod)
+	{
+		this.shortP.setText(shortPeriod);
+	}
+	
+	public void setLong(String longPeriod)
+	{
+		this.longP.setText(longPeriod);
+	}
+	
 	class OkListener extends AbstractOkListener
 	{
 
