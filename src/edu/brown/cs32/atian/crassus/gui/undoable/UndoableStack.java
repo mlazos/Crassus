@@ -43,4 +43,8 @@ public class UndoableStack {
 		undoables.clear();
 		redoables.clear();
 	}
+
+	public boolean isEmpty() {
+		return undoables.isEmpty() && redoables.isEmpty();
+	}
 }

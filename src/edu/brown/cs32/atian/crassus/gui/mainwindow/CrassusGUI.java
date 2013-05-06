@@ -10,22 +10,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
 
@@ -46,66 +45,6 @@ public class CrassusGUI implements GUI {
 	/*
 	 * inner classes appear in same order that they do in the constructor.
 	 */
-	
-	private class fileNewListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			
-			StockList stocks = fileGui.fileNew();
-			changeStockListTo(stocks);
-		}
-	}
-
-	private class FileOpenListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-
-			StockList stocks = fileGui.fileOpen();
-			changeStockListTo(stocks);
-		}
-	}
-
-	private class FileSaveListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			fileGui.fileSave();
-		}
-	}
-
-	private class FileSaveAsListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			fileGui.fileSaveAs();
-		}
-	}
-
-	private class FileExitListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			frame.dispose();
-		}
-	}
-
-	private class EditUndoListener implements ActionListener {
-		
-		@Override 
-		public void actionPerformed(ActionEvent e) {
-			undoables.undo();
-		}
-	}
-
-	private class EditRedoListner implements ActionListener {
-		
-		@Override 
-		public void actionPerformed(ActionEvent e) {
-			undoables.redo();
-		}
-	}
 	
 	//TODO change above inner classes and possibly below inner classes to anonymous inner classes
 
@@ -153,7 +92,7 @@ public class CrassusGUI implements GUI {
 		} catch (IOException e) {}//not a disaster, can be ignored....
 		
 		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		stockBox = new CrassusStockTablePane(frame,undoables);
 		stockBox.setChangeStockListener(new CompoundChangeStockListener());
@@ -177,7 +116,21 @@ public class CrassusGUI implements GUI {
 		frame.add(stockInfo,BorderLayout.CENTER);
 		frame.setMinimumSize(new Dimension(1080,500));
 		
-		
+		frame.addWindowListener(
+				new WindowListener(){
+					@Override public void windowActivated(WindowEvent arg0) {}
+					@Override public void windowClosed(WindowEvent arg0) {}
+					
+					@Override 
+					public void windowClosing(WindowEvent arg0) {
+						possiblyExit();
+					}
+					
+					@Override public void windowDeactivated(WindowEvent arg0) {}
+					@Override public void windowDeiconified(WindowEvent arg0) {}
+					@Override public void windowIconified(WindowEvent arg0) {}
+					@Override public void windowOpened(WindowEvent arg0) {}
+				});
 		
 		
 
@@ -193,29 +146,44 @@ public class CrassusGUI implements GUI {
 		
 		JMenuItem mNew = new JMenuItem("New");
 		mNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.CTRL_MASK));
-		mNew.addActionListener(new fileNewListener());
+		mNew.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {changeStockListTo(fileGui.fileNew());}
+				});
 		fileMenu.add(mNew);
 
 		JMenuItem mOpen = new JMenuItem("Open");
 		mOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,ActionEvent.CTRL_MASK));
-		mOpen.addActionListener(new FileOpenListener());
+		mOpen.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {changeStockListTo(fileGui.fileOpen());}
+				});
 		fileMenu.add(mOpen);
 		
 		JMenuItem mSave = new JMenuItem("Save");
 		mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
-		mSave.addActionListener(new FileSaveListener());
+		mSave.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {fileGui.fileSave();}
+				});
 		fileMenu.add(mSave);
 		
 		JMenuItem mSaveAs = new JMenuItem("Save As");
 		mSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK|ActionEvent.ALT_MASK));
-		mSaveAs.addActionListener(new FileSaveAsListener());
+		mSaveAs.addActionListener(
+				new ActionListener(){ @Override
+					public void actionPerformed(ActionEvent arg0) {fileGui.fileSaveAs();}
+				});
 		fileMenu.add(mSaveAs);
 		
 		fileMenu.addSeparator();
 		
 		JMenuItem mExit = new JMenuItem("Exit");
 		mExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0));
-		mExit.addActionListener(new FileExitListener());
+		mExit.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {possiblyExit();}
+				});
 		fileMenu.add(mExit);
 		
 		//ADDING EDIT MENU
@@ -226,12 +194,18 @@ public class CrassusGUI implements GUI {
 		
 		JMenuItem mUndo = new JMenuItem("Undo");
 		mUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK));
-		mUndo.addActionListener(new EditUndoListener());
+		mUndo.addActionListener(
+				new ActionListener(){@Override 
+					public void actionPerformed(ActionEvent e) {undoables.undo();}
+				});
 		editMenu.add(mUndo);
 		
 		JMenuItem mRedo = new JMenuItem("Redo");
 		mRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,InputEvent.CTRL_DOWN_MASK));
-		mRedo.addActionListener(new EditRedoListner());
+		mRedo.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {undoables.redo();}
+				});
 		editMenu.add(mRedo);
 		
 		//ADDING TICKER MENU
@@ -319,12 +293,6 @@ public class CrassusGUI implements GUI {
 		
 		//DONE SETTING UP THE MENU BAR!
 		
-		
-		
-		
-		
-		
-		
 	}
 	
 
@@ -348,25 +316,21 @@ public class CrassusGUI implements GUI {
 	public void launch() {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
-
-		String[] options = {"New File","Open existing File"};
-		int fileBehavior = JOptionPane.showOptionDialog(frame, 
-				"Would you like to start a new file or open an existing one?","Crassus",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, 
-				options, options[0]);
 		
-		StockList stocks;
-		if(fileBehavior == 0)
-			stocks = fileGui.fileNew();
-		else
-			stocks = fileGui.fileOpen();
-		changeStockListTo(stocks);
+		changeStockListTo(fileGui.fileNew());
 	}
 
 	@Override
 	public void update() {
 		stockBox.refresh();
 		plotPane.refresh();
+	}
+	
+	public void possiblyExit() {
+		if(undoables.isEmpty())
+			System.exit(0);
+		if(fileGui.fileExit())
+			System.exit(0);
 	}
 
 }

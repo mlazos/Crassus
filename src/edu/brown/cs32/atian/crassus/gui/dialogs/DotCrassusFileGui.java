@@ -25,8 +25,22 @@ public class DotCrassusFileGui {
 
 	public class TimerListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			stocks.refreshAll();
-			gui.update();
+			while(true){
+				try{
+					stocks.refreshAll();
+					gui.update();
+					return;
+				}catch(Exception e){
+					String[] options = {"Try Again","Exit"};
+					int result = JOptionPane.showOptionDialog(frame, 
+							"Your connection with the server has been lost. You can either try to connect again, or exit the program",  
+							"Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0);
+					if(result==1){
+						frame.dispose();
+						return;
+					}
+				}
+			}
 		}
 	}
 	
@@ -52,40 +66,68 @@ public class DotCrassusFileGui {
 		fc.setFileView(new DotCrassusFileView());
 	}
 
-	private void tryWrite(File file) {
+	private boolean tryWrite(File file) {
 		try {
 			
 			fio.write(file,stocks);
 			this.f=file;
+			return true;
 			
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(frame, "Something went wrong. Your file could not be saved.");
+			return false;
 		} catch (ParserConfigurationException e) {
 			JOptionPane.showMessageDialog(frame, "Something went wrong. Your file could not be saved.");
+			return false;
 		} catch (TransformerException e) {
 			JOptionPane.showMessageDialog(frame, "Something went wrong. Your file could not be saved.");
+			return false;
 		}
 	}
 
-	public void fileSave() {
+	public boolean fileSave() {
 		if(f==null)
-			fileSaveAs();
+			return fileSaveAs();
 		
-		tryWrite(f);
+		return tryWrite(f);
 	}
 	
-	public void fileSaveAs() {
+	public boolean fileSaveAs() {
 		
 		int fcResult = fc.showSaveDialog(frame);
 		
 		if(fcResult == JFileChooser.APPROVE_OPTION){
 			File file = new File(ExtensionUtils.setExtension("crassus",fc.getSelectedFile().getAbsolutePath()));
 			
-			tryWrite(file);
+			return tryWrite(file);
 		}
+		return false;
+	}
+	
+	public boolean maybeSave(String prompt) {
+		
+		if(stocks==null || stocks.getStockList().isEmpty())
+			return true;
+		
+		int result = JOptionPane.showConfirmDialog(frame, prompt, "Message", 
+				JOptionPane.YES_NO_CANCEL_OPTION);
+		
+		if(result==0){
+			return fileSave();
+		}
+		if(result==1){
+			return true;
+		}
+		return false;
 	}
 	
 	public StockList fileNew() {
+		
+		if(!maybeSave("Would you like to save the current session before creating a new file?"))
+			return stocks;
+		
+		if(timer!=null)
+			timer.stop();
 		
 		StockList stocks = new StockListImpl();
 		
@@ -100,6 +142,9 @@ public class DotCrassusFileGui {
 	}
 
 	public StockList fileOpen() {
+		
+		if(!maybeSave("Would you like to save the current session before opening a different file?"))
+			return stocks;
 		
 		int fcResult = fc.showOpenDialog(frame);
 		
@@ -137,5 +182,10 @@ public class DotCrassusFileGui {
 		return fileNew();
 	}
 	
-
+	public boolean fileExit(){
+		
+		return maybeSave("Would you like to save the current session before you exit?");
+		
+	}
+	
 }
