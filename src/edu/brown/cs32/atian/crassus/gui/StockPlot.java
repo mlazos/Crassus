@@ -63,6 +63,6 @@ public interface StockPlot {
 	
 	public SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime, Date endTime, Color seriesColor);
 
-	public void addRsSeries(SeriesWrapper series);
+
 	
 }

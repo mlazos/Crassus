@@ -79,6 +79,11 @@ public class RSIPanel extends JPanel
 		
 	}
 	
+	public void setPeriod(String period)
+	{
+		this.period.setText(period);
+	}
+	
 	class OkListener extends AbstractOkListener
 	{
 
