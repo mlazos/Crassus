@@ -41,18 +41,14 @@ public class PriceChannel implements Indicator {
 	private int lookBackPeriod;
 	private boolean isActive;
 	private boolean isVisible;
-	private Date startTime;
-	private Date endTime;
 	
-	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod, Date startTime, Date endTime) {
+	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
 		this.data = data;
 		this.lookBackPeriod = lookBackPeriod;
-		this.startTime = startTime;
-		this.endTime = endTime;
 		upperChannel = new ArrayList<IndicatorDatum>();
 		lowerChannel = new ArrayList<IndicatorDatum>();
 		centreLine = new ArrayList<IndicatorDatum>();
-		refresh(data, startTime, endTime);
+		refresh(data);
 	}
 	
 	List<IndicatorDatum> getUpperChannel() {
@@ -138,7 +134,7 @@ public class PriceChannel implements Indicator {
 	}
 	
 	@Override
-	public void addToPlot(StockPlot stockPlot) {
+	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperChannel, "Upper Channel", startTime, endTime, Color.pink);
 		SeriesWrapper middleSeries = stockPlot.getTimeSeries(centreLine, "Centre Line", startTime, endTime, Color.cyan);
@@ -150,10 +146,8 @@ public class PriceChannel implements Indicator {
 	}
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
+	public void refresh(List<StockTimeFrameData> data) {
 		this.data = data;
-		this.startTime = startTime;
-		this.endTime = endTime;
 		updatePriceChannel();
 	}
 

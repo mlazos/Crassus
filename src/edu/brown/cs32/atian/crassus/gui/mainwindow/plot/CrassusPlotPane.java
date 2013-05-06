@@ -228,12 +228,9 @@ public class CrassusPlotPane extends JPanel {
 			plot.setAxesTitles("Time", "Price");
 			
 			stock.addToPlot(plot);
-			System.out.println("checkpoint 1");
 			for (Indicator ind: stock.getEventList()){
-				System.out.println("checkpoint 2");
 				if (ind.getVisible()) {
-					System.out.println("checkpoint 3");
-					ind.addToPlot(plot);
+					ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
 				}
 			}
 			

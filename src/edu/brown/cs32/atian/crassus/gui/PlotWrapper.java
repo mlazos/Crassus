@@ -256,4 +256,5 @@ public class PlotWrapper implements StockPlot
         return new SeriesWrapper(series, seriesColor);
     }
 
+
 }

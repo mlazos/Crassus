@@ -11,12 +11,12 @@ public interface Indicator {
 	/**
 	 * Adds the indicator data to the plot.
 	 */
-	void addToPlot(StockPlot stockPlot);
+	void addToPlot(StockPlot stockPlot, Date startTime, Date endTime);
 	
 	/**
 	 * Refreshes the indicator data values.
 	 */
-	void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime);
+	void refresh(List<StockTimeFrameData> data);
 	
 	/*
 	 * Tests the indicator against data which should have been

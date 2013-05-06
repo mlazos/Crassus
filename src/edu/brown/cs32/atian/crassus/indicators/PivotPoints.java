@@ -42,13 +42,9 @@ public class PivotPoints implements Indicator {
 	private int pivotType;
 	private boolean isVisible;
 	private boolean isActive;
-	private Date startTime;
-	private Date endTime;
 	
-	public PivotPoints(List<StockTimeFrameData> data, String pivotOption, Date startTime, Date endTime) {
+	public PivotPoints(List<StockTimeFrameData> data, String pivotOption) {
 		this.data = data;
-		this.startTime = startTime;
-		this.endTime = endTime;
 		pivotPoints = new ArrayList<IndicatorDatum>();
 		support1 = new ArrayList<IndicatorDatum>();
 		support2 = new ArrayList<IndicatorDatum>();
@@ -65,11 +61,11 @@ public class PivotPoints implements Indicator {
         } else  {
             pivotType = 0;
         }
-		refresh(data, startTime, endTime);
+		refresh(data);
 	}
 
 	@Override
-	public void addToPlot(StockPlot stockPlot) {
+	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 		
 		SeriesWrapper p = stockPlot.getTimeSeries(pivotPoints, "Pivot Line", startTime, endTime, Color.magenta);
 
@@ -212,10 +208,8 @@ public class PivotPoints implements Indicator {
 	
 
 	@Override
-	public void refresh(List<StockTimeFrameData> data, Date startTime, Date endTime) {
+	public void refresh(List<StockTimeFrameData> data) {
 		this.data = data;
-		this.endTime = endTime;
-		this.startTime = startTime;
 		if (pivotType == 2) updateDemark();
 		else updatePivot();
 	}
