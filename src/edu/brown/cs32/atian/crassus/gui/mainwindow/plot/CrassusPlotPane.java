@@ -166,7 +166,8 @@ public class CrassusPlotPane extends JPanel {
 		
 		this.add(timePanel, BorderLayout.SOUTH);
 		
-		this.addComponentListener(new ResizeListener());
+		primaryPanel.addComponentListener(new ResizeListener());
+		rsPanel.addComponentListener(new ResizeListener());
 	}
 
 	public void changeToStock(Stock stock){

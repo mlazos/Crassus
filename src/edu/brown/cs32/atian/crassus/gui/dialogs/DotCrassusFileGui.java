@@ -29,6 +29,7 @@ public class DotCrassusFileGui {
 				try{
 					stocks.refreshAll();
 					gui.update();
+					return;
 				}catch(Exception e){
 					String[] options = {"Try Again","Exit"};
 					int result = JOptionPane.showOptionDialog(frame, 
