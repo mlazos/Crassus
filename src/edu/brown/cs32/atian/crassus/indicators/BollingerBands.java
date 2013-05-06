@@ -32,6 +32,7 @@ public class BollingerBands implements Indicator {
 	private boolean isActive;
 	private boolean isVisible;
 	private final double START_AMT = 10000;
+	private final double EPSILON = 0.1;
 	private double percentMade;
 	
 	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {
@@ -46,20 +47,17 @@ public class BollingerBands implements Indicator {
 		refresh(data);
 	}
 	
-	/**
-	 * Creates new Bollinger Band stock event.
-	 * 
-	 * @param period	int period of SMA
-	 * @param k			int multiplier of standard deviation; determines
-	 * 					width of the bands.
-	 */
-	public BollingerBands(int period, int bandWidth) {
-		this.period = period;
-		this.lowerBand = new ArrayList<IndicatorDatum>();
-		this.upperBand = new ArrayList<IndicatorDatum>();
-		this.bandWidth = bandWidth;
-		updateBollingerBands();
+	// Indicator parameters
+	public int getPeriod() {
+		return period;
 	}
+	
+	public int getBandWidth() {
+		return bandWidth;
+	}
+	//
+	
+
 	
 	@Override
 	public boolean getVisible() {
@@ -145,7 +143,6 @@ public class BollingerBands implements Indicator {
 		
 		StockEventType currEvent = StockEventType.NONE;
 		double currAmt = START_AMT;
-		double epsilon = 0.1;
 		double numStocks = 0;
 		for (int i = 0; (i + period - 1) < data.size(); i++) {
 			double avg = calcSMA(i, i + period - 1);
@@ -155,7 +152,7 @@ public class BollingerBands implements Indicator {
 			double lowerBandValue = avg - (bandWidth * stdDev);
 			double currClose = data.get(i).getAdjustedClose();
 			
-			if (((currClose > upperBandValue - epsilon) && (currClose < upperBandValue + epsilon)) || (i == data.size() - 1)) {
+			if (((currClose > upperBandValue - EPSILON) && (currClose < upperBandValue + EPSILON)) || (i == data.size() - 1)) {
 				if (currEvent.equals(StockEventType.BUY)) {		// if we have already bought then sell now or sell at whatever price is 
 					currAmt += numStocks * currClose;			// last price
 					numStocks = 0;								// sold all the stocks
@@ -163,7 +160,7 @@ public class BollingerBands implements Indicator {
 				}
 			}
 			
-			if (((currClose > lowerBandValue - epsilon) && (currClose < lowerBandValue + epsilon))) {
+			if (((currClose > lowerBandValue - EPSILON) && (currClose < lowerBandValue + EPSILON))) {
 				numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
 				currAmt = currAmt%currClose;					// keep amount left over
 				currEvent = StockEventType.BUY;

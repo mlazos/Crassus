@@ -56,6 +56,20 @@ public class MACD implements Indicator {
 		refresh(data);
 	}
 	
+	// Indicator parameters
+	public int getSignalPeriod() {
+		return signalPeriod;
+	}
+	
+	public int getShortPeriod() {
+		return shortPeriod;
+	}
+	
+	public int getLongPeriod() {
+		return longPeriod;
+	}
+	//
+	
 	@Override
 	public boolean getVisible() {
 		return isVisible;

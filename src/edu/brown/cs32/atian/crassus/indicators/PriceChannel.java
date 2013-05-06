@@ -41,6 +41,9 @@ public class PriceChannel implements Indicator {
 	private int lookBackPeriod;
 	private boolean isActive;
 	private boolean isVisible;
+	private double EPSILON = 0.1;
+	private double START_AMT = 10000;
+	private double percentMade;
 	
 	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
 		this.data = data;
@@ -50,6 +53,12 @@ public class PriceChannel implements Indicator {
 		centreLine = new ArrayList<IndicatorDatum>();
 		refresh(data);
 	}
+	
+	// Indicator parameters
+	public int getLookBackPeriod() {
+		return lookBackPeriod;
+	}
+	//
 	
 	List<IndicatorDatum> getUpperChannel() {
 		return upperChannel;
@@ -90,6 +99,10 @@ public class PriceChannel implements Indicator {
 	 */
 	private void updatePriceChannel() {
 		
+		StockEventType currEvent = StockEventType.NONE;
+		double currAmt = START_AMT;
+		double numStocks = 0;
+		
 		for (int i = 0; i + lookBackPeriod < data.size(); i++) {
 			double[] periodHighLow = getHighLow(i, i + lookBackPeriod - 1);
 			double periodHigh = periodHighLow[0];
@@ -101,7 +114,25 @@ public class PriceChannel implements Indicator {
 			upperChannel.add(new IndicatorDatum(timeLabel, currTime, periodHigh));
 			lowerChannel.add(new IndicatorDatum(timeLabel, currTime, periodLow));
 			centreLine.add(new IndicatorDatum(timeLabel, currTime, centreVal));
+			
+			double currClose = data.get(i).getAdjustedClose();
+			
+			if (((currClose > periodHigh - EPSILON) && (currClose < periodHigh + EPSILON)) || (i == data.size() - 1)) {
+				if (currEvent.equals(StockEventType.BUY)) {		// if we have already bought then sell now or sell at whatever price is 
+					currAmt += numStocks * currClose;			// last price
+					numStocks = 0;								// sold all the stocks
+					currEvent = StockEventType.SELL;
+				}
+			}
+			
+			if (((currClose > periodLow - EPSILON) && (currClose < periodLow + EPSILON))) {
+				numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
+				currAmt = currAmt%currClose;					// keep amount left over
+				currEvent = StockEventType.BUY;
+			}
 		}
+		
+		percentMade = ((currAmt - START_AMT) / START_AMT);
 	}
 	
 	/**
@@ -159,7 +190,6 @@ public class PriceChannel implements Indicator {
 
 	@Override
 	public double getTestResults() {
-		// TODO Auto-generated method stub
-		return 0;
+		return percentMade;
 	}
 }

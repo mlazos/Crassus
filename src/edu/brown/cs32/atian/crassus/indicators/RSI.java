@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
+import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
 import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
@@ -39,6 +40,12 @@ public class RSI implements Indicator {
 		this.RSIPoints = new ArrayList<IndicatorDatum>();
 		refresh(data);
 	}
+	
+	// Indicator parameters
+	public int getPeriod() {
+		return period;
+	}
+	//
 	
 	List<IndicatorDatum> getRSIPoints() {
 		return RSIPoints;
@@ -142,9 +149,13 @@ public class RSI implements Indicator {
 
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(RSIPoints, "Relative Strength Index", startTime, endTime, Color.red);
 		
-		//stockPlot.
-		
-		stockPlot.addSeries(upperSeries);
+		try {
+			stockPlot.setRS(true);
+		} catch (CantTurnRsOnAfterChartsRetreivedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		stockPlot.addRsSeries(upperSeries);
 
 	}
 

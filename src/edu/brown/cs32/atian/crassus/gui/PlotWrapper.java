@@ -50,6 +50,7 @@ public class PlotWrapper implements StockPlot
 		this.timeFrame = timeFrame;
 	}
 	
+	@Override
 	public void setTimeFrame(TimeFrame timeFrame)
 	{
 		this.timeFrame = timeFrame;
@@ -61,12 +62,14 @@ public class PlotWrapper implements StockPlot
 	}
 	
 	//add a series to the list of series
+	@Override
 	public void addSeries(SeriesWrapper series)
 	{
 		this.series.addSeries(series.getSeries());
 		this.seriesColors.add(series.getColor());
 	}
 	
+	@Override
 	public void addRsSeries(SeriesWrapper series)
 	{
 		this.rsSeries.addSeries(series.getSeries());

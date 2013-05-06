@@ -36,9 +36,11 @@ public interface StockPlot {
 	 */
 	//public JFreeChart getRelativeStrengthChart();
 	
+	public void setTimeFrame(TimeFrame timeFrame);
+	
 	public void addSeries(SeriesWrapper series);
 
-
+	public void addRsSeries(SeriesWrapper series);
 	
 	/**
 	 * Turn RS on or off
@@ -62,5 +64,7 @@ public interface StockPlot {
 	public BufferedImage getRsBufferedImage(int width, int height);
 	
 	public SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime, Date endTime, Color seriesColor);
+
+	public void addRsSeries(SeriesWrapper series);
 	
 }

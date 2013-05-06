@@ -10,8 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.KeyStroke;
-import javax.swing.undo.UndoManager;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
@@ -94,6 +92,22 @@ public class PivotPanel extends JPanel
 		stan.setSelected(true);
 
 		
+	}
+	
+	public void setSelected(String button)
+	{
+		switch(button)
+		{
+			case "fibonacci":
+				fibo.setSelected(true);
+				break;
+			case "standard":
+				stan.setSelected(true);
+				break;
+			case "demark":
+				dem.setSelected(true);
+				break;
+		}
 	}
 	
 	class OkListener extends AbstractOkListener

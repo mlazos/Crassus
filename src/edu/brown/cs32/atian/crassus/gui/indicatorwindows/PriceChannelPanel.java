@@ -75,6 +75,11 @@ public class PriceChannelPanel extends JPanel
 		
 	}
 	
+	public void setLookBack(String lookBack)
+	{
+		this.lookBack.setText(lookBack);
+	}
+	
 	class OkListener extends AbstractOkListener
 	{
 
