@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.EtchedBorder;
@@ -30,68 +31,24 @@ public class CrassusPlotPane extends JPanel {
 	private SharedState dropdownsShouldRespond = new SharedState(true);
 	private int timeFreqOldIndex=0;
 
-	private int timeScaleOldIndex=0;
-	
 	public class TimeFreqChangeListener implements ActionListener {
-		@Override public void actionPerformed(ActionEvent e) {
+		
+		@Override 
+		public void actionPerformed(ActionEvent e) {
+			
 			int index = timeFreq.getSelectedIndex();
-			
-			if(dropdownsShouldRespond.getState())
-				undoables.push(new DropdownSelectionUndoable(dropdownsShouldRespond, 
-						timeFreq, timeFreqOldIndex, index, 
-						timeframe, timeScaleOldIndex, timeframe.getSelectedIndex()));
-			
-			if(stock==null){
-				timeFreqOldIndex = index;
-				return;
-			}
-			
-			stock.setCurrFreq(timeFreqFromIndex(index));
-			refresh();
-			
+			changeTimeFreq(timeFreqFromIndex(index));
 			timeFreqOldIndex = index;
 		}
 	}
 
 	public class TimeScaleChangeListener implements ActionListener {
-		@Override public void actionPerformed(ActionEvent arg0) {
+		
+		@Override 
+		public void actionPerformed(ActionEvent arg0) {
+			
 			int index = timeframe.getSelectedIndex();
-			
-			timeFreq.removeActionListener(timeFreqListener);//must be done to keep timeFreq from going bannanas; added back at the end of function
-			timeFreq.removeAllItems();
-			switch(index){
-			case 4:
-				timeFreq.addItem("Daily");
-				timeFreq.addItem("Weekly");
-				timeFreq.addItem("Monthly");
-				break;
-			case 3:
-				timeFreq.addItem("Daily");
-				timeFreq.addItem("Weekly");
-				timeFreq.addItem("Monthly");
-				break;
-			case 2:
-				timeFreq.addItem("Daily");
-				timeFreq.addItem("Weekly");
-				break;
-			case 1:
-				timeFreq.addItem("Minutely");
-				timeFreq.addItem("Daily");
-				break;
-			case 0:
-				timeFreq.addItem("Minutely");
-			}
-			
-			if(stock!=null)
-				stock.setTimeFrame(timeframeFromIndex(index));
-			
-			timeFreq.addActionListener(timeFreqListener);
-			
-			if(dropdownsShouldRespond.getState()){
-				timeFreq.setSelectedIndex(0);//force timeFreq to update. This will make 'refresh' unnecessary
-				refresh();
-			}
-			
+			changeTimeFrame(timeframeFromIndex(index));
 			timeScaleOldIndex = index;
 		}
 	}
@@ -109,10 +66,16 @@ public class CrassusPlotPane extends JPanel {
 	
 	private JComboBox<String> timeframe;
 	private JComboBox<String> timeFreq;
+	private TimeScaleChangeListener timeframeListener;
 	private TimeFreqChangeListener timeFreqListener;
 	private Stock stock;
 	
 	private UndoableStack undoables;
+	
+	private JMenuItem mSetTimeFreqMinutely;
+	private JMenuItem mSetTimeFreqDaily;
+	private JMenuItem mSetTimeFreqWeekly;
+	private JMenuItem mSetTimeFreqMonthly;
 	
 	public CrassusPlotPane(UndoableStack undoables){
 		this.undoables = undoables;
@@ -143,7 +106,9 @@ public class CrassusPlotPane extends JPanel {
 		timeframe.addItem("One Month");
 		timeframe.addItem("One Year");
 		timeframe.addItem("Five Years");
-		timeframe.addActionListener(new TimeScaleChangeListener());
+		
+		timeframeListener = new TimeScaleChangeListener();
+		timeframe.addActionListener(timeframeListener);
 		
 		timeFreq = new JComboBox<String>();
 		timeFreq.addItem("Minutely");
@@ -196,6 +161,102 @@ public class CrassusPlotPane extends JPanel {
 		}
 	}
 	
+	private int indexFromTimeFrame(TimeFrame tf){
+		switch(tf){
+		case DAILY:
+			return 0;
+		case WEEKLY:
+			return 1;
+		case MONTHLY:
+			return 2;
+		case YEARLY:
+			return 3;
+		case FIVE_YEAR:
+		default:
+			return 4;
+		}
+	}
+
+	private int timeScaleOldIndex=0;
+	
+	public void changeTimeFrame(TimeFrame tf){
+
+		timeFreq.removeActionListener(timeFreqListener);//must be done to keep timeFreq from going bannanas; added back at the end of function
+		timeFreq.removeAllItems();
+		switch(tf){
+		case FIVE_YEAR:
+			mSetTimeFreqMinutely.setEnabled(false);
+			
+			timeFreq.addItem("Daily");
+			mSetTimeFreqDaily.setEnabled(true);
+			timeFreq.addItem("Weekly");
+			mSetTimeFreqWeekly.setEnabled(true);
+			timeFreq.addItem("Monthly");
+			mSetTimeFreqMonthly.setEnabled(true);
+			break;
+		case YEARLY:
+			mSetTimeFreqMinutely.setEnabled(false);
+			
+			timeFreq.addItem("Daily");
+			mSetTimeFreqDaily.setEnabled(true);
+			timeFreq.addItem("Weekly");
+			mSetTimeFreqWeekly.setEnabled(true);
+			timeFreq.addItem("Monthly");
+			mSetTimeFreqMonthly.setEnabled(true);
+			break;
+		case MONTHLY:
+			mSetTimeFreqMinutely.setEnabled(false);
+			
+			timeFreq.addItem("Daily");
+			mSetTimeFreqDaily.setEnabled(true);
+			timeFreq.addItem("Weekly");
+			mSetTimeFreqWeekly.setEnabled(true);
+			
+			mSetTimeFreqMonthly.setEnabled(false);
+			break;
+		case WEEKLY:
+			timeFreq.addItem("Minutely");
+			mSetTimeFreqMinutely.setEnabled(true);
+			timeFreq.addItem("Daily");
+			mSetTimeFreqDaily.setEnabled(true);
+			
+			mSetTimeFreqWeekly.setEnabled(false);
+			mSetTimeFreqMonthly.setEnabled(false);
+			break;
+		case DAILY:
+			timeFreq.addItem("Minutely");
+			mSetTimeFreqMinutely.setEnabled(true);
+
+			mSetTimeFreqDaily.setEnabled(false);
+			mSetTimeFreqWeekly.setEnabled(false);
+			mSetTimeFreqMonthly.setEnabled(false);
+			break;
+		}
+		
+		if(stock!=null)
+			stock.setTimeFrame(tf);
+		
+		timeFreq.addActionListener(timeFreqListener);
+		//timeFreq can now respond. In fact we may want it to
+
+		
+		//the next four lines of code MUST occur before timeFreq.setSelectedIndex(0), or else undo functionality will not work
+		int index = indexFromTimeFrame(tf);
+		timeframe.removeActionListener(timeframeListener);
+		timeframe.setSelectedIndex(index);
+		timeframe.addActionListener(timeframeListener);
+		
+		if(dropdownsShouldRespond.getState()){
+			timeFreq.setSelectedIndex(0);//force timeFreq to update. This will make 'refresh' unnecessary
+		}
+		else{
+			refresh();
+		}
+		
+		timeScaleOldIndex = index;
+		
+	}
+	
 	private StockFreqType timeFreqFromIndex(int index){
 		
 		switch(timeframeFromIndex(timeframe.getSelectedIndex())){
@@ -219,6 +280,56 @@ public class CrassusPlotPane extends JPanel {
 		}
 	}
 	
+	private int indexFromTimeFreq(StockFreqType freq){
+		switch(timeframeFromIndex(timeframe.getSelectedIndex())){
+		case FIVE_YEAR:
+		case YEARLY:
+		case MONTHLY:
+			switch(freq){
+			case DAILY:
+				return 0;
+			case WEEKLY:
+				return 1;
+			case MONTHLY:
+			default:
+				return 2;
+			}
+		default:
+			switch(freq){
+			case MINUTELY:
+				return 0;
+			case DAILY:
+				return 1;
+			case WEEKLY:
+				return 2;
+			case MONTHLY:
+			default:
+				return 3;
+			}
+		}
+	}
+
+	public void changeTimeFreq(StockFreqType freq) {
+
+		int index = indexFromTimeFreq(freq);
+		
+		if(dropdownsShouldRespond.getState())
+			undoables.push(new DropdownSelectionUndoable(dropdownsShouldRespond, 
+					timeFreq, timeFreqOldIndex, index, 
+					timeframe, timeScaleOldIndex, timeframe.getSelectedIndex()));
+		
+		if(stock!=null){
+			stock.setCurrFreq(freq);
+			refresh();
+		}
+		
+		timeFreq.removeActionListener(timeFreqListener);
+		timeFreq.setSelectedIndex(index);
+		timeFreq.addActionListener(timeFreqListener);
+		
+		timeFreqOldIndex = index;
+	}
+
 	public void refresh(){
 		//check width of primaryPanel because when pane is swapped out it will be zero, plot object flips out
 		if(stock==null || primaryPanel.getWidth()==0){
@@ -246,6 +357,20 @@ public class CrassusPlotPane extends JPanel {
 	
 		primaryPanel.revalidate();
 		primaryPanel.repaint();
+	}
+
+	public void setMenuItems(
+			JMenuItem mSetTimeFreqMinutely,
+			JMenuItem mSetTimeFreqDaily, 
+			JMenuItem mSetTimeFreqWeekly,
+			JMenuItem mSetTimeFreqMonthly) {
+		this.mSetTimeFreqMinutely = mSetTimeFreqMinutely;
+		this.mSetTimeFreqDaily = mSetTimeFreqDaily;
+		mSetTimeFreqDaily.setEnabled(false);
+		this.mSetTimeFreqWeekly = mSetTimeFreqWeekly;
+		mSetTimeFreqWeekly.setEnabled(false);
+		this.mSetTimeFreqMonthly = mSetTimeFreqMonthly;
+		mSetTimeFreqMonthly.setEnabled(false);
 	}
 	
 }

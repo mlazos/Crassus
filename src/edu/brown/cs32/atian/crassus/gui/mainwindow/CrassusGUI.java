@@ -29,7 +29,9 @@ import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 import edu.brown.cs32.atian.crassus.gui.dialogs.DotCrassusFileGui;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.plot.CrassusPlotPane;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator.CrassusIndicatorTablePane;
@@ -250,16 +252,71 @@ public class CrassusGUI implements GUI {
 		plotMenu.addSeparator();
 		
 		JMenuItem mSetTimeScaleOneDay = new JMenuItem("Plot One Day");
-		//TODO action listener
+		mSetTimeScaleOneDay.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.DAILY);}
+				});
 		plotMenu.add(mSetTimeScaleOneDay);
 		
 		JMenuItem mSetTimeScaleOneWeek = new JMenuItem("Plot One Week");
-		//TODO action listener
+		mSetTimeScaleOneWeek.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.WEEKLY);}
+				});
 		plotMenu.add(mSetTimeScaleOneWeek);
 		
 		JMenuItem mSetTimeScaleOneMonth = new JMenuItem("Plot One Month");
-		//TODO action listener
+		mSetTimeScaleOneMonth.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.MONTHLY);}
+				});
 		plotMenu.add(mSetTimeScaleOneMonth);
+		
+		JMenuItem mSetTimeScaleOneYear = new JMenuItem("Plot One Year");
+		mSetTimeScaleOneYear.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.YEARLY);}
+				});
+		plotMenu.add(mSetTimeScaleOneYear);
+		
+		JMenuItem mSetTimeScaleFiveYears = new JMenuItem("Plot Five Years");
+		mSetTimeScaleFiveYears.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.FIVE_YEAR);}
+				});
+		plotMenu.add(mSetTimeScaleFiveYears);
+		
+		plotMenu.addSeparator();
+		
+		JMenuItem mSetTimeFreqMinutely = new JMenuItem("Use Intervals Of One Minute");
+		mSetTimeFreqMinutely.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFreq(StockFreqType.MINUTELY);}
+				});
+		plotMenu.add(mSetTimeFreqMinutely);
+		
+		JMenuItem mSetTimeFreqDaily = new JMenuItem("Use Intervals Of One Day");
+		mSetTimeFreqDaily.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFreq(StockFreqType.DAILY);}
+				});
+		plotMenu.add(mSetTimeFreqDaily);
+		
+		JMenuItem mSetTimeFreqWeekly = new JMenuItem("Use Intervals Of One Week");
+		mSetTimeFreqWeekly.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFreq(StockFreqType.WEEKLY);}
+				});
+		plotMenu.add(mSetTimeFreqWeekly);
+		
+		JMenuItem mSetTimeFreqMonthly = new JMenuItem("Use Intervals Of One Month");
+		mSetTimeFreqMonthly.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFreq(StockFreqType.MONTHLY);}
+				});
+		plotMenu.add(mSetTimeFreqMonthly);
+		
+		plotPane.setMenuItems(mSetTimeFreqMinutely,mSetTimeFreqDaily,mSetTimeFreqWeekly,mSetTimeFreqMonthly);
 		
 		//TODO etc......
 		
