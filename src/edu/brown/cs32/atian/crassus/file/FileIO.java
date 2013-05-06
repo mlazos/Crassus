@@ -25,22 +25,106 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.backend.StockListImpl;
+import edu.brown.cs32.atian.crassus.indicators.BollingerBands;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
+import edu.brown.cs32.atian.crassus.indicators.MACD;
+import edu.brown.cs32.atian.crassus.indicators.PivotPoints;
+import edu.brown.cs32.atian.crassus.indicators.PriceChannel;
+import edu.brown.cs32.atian.crassus.indicators.RSI;
+import edu.brown.cs32.atian.crassus.indicators.StochasticOscillator;
 
 public class FileIO {
+	
+	
+
+	private void writeIndicator(Document doc, Element elStock, Indicator indicator) {
+		
+		Element elIndicator = doc.createElement("indicator");
+		
+		String visible = Boolean.toString(indicator.getVisible());
+		elIndicator.setAttribute("visible", visible);
+		
+		String active = Boolean.toString(indicator.getActive());
+		elIndicator.setAttribute("active", active);
+		
+		if(indicator instanceof BollingerBands){
+			
+			BollingerBands bb = (BollingerBands) indicator;
+			elIndicator.setAttribute("implementation", "BollingerBands");
+			
+			String period = Integer.toString(bb.getPeriod());
+			elIndicator.setAttribute("period", period);
+			
+			String bandWidth = Integer.toString(bb.getBandWidth());
+			elIndicator.setAttribute("bandWidth", bandWidth);
+			
+		}
+		else if(indicator instanceof MACD){
+			
+			MACD macd = (MACD) indicator;
+			elIndicator.setAttribute("implementation", "MACD");
+			
+			String shortPeriod = Integer.toString(macd.getShortPeriod());
+			elIndicator.setAttribute("shortPeriod", shortPeriod);
+			
+			String signalPeriod = Integer.toString(macd.getSignalPeriod());
+			elIndicator.setAttribute("signalPeriod", signalPeriod);
+			
+			String longPeriod = Integer.toString(macd.getLongPeriod());
+			elIndicator.setAttribute("longPeriod",longPeriod);
+			
+		}
+		else if(indicator instanceof PivotPoints){
+			
+			PivotPoints pp = (PivotPoints) indicator;
+			elIndicator.setAttribute("implementation", "PivotPoints");
+			
+			String pivotOption = pp.getPivotOption();
+			elIndicator.setAttribute("pivotOption", pivotOption);
+			
+		}
+		else if(indicator instanceof PriceChannel){
+			
+			PriceChannel pc = (PriceChannel) indicator;
+			elIndicator.setAttribute("implementation", "PriceChannel");
+			
+			String lookBackPeriod = Integer.toString(pc.getLookBackPeriod());
+			elIndicator.setAttribute("lookBackPeriod", lookBackPeriod);
+			
+		}
+		else if(indicator instanceof RSI){
+			
+			RSI rsi = (RSI) indicator;
+			elIndicator.setAttribute("implementation", "rsi");
+			
+			String period = Integer.toString(rsi.getPeriod());
+			elIndicator.setAttribute("period", period);
+			
+		}
+		else if(indicator instanceof StochasticOscillator){
+			
+			StochasticOscillator so = (StochasticOscillator) indicator;
+			elIndicator.setAttribute("implementation", "StochasticOscillator");
+			
+			String period = Integer.toString(so.getPeriod());
+			elIndicator.setAttribute("period", period);
+			
+		}
+	}
 	
 	private void writeStock(Document doc, Element parent, Stock stock){
 		
 		Element elStock = doc.createElement("stock");
-		
 		elStock.setAttribute("ticker",stock.getTicker());
 		
-		//TODO add contained indicators
+		for(Indicator indicator: stock.getEventList()){
+			writeIndicator(doc, elStock, indicator);
+		}
 		
 		parent.appendChild(elStock);
 		
 	}
-
-
+	
 	private Stock readStock(Element parent) {
 		
 		String ticker = parent.getAttribute("ticker");

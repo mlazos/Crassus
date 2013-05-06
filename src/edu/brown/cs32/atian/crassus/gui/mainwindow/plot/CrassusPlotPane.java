@@ -352,6 +352,9 @@ public class CrassusPlotPane extends JPanel {
 			if(plot.isRsOn()){
 				BufferedImage rs = plot.getRsBufferedImage(rsPanel.getWidth(), rsPanel.getHeight());
 				rsPanel.setImage(rs);
+				
+				rsPanel.revalidate();
+				rsPanel.repaint();
 			}
 		}
 	
