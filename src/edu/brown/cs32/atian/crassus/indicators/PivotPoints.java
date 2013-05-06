@@ -42,9 +42,11 @@ public class PivotPoints implements Indicator {
 	private int pivotType;
 	private boolean isVisible;
 	private boolean isActive;
+	private String pivotOption;
 	
 	public PivotPoints(List<StockTimeFrameData> data, String pivotOption) {
 		this.data = data;
+		this.pivotOption = pivotOption;
 		pivotPoints = new ArrayList<IndicatorDatum>();
 		support1 = new ArrayList<IndicatorDatum>();
 		support2 = new ArrayList<IndicatorDatum>();
@@ -63,6 +65,12 @@ public class PivotPoints implements Indicator {
         }
 		refresh(data);
 	}
+	
+	// Indicator parameters
+	public String getPivotOption() {
+		return pivotOption;
+	}
+	//
 
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {

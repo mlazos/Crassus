@@ -47,6 +47,12 @@ public class StochasticOscillator implements Indicator {
 		refresh(data);
 	}
 	
+	// Indicator parameters
+	public int getPeriod() {
+		return period;
+	}
+	//
+	
 	public List<IndicatorDatum> getStocOscillator() {
 		return stocOscillator;
 	}

@@ -14,32 +14,34 @@ public class BollingerBandsTest {
 
 	private static BollingerBands bb; 
 	
+	private static List<StockTimeFrameData> data;
+	
 	@BeforeClass
 	public static void setUp() {
 		
 		//new StockTimeFrameData(String time, double open, double high, double low,
 	    //        double close, int volume, double adjustedClose)
 		
-		List<StockTimeFrameData> data = new ArrayList<>();
-		data.add(new StockTimeFrameData("a", 0, 0, 0, 0, 0, 88.71, false)); 
-		data.add(new StockTimeFrameData("b", 0, 0, 0, 0, 0, 89.05, false)); 
-		data.add(new StockTimeFrameData("c", 0, 0, 0, 0, 0, 89.24, false)); 
-		data.add(new StockTimeFrameData("d", 0, 0, 0, 0, 0, 89.39, false));	
-		data.add(new StockTimeFrameData("e", 0, 0, 0, 0, 0, 89.51, false)); 
-		data.add(new StockTimeFrameData("f", 0, 0, 0, 0, 0, 89.69, false)); 
-		data.add(new StockTimeFrameData("g", 0, 0, 0, 0, 0, 89.75, false)); 	
-		data.add(new StockTimeFrameData("h", 0, 0, 0, 0, 0, 89.91, false)); 
-		data.add(new StockTimeFrameData("i", 0, 0, 0, 0, 0, 90.08, false)); 
-		data.add(new StockTimeFrameData("j", 0, 0, 0, 0, 0, 90.38, false)); 
-		data.add(new StockTimeFrameData("k", 0, 0, 0, 0, 0, 90.66, false)); 
-		data.add(new StockTimeFrameData("l", 0, 0, 0, 0, 0, 90.86, false)); 
-		data.add(new StockTimeFrameData("m", 0, 0, 0, 0, 0, 90.88, false)); 
-		data.add(new StockTimeFrameData("n", 0, 0, 0, 0, 0, 90.91, false)); 
-		data.add(new StockTimeFrameData("o", 0, 0, 0, 0, 0, 90.99, false)); 
-		data.add(new StockTimeFrameData("p", 0, 0, 0, 0, 0, 91.15, false));
-		data.add(new StockTimeFrameData("q", 0, 0, 0, 0, 0, 91.19, false)); 
-		data.add(new StockTimeFrameData("r", 0, 0, 0, 0, 0, 91.12, false)); 
-		data.add(new StockTimeFrameData("s", 0, 0, 0, 0, 0, 91.17, false)); 
+		data = new ArrayList<>();
+		data.add(new StockTimeFrameData("11", 0, 0, 0, 0, 0, 88.71, false)); 
+		data.add(new StockTimeFrameData("12", 0, 0, 0, 0, 0, 89.05, false)); 
+		data.add(new StockTimeFrameData("13", 0, 0, 0, 0, 0, 89.24, false)); 
+		data.add(new StockTimeFrameData("14", 0, 0, 0, 0, 0, 89.39, false));	
+		data.add(new StockTimeFrameData("15", 0, 0, 0, 0, 0, 89.51, false)); 
+		data.add(new StockTimeFrameData("16", 0, 0, 0, 0, 0, 89.69, false)); 
+		data.add(new StockTimeFrameData("17", 0, 0, 0, 0, 0, 89.75, false)); 	
+		data.add(new StockTimeFrameData("18", 0, 0, 0, 0, 0, 89.91, false)); 
+		data.add(new StockTimeFrameData("19", 0, 0, 0, 0, 0, 90.08, false)); 
+		data.add(new StockTimeFrameData("20", 0, 0, 0, 0, 0, 90.38, false)); 
+		data.add(new StockTimeFrameData("21", 0, 0, 0, 0, 0, 90.66, false)); 
+		data.add(new StockTimeFrameData("22", 0, 0, 0, 0, 0, 90.86, false)); 
+		data.add(new StockTimeFrameData("23", 0, 0, 0, 0, 0, 90.88, false)); 
+		data.add(new StockTimeFrameData("24", 0, 0, 0, 0, 0, 90.91, false)); 
+		data.add(new StockTimeFrameData("25", 0, 0, 0, 0, 0, 90.99, false)); 
+		data.add(new StockTimeFrameData("26", 0, 0, 0, 0, 0, 91.15, false));
+		data.add(new StockTimeFrameData("27", 0, 0, 0, 0, 0, 91.19, false)); 
+		data.add(new StockTimeFrameData("28", 0, 0, 0, 0, 0, 91.12, false)); 
+		data.add(new StockTimeFrameData("29", 0, 0, 0, 0, 0, 91.17, false)); 
 		data.add(new StockTimeFrameData("1", 0, 0, 0, 0, 0, 91.25, false)); 
 		data.add(new StockTimeFrameData("2", 0, 0, 0, 0, 0, 91.24, false)); 
 		data.add(new StockTimeFrameData("3", 0, 0, 0, 0, 0, 91.17, false)); 
@@ -112,12 +114,6 @@ public class BollingerBandsTest {
 		assertTrue(Math.abs(lowerBand.get(3).getValue()) - 89.3530 < 0.00001);
 		assertTrue(lowerBand.get(3).getTimeLabel().equals("4"));
 	}
-	
-	@Test
-	public void testGetTestResults() {
-		
-		System.out.println("test results: "+ bb.getTestResults());
-	
-	}
+
 	
 }
