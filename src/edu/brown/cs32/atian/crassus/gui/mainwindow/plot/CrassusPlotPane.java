@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.border.EtchedBorder;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
@@ -104,6 +105,8 @@ public class CrassusPlotPane extends JPanel {
 
 	private CrassusImageDisplayer primaryPanel;
 	private CrassusImageDisplayer rsPanel;
+	private boolean rsOnState;
+	
 	private JComboBox<String> timeframe;
 	private JComboBox<String> timeFreq;
 	private TimeFreqChangeListener timeFreqListener;
@@ -123,17 +126,16 @@ public class CrassusPlotPane extends JPanel {
 						BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)),
 				BorderFactory.createEmptyBorder(5,5,5,5)));
 		
-		JPanel imagePanel = new JPanel();
-		imagePanel.setLayout(new BorderLayout());
-		
 		primaryPanel = new CrassusImageDisplayer();
-		imagePanel.add(primaryPanel, BorderLayout.CENTER);
 		
 		rsPanel = new CrassusImageDisplayer();
-		rsPanel.setMinimumSize(new Dimension(50,100));
-		imagePanel.add(rsPanel, BorderLayout.SOUTH);
 		
-		this.add(imagePanel,BorderLayout.CENTER);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,primaryPanel,rsPanel);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(350);
+		this.add(splitPane,BorderLayout.CENTER);
+		//splitPane.setDividerLocation(splitPane.getSize().width - splitPane.getInsets().bottom - splitPane.getDividerSize() - 100);
+		splitPane.setResizeWeight(1.0);
 		
 		timeframe = new JComboBox<String>();
 		timeframe.addItem("One Day");
@@ -224,9 +226,7 @@ public class CrassusPlotPane extends JPanel {
 		else{
 			PlotWrapper plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
 			plot.setAxesTitles("Time", "Price");
-//			
-//			plot.setRsOnSameChart(false);
-//			
+			
 			stock.addToPlot(plot);
 			System.out.println("checkpoint 1");
 			for (Indicator ind: stock.getEventList()){
@@ -239,11 +239,11 @@ public class CrassusPlotPane extends JPanel {
 			
 			BufferedImage primary = plot.getPrimaryBufferedImage(primaryPanel.getWidth(), primaryPanel.getHeight());
 			primaryPanel.setImage(primary);
-//			
-//			if(plot.isRsOn()){
-//				BufferedImage rs = plot.getRsBufferedImage(rsPanel.getWidth(), rsPanel.getHeight());
-//				rsPanel.setImage(rs);
-//			}
+			
+			if(plot.isRsOn()){
+				BufferedImage rs = plot.getRsBufferedImage(rsPanel.getWidth(), rsPanel.getHeight());
+				rsPanel.setImage(rs);
+			}
 		}
 	
 		primaryPanel.revalidate();
