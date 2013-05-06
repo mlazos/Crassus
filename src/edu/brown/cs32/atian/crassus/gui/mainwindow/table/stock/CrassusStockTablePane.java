@@ -225,7 +225,7 @@ public class CrassusStockTablePane extends JPanel {
 				}
 			}
 			
-			Stock stock = new StockImpl(symbol);
+			Stock stock = stocks.createStock(symbol);
 			int previousIndex = table.getSelectedRow();
 			model.addLastStock(stock);
 			undoables.push(new AddStockUndoable(model, stock, previousIndex, selector));

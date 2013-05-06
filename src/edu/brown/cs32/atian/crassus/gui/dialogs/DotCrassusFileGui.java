@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
+import edu.brown.cs32.atian.crassus.backend.DataSourceType;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.backend.StockListImpl;
 import edu.brown.cs32.atian.crassus.file.FileIO;
@@ -36,8 +37,11 @@ public class DotCrassusFileGui {
 							"Your connection with the server has been lost. You can either try to connect again, or exit the program",  
 							"Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0);
 					if(result==1){
-						frame.dispose();
-						return;
+						
+						if(maybeSave("Would you like to save before you exit?")){
+							frame.dispose();
+							return;
+						}
 					}
 				}
 			}
@@ -99,7 +103,15 @@ public class DotCrassusFileGui {
 		if(fcResult == JFileChooser.APPROVE_OPTION){
 			File file = new File(ExtensionUtils.setExtension("crassus",fc.getSelectedFile().getAbsolutePath()));
 			
-			return tryWrite(file);
+			if(file.exists()){
+				int result = JOptionPane.showConfirmDialog(frame, file.getName() + " already exists in this directory. Would you like to overwrite it?");
+				if(result==0)
+					return tryWrite(file);
+				if(result==1)
+					return fileSaveAs();
+				if(result==2)
+					return false;
+			}
 		}
 		return false;
 	}
@@ -129,7 +141,18 @@ public class DotCrassusFileGui {
 		if(timer!=null)
 			timer.stop();
 		
-		StockList stocks = new StockListImpl();
+		String[] possibilities = {"Yahoo Finance","Demo Data"};
+		String result = (String) JOptionPane.showInputDialog(frame, "choose a data source", "Message", 
+				JOptionPane.PLAIN_MESSAGE, null, possibilities, "Yahoo Finance");
+		
+		DataSourceType source;
+		
+		if("Yahoo Finance".equals(result))
+			source = DataSourceType.YAHOOFINANCE;
+		else
+			source = DataSourceType.DEMODATA;
+		
+		StockList stocks = new StockListImpl(source);
 		
 		this.stocks = stocks;
 		
