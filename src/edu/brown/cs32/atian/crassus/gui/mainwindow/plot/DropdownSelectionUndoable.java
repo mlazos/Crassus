@@ -43,4 +43,14 @@ public class DropdownSelectionUndoable implements Undoable {
 		dropdownsRespond.setState(true);
 	}
 
+	@Override
+	public boolean isIntense() {
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return "Change Of Plotting Options";
+	}
+
 }

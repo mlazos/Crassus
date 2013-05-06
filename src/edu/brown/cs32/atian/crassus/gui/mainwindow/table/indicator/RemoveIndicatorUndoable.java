@@ -30,4 +30,14 @@ public class RemoveIndicatorUndoable implements Undoable {
 		model.removeIndicator(index);
 	}
 
+	@Override
+	public boolean isIntense() {
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "Removed "+ind.getName()+" Indicator";
+	}
+
 }

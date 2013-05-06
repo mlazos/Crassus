@@ -30,4 +30,14 @@ public class RemoveStockUndoable implements Undoable {
 		model.removeStock(index);
 	}
 
+	@Override
+	public boolean isIntense() {
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "Removal Of Stock "+stock.getTicker();
+	}
+
 }

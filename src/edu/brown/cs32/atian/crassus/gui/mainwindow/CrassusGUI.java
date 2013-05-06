@@ -37,6 +37,7 @@ import edu.brown.cs32.atian.crassus.gui.mainwindow.plot.CrassusPlotPane;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator.CrassusIndicatorTablePane;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock.CrassusStockTablePane;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
+import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStackListener;
 
 /**
  * @author Matthew
@@ -79,12 +80,39 @@ public class CrassusGUI implements GUI {
 	private DotCrassusFileGui fileGui;
 	
 	private UndoableStack undoables;
+	private JMenuItem mUndo;
+	private JMenuItem mRedo;
+	
+	private class UndoStateListener implements UndoableStackListener{
+		@Override
+		public void changeUndo(String string) {
+			if(string==null){ 
+				mUndo.setText("Undo");
+				mUndo.setEnabled(false);  
+			}
+			else{ 
+				mUndo.setText("Undo "+string);
+				mUndo.setEnabled(true);  
+			}
+		}
+		@Override
+		public void changeRedo(String string) {
+			if(string==null){  
+				mRedo.setText("Redo");  
+				mRedo.setEnabled(false);  }
+			else{  
+				mRedo.setText("Redo "+string); 
+				mRedo.setEnabled(true);  
+			}
+		}
+	};
 
 	public CrassusGUI() {
 		frame = new JFrame("Crassus");
 		
-		undoables = new UndoableStack(32);
-		
+		undoables = new UndoableStack(
+				32,new UndoStateListener());
+
 		fileGui = new DotCrassusFileGui(frame,this);
 		
 		
@@ -194,21 +222,23 @@ public class CrassusGUI implements GUI {
 		editMenu.setMnemonic(KeyEvent.VK_F2);
 		menuBar.add(editMenu);
 		
-		JMenuItem mUndo = new JMenuItem("Undo");
+		mUndo = new JMenuItem("Undo");
 		mUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK));
 		mUndo.addActionListener(
 				new ActionListener(){@Override 
 					public void actionPerformed(ActionEvent e) {undoables.undo();}
 				});
 		editMenu.add(mUndo);
+		mUndo.setEnabled(false);
 		
-		JMenuItem mRedo = new JMenuItem("Redo");
+		mRedo = new JMenuItem("Redo");
 		mRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,InputEvent.CTRL_DOWN_MASK));
 		mRedo.addActionListener(
 				new ActionListener(){@Override
 					public void actionPerformed(ActionEvent e) {undoables.redo();}
 				});
 		editMenu.add(mRedo);
+		mRedo.setEnabled(false);
 		
 		//ADDING TICKER MENU
 		

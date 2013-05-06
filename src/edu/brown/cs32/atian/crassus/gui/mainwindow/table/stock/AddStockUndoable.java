@@ -30,4 +30,14 @@ public class AddStockUndoable implements Undoable {
 		selector.selectLast();
 	}
 
+	@Override
+	public boolean isIntense() {
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "Addition Of Stock "+stock.getTicker();
+	}
+
 }

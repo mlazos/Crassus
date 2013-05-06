@@ -31,4 +31,15 @@ public class AlertBoxUndoable implements Undoable {
 			table.getCellEditor().cancelCellEditing();
 	}
 
+	@Override
+	public boolean isIntense() {
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "Toggled Alerts For Indicator";
+	}
+	
+
 }

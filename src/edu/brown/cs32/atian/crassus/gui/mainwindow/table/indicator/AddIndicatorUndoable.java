@@ -33,4 +33,14 @@ public class AddIndicatorUndoable implements Undoable {
 		selector.selectLast();
 	}
 
+	@Override
+	public boolean isIntense() {
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "Added "+ind.getName()+" Indicator";
+	}
+
 }

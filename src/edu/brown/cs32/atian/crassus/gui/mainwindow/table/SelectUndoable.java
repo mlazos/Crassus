@@ -24,4 +24,13 @@ public class SelectUndoable implements Undoable {
 		selector.select(newIndex);
 	}
 
+	@Override
+	public boolean isIntense() {
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return "Change Of " + selector.getTableType() + " Selection";
+	}
 }

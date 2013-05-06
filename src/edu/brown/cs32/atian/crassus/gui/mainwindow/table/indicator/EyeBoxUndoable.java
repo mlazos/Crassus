@@ -35,4 +35,14 @@ public class EyeBoxUndoable implements Undoable {
 		plotListener.informPlotIsObsolete();
 	}
 
+	@Override
+	public boolean isIntense() {
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "Toggled Indicator Visibility";
+	}
+
 }

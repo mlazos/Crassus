@@ -4,6 +4,8 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator.CrassusIndicatorTable;
+
 public class CrassusTableRowSelector {
 
 	private JTable table;
@@ -64,6 +66,13 @@ public class CrassusTableRowSelector {
 		shouldRegisterSelection = true;
 		
 		stopEditing();
+	}
+	
+	public String getTableType() {
+		if(table instanceof CrassusIndicatorTable)
+			return "Indicator";
+		else
+			return "Ticker";
 	}
 
 }
