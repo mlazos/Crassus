@@ -39,45 +39,60 @@ public class StockRealTimeDataImplTest {
     @After
     public void tearDown() {
     }
+//
+//    /**
+//     * Test of getRealTimeData method, of class StockRealTimeDataImpl.
+//     */
+//    @Test
+//    public void testGetRealTimeData() {
+//        System.out.println("getRealTimeData");
+//        //System.out.println(System.currentTimeMillis());
+//        StockRealTimeDataImpl instance = new StockRealTimeDataImpl("goog");
+//        instance.Init();
+//        
+//  
+//        long now = System.currentTimeMillis();
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(now);
+//        String timeStampNow = calendar.getTime().toString();
+//        System.out.println("Current time: " + timeStampNow);
+//
+//        List<StockTimeFrameData> allRealTimeData = instance.getRealTimeData();
+//
+//        StockTimeFrameData firstData = allRealTimeData.get(0);
+//        
+//        String open = instance.getOpenPrice();
+//        System.out.println("Open: " + open);
+//        
+//        String price = instance.getCurrPrice();
+//        System.out.println("price: " + price);        
+//        
+//        long tmp = (Long.parseLong(firstData.getTime()));
+//        tmp = tmp * 1000;
+//        calendar.setTimeInMillis(tmp);
+//        String timeStamp = calendar.getTime().toString();
+//        System.out.println("First data timestamp: " + timeStamp);
+//
+//        StockTimeFrameData lastData = allRealTimeData.get(allRealTimeData.size() - 1);
+//        tmp = (Long.parseLong(lastData.getTime()));
+//        tmp = tmp * 1000;  // to miniseconds
+//        calendar.setTimeInMillis(tmp);
+//        timeStamp = calendar.getTime().toString();
+//        System.out.println("Latest data timestamp: " +  tmp);
+//        System.out.println("Latest data timestamp: " +  timeStamp);
+//    }
+    
 
     /**
      * Test of getRealTimeData method, of class StockRealTimeDataImpl.
      */
     @Test
-    public void testGetRealTimeData() {
-        System.out.println("getRealTimeData");
+    public void testGetCurrPrice() {
+        System.out.println("getRealTimeData curr");
         //System.out.println(System.currentTimeMillis());
-        StockRealTimeDataImpl instance = new StockRealTimeDataImpl("goog");
+        StockRealTimeDataImpl instance = new StockRealTimeDataImpl("msft");
         instance.Init();
-        
-        long now = System.currentTimeMillis();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(now);
-        String timeStampNow = calendar.getTime().toString();
-        System.out.println("Current time: " + timeStampNow);
+        System.out.println(instance.getCurrPrice());
 
-        List<StockTimeFrameData> allRealTimeData = instance.getRealTimeData();
-
-        StockTimeFrameData firstData = allRealTimeData.get(0);
-        
-        String open = instance.getOpenPrice();
-        System.out.println("Open: " + open);
-        
-        String price = instance.getCurrPrice();
-        System.out.println("price: " + price);        
-        
-        long tmp = (Long.parseLong(firstData.getTime()));
-        tmp = tmp * 1000;
-        calendar.setTimeInMillis(tmp);
-        String timeStamp = calendar.getTime().toString();
-        System.out.println("First data timestamp: " + timeStamp);
-
-        StockTimeFrameData lastData = allRealTimeData.get(allRealTimeData.size() - 1);
-        tmp = (Long.parseLong(lastData.getTime()));
-        tmp = tmp * 1000;  // to miniseconds
-        calendar.setTimeInMillis(tmp);
-        timeStamp = calendar.getTime().toString();
-        System.out.println("Latest data timestamp: " +  tmp);
-        System.out.println("Latest data timestamp: " +  timeStamp);
-    }
+    }    
 }

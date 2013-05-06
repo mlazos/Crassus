@@ -31,10 +31,15 @@ public interface Stock {
     void setTimeFrame(Date beginTime, Date endTime);
     
     StockFreqType getCurrFreq();   // MINUTELY, DAILY, WEEKLY, MONTHLY
-    TimeFrame getTimeFrame();
+    TimeFrame getTimeFrame(); 
     
-    StockRealTimeData getStockRealTimeData();
-    
+    String getChgAndPertChg();    
+    String getOpenPrice();
+    String getCurrPrice();
+    String getTodayLow();
+    String getTodayHigh();
+    String getWeek52Low();
+    String getWeek52High();  
     List<StockTimeFrameData> getStockPriceData(StockFreqType freq);
     
     ArrayList<Indicator> getEventList();

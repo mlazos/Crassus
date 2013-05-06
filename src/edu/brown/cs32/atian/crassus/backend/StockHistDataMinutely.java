@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,8 @@ import java.util.regex.Pattern;
 public class StockHistDataMinutely implements StockHistData {
     private String _ticker;
     private List<StockTimeFrameData> _histData;
+    private Date latestCheckTime = null;
+   
     
     public StockHistDataMinutely(String ticker) {
         _ticker = ticker;
@@ -29,6 +32,13 @@ public class StockHistDataMinutely implements StockHistData {
     }
 
     public boolean Init() {
+        
+        Date now = new Date();        
+        
+        if( latestCheckTime != null && now.getTime() < latestCheckTime.getTime() + 300000) {   // minutely time only update once every 300 seond
+            return true;  
+        }
+        
         _histData.clear();
 
         String urlString = "http://chartapi.finance.yahoo.com/instrument/1.0/" + _ticker + "/chartdata;type=quote;range=15d/csv/";
@@ -39,6 +49,7 @@ public class StockHistDataMinutely implements StockHistData {
         String line = null;
 
         try {
+            latestCheckTime = now;
             serverAddress = new URL(urlString);
             //set up out communications stuff
             connection = null;
@@ -90,7 +101,7 @@ public class StockHistDataMinutely implements StockHistData {
                     
                 _histData.add(newTFData);   // from the earliest to the latest
             }
-
+            
             return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
