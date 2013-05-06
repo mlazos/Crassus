@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,9 +23,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.backend.StockListImpl;
+import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
 import edu.brown.cs32.atian.crassus.indicators.BollingerBands;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 import edu.brown.cs32.atian.crassus.indicators.MACD;
@@ -37,99 +40,183 @@ public class FileIO {
 	
 	
 
-	private void writeIndicator(Document doc, Element elStock, Indicator indicator) {
+	private void writeIndicator(Document doc, Element parent, Indicator indicator) {
 		
-		Element elIndicator = doc.createElement("indicator");
+		Element element = doc.createElement("indicator");
 		
 		String visible = Boolean.toString(indicator.getVisible());
-		elIndicator.setAttribute("visible", visible);
+		element.setAttribute("visible", visible);
 		
 		String active = Boolean.toString(indicator.getActive());
-		elIndicator.setAttribute("active", active);
+		element.setAttribute("active", active);
 		
 		if(indicator instanceof BollingerBands){
 			
 			BollingerBands bb = (BollingerBands) indicator;
-			elIndicator.setAttribute("implementation", "BollingerBands");
+			element.setAttribute("implementation", "BollingerBands");
 			
 			String period = Integer.toString(bb.getPeriod());
-			elIndicator.setAttribute("period", period);
+			element.setAttribute("period", period);
 			
 			String bandWidth = Integer.toString(bb.getBandWidth());
-			elIndicator.setAttribute("bandWidth", bandWidth);
+			element.setAttribute("bandWidth", bandWidth);
 			
 		}
 		else if(indicator instanceof MACD){
 			
 			MACD macd = (MACD) indicator;
-			elIndicator.setAttribute("implementation", "MACD");
+			element.setAttribute("implementation", "MACD");
 			
 			String shortPeriod = Integer.toString(macd.getShortPeriod());
-			elIndicator.setAttribute("shortPeriod", shortPeriod);
+			element.setAttribute("shortPeriod", shortPeriod);
 			
 			String signalPeriod = Integer.toString(macd.getSignalPeriod());
-			elIndicator.setAttribute("signalPeriod", signalPeriod);
+			element.setAttribute("signalPeriod", signalPeriod);
 			
 			String longPeriod = Integer.toString(macd.getLongPeriod());
-			elIndicator.setAttribute("longPeriod",longPeriod);
+			element.setAttribute("longPeriod",longPeriod);
 			
 		}
 		else if(indicator instanceof PivotPoints){
 			
 			PivotPoints pp = (PivotPoints) indicator;
-			elIndicator.setAttribute("implementation", "PivotPoints");
+			element.setAttribute("implementation", "PivotPoints");
 			
 			String pivotOption = pp.getPivotOption();
-			elIndicator.setAttribute("pivotOption", pivotOption);
+			element.setAttribute("pivotOption", pivotOption);
 			
 		}
 		else if(indicator instanceof PriceChannel){
 			
 			PriceChannel pc = (PriceChannel) indicator;
-			elIndicator.setAttribute("implementation", "PriceChannel");
+			element.setAttribute("implementation", "PriceChannel");
 			
 			String lookBackPeriod = Integer.toString(pc.getLookBackPeriod());
-			elIndicator.setAttribute("lookBackPeriod", lookBackPeriod);
+			element.setAttribute("lookBackPeriod", lookBackPeriod);
 			
 		}
 		else if(indicator instanceof RSI){
 			
 			RSI rsi = (RSI) indicator;
-			elIndicator.setAttribute("implementation", "rsi");
+			element.setAttribute("implementation", "RSI");
 			
 			String period = Integer.toString(rsi.getPeriod());
-			elIndicator.setAttribute("period", period);
+			element.setAttribute("period", period);
 			
 		}
 		else if(indicator instanceof StochasticOscillator){
 			
 			StochasticOscillator so = (StochasticOscillator) indicator;
-			elIndicator.setAttribute("implementation", "StochasticOscillator");
+			element.setAttribute("implementation", "StochasticOscillator");
 			
 			String period = Integer.toString(so.getPeriod());
-			elIndicator.setAttribute("period", period);
+			element.setAttribute("period", period);
 			
 		}
+		
+		parent.appendChild(element);
+		
+	}
+	
+	private Indicator readIndicator(List<StockTimeFrameData> data, Element element) {
+		
+		//Element elIndicator = doc.createElement("indicator");
+		
+		boolean visible = Boolean.parseBoolean(element.getAttribute("visible"));
+		boolean active = Boolean.parseBoolean(element.getAttribute("active"));
+		
+		Indicator indicator;
+		String implementation = element.getAttribute("implementation");
+		
+		if("BollingerBands".equals(implementation)){
+			
+			int period = Integer.parseInt(element.getAttribute("period"));
+			int bandWidth = Integer.parseInt(element.getAttribute("bandWidth"));
+			
+			indicator = new BollingerBands(data, period, bandWidth);
+			
+		}
+		else if("MACD".equals(implementation)){
+			
+			int shortPeriod = Integer.parseInt(element.getAttribute("shortPeriod"));
+			int signalPeriod = Integer.parseInt(element.getAttribute("signalPeriod"));
+			int longPeriod = Integer.parseInt(element.getAttribute("longPeriod"));
+			
+			indicator = new MACD(data, signalPeriod, shortPeriod, longPeriod);
+			
+		}
+		else if("PivotPoints".equals(implementation)){
+			
+			String pivotOption = element.getAttribute("pivotOption");
+			
+			indicator = new PivotPoints(data, pivotOption);
+			
+		}
+		else if("PriceChannel".equals(implementation)){
+			
+			int lookBackPeriod = Integer.parseInt(element.getAttribute("lookBackPeriod"));
+			
+			indicator = new PriceChannel(data, lookBackPeriod);
+			
+		}
+		else if("RSI".equals(implementation)){
+			
+			int period = Integer.parseInt(element.getAttribute("period"));
+			
+			indicator = new RSI(data,period);
+			
+		}
+		else if("StochasticOscillator".equals(implementation)){
+			
+			int period = Integer.parseInt(element.getAttribute("period"));
+			
+			indicator = new StochasticOscillator(data, period);
+			
+		}
+		else{
+			return null;
+		}
+		
+		indicator.setActive(active);
+		indicator.setVisible(visible);
+		return indicator;
+		
 	}
 	
 	private void writeStock(Document doc, Element parent, Stock stock){
 		
-		Element elStock = doc.createElement("stock");
-		elStock.setAttribute("ticker",stock.getTicker());
+		Element element = doc.createElement("stock");
+		element.setAttribute("ticker",stock.getTicker());
 		
 		for(Indicator indicator: stock.getEventList()){
-			writeIndicator(doc, elStock, indicator);
+			writeIndicator(doc, element, indicator);
 		}
 		
-		parent.appendChild(elStock);
+		parent.appendChild(element);
 		
 	}
 	
-	private Stock readStock(Element parent) {
+	private Stock readStock(Element element) {
 		
-		String ticker = parent.getAttribute("ticker");
+		String ticker = element.getAttribute("ticker");
 		Stock stock = new StockImpl(ticker);
-		//TODO deal with the contained indicators
+		
+		NodeList nList = element.getChildNodes();
+		
+		for(int i=0; i<nList.getLength(); i++){
+			
+			Node node = nList.item(i);
+			
+			if(node.getNodeType() == Node.ELEMENT_NODE && "indicator".equals(node.getNodeName())){
+				
+				Element child = (Element) node;
+				Indicator indicator = readIndicator(stock.getStockPriceData(stock.getCurrFreq()),child);
+				stock.addEvent(indicator);
+				
+			}
+			
+		}
+		
 		return stock;
 		
 	}
