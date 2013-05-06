@@ -132,6 +132,73 @@ public class PivotPoints implements Indicator {
 		}
 	}
 
+	
+	public void incrementalUpdate(StockTimeFrameData datum) {
+		
+		data.add(datum);
+		int lastIndex = data.size() - 1;
+		StockTimeFrameData previous = data.get(lastIndex - 1);
+		String currTimeLabel = datum.getTime();
+		long currTime = datum.getTimeInNumber();
+		double pivot = (previous.getHigh() + previous.getAdjustedClose() + previous.getLow()) / 3;
+		double high = previous.getHigh();
+		double low = previous.getLow();
+		
+		double s1, s2, s3, r1 = 0, r2, r3;
+		
+		if (pivotType == 0 || pivotType == 1) {
+			if (pivotType == 1) {								// fibonacci
+				s1 = pivot - (0.382 * (high - low));
+				s2 = pivot - (0.618 * (high - low));
+				s3 = pivot - (high - low);
+				r1 = pivot + (0.382 * (high - low));
+				r2 = pivot + (0.618 * (high - low));
+				r3 = pivot + (high - low);
+			
+			} else {											// standard pivot
+			
+				r1 = 2 * pivot - low;
+				s1 = 2 * pivot - high;
+				r2 = pivot + r1 - s1;
+				s2 = pivot - (r1 - s1);
+				s3 = low - 2 * (high - pivot);
+				r3 = high + 2 * (pivot - low);
+			
+			}
+			
+			pivotPoints.add(new IndicatorDatum(currTimeLabel, currTime, pivot));
+			support1.add(new IndicatorDatum(currTimeLabel, currTime, s1));
+			support2.add(new IndicatorDatum(currTimeLabel, currTime, s2));
+			support3.add(new IndicatorDatum(currTimeLabel, currTime, s3));
+			
+			resistance1.add(new IndicatorDatum(currTimeLabel, currTime, r1));
+			resistance2.add(new IndicatorDatum(currTimeLabel, currTime, r2));
+			resistance3.add(new IndicatorDatum(currTimeLabel, currTime, r3));
+		} else {	
+			double close = previous.getAdjustedClose();
+			double open = previous.getOpen();
+			double x;
+			if (close < open) {
+				x = high + (2 * low) + close;
+			} else if (close > open) {
+				x = (2 * high) + low + close;
+			} else {
+				x = high + low + (2 * close);
+			}
+			
+			pivot = x / 4;
+			s1 = x/2 - high;
+			r1 = x/2 - low;
+			
+			pivotPoints.add(new IndicatorDatum(currTimeLabel, currTime, pivot));
+			support1.add(new IndicatorDatum(currTimeLabel, currTime, s1));
+			resistance1.add(new IndicatorDatum(currTimeLabel, currTime, r1));
+			
+		}
+	
+	}
+	
+	
 	/**
 	 * Updates the standard pivot points and resistance and support lines. 
 	 */

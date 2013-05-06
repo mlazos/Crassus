@@ -45,7 +45,7 @@ public class BollingerBandsTest {
 		data.add(new StockTimeFrameData("1", 0, 0, 0, 0, 0, 91.25, false)); 
 		data.add(new StockTimeFrameData("2", 0, 0, 0, 0, 0, 91.24, false)); 
 		data.add(new StockTimeFrameData("3", 0, 0, 0, 0, 0, 91.17, false)); 
-		data.add(new StockTimeFrameData("4", 0, 0, 0, 0, 0, 91.05, false)); 
+		//data.add(new StockTimeFrameData("4", 0, 0, 0, 0, 0, 91.05, false)); 
 		bb = new BollingerBands(data, 20, 2);
 	}
 	
@@ -59,7 +59,7 @@ public class BollingerBandsTest {
 		assertTrue(Math.abs((bb.calcSMA(0, 5) - 89.265)) < 0.00001);			// 6 day SMA
 		assertTrue(Math.abs((bb.calcSMA(0, 6) - 89.33428571)) < 0.00001);		// 7 day SMA
 		assertTrue(bb.calcSMA(0, 19) == 90.2945);								// 20 day SMA
-		assertTrue(Math.abs((bb.calcSMA(18, 22) - 91.176)) < 0.00001);			// 5 day SMA at the end
+		//assertTrue(Math.abs((bb.calcSMA(18, 22) - 91.176)) < 0.00001);			// 5 day SMA at the end
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ public class BollingerBandsTest {
 		assertTrue(Math.abs(bb.calcStdDev(0, 5, bb.calcSMA(0, 5)) - 0.319152) < 0.00001);
 		assertTrue(Math.abs(bb.calcStdDev(0, 6, bb.calcSMA(0, 6)) - 0.340749) < 0.00001);
 		assertTrue(Math.abs(bb.calcStdDev(0, 19, bb.calcSMA(0, 19)) - 0.806892) < 0.00001);
-		assertTrue(Math.abs(bb.calcStdDev(18,22, bb.calcSMA(18, 22)) - 0.0714422) < 0.00001);
+		//assertTrue(Math.abs(bb.calcStdDev(18,22, bb.calcSMA(18, 22)) - 0.0714422) < 0.00001);
 	}
 	
 	@Test
@@ -82,9 +82,9 @@ public class BollingerBandsTest {
 		List<IndicatorDatum> middleBand = bb.getMiddleBand();
 		List<IndicatorDatum> lowerBand = bb.getLowerBand();
 		
-		assertTrue(upperBand.size() == 4);
-		assertTrue(middleBand.size() == 4);
-		assertTrue(lowerBand.size() == 4);
+		assertTrue(upperBand.size() == 3);
+		assertTrue(middleBand.size() == 3);
+		assertTrue(lowerBand.size() == 3);
 		
 		assertTrue(Math.abs(upperBand.get(0).getValue()) - 91.908284 < 0.00001);
 		assertTrue(upperBand.get(0).getTimeLabel().equals("1"));
@@ -107,6 +107,11 @@ public class BollingerBandsTest {
 		assertTrue(Math.abs(lowerBand.get(2).getValue() - 89.145594) < 0.00001);
 		assertTrue(lowerBand.get(2).getTimeLabel().equals("3"));
 
+		bb.incrementalUpdate(new StockTimeFrameData("4", 0, 0, 0, 0, 0, 91.05, false));
+		upperBand = bb.getUpperBand();
+		middleBand = bb.getMiddleBand();
+		lowerBand = bb.getLowerBand();
+		
 		assertTrue(Math.abs(upperBand.get(3).getValue()) - 91.88199 < 0.00001);
 		assertTrue(upperBand.get(3).getTimeLabel().equals("4"));
 		assertTrue(Math.abs(middleBand.get(3).getValue()) - 90.6175 < 0.00001);

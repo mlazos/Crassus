@@ -183,17 +183,26 @@ public class PlotWrapper implements StockPlot
 		SeriesWrapper s1 = new SeriesWrapper(series1, Color.RED);
 		SeriesWrapper s2 = new SeriesWrapper(series2, Color.BLUE);
 		
-		pw.addSeries(s1);
-		pw.addSeries(s2);
+		try {
+			pw.setRS(true);
+		} catch (CantTurnRsOnAfterChartsRetreivedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		pw.addRsSeries(s1);
+		pw.addRsSeries(s2);
+		
+		
 		
 		Long start = System.currentTimeMillis();
-		BufferedImage img = pw.getPrimaryBufferedImage(1000, 1000);
+		BufferedImage img = pw.getRsBufferedImage(1000, 1000);
 		Long end = System.currentTimeMillis();
 		
 		System.out.println(end - start);
 		
 		start = System.currentTimeMillis();
-		img = pw.getPrimaryBufferedImage(1000, 1000);
+		img = pw.getRsBufferedImage(1000, 1000);
 	    end = System.currentTimeMillis();
 	    
 	    System.out.println(end - start);

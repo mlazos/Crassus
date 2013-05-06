@@ -193,6 +193,21 @@ public class BollingerBands implements Indicator {
 		this.data = data;
 		updateBollingerBands();
 	}
+	
+	public void incrementalUpdate(StockTimeFrameData datum) {
+		data.add(datum);
+		int lastIndex = data.size() - 1;
+		
+		double avg = calcSMA(lastIndex - (period - 1), lastIndex);
+		double stdDev = calcStdDev(lastIndex - (period - 1), lastIndex, avg);
+		
+		double upperBandValue = avg + (bandWidth * stdDev);
+		double lowerBandValue = avg - (bandWidth * stdDev);
+
+		middleBand.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), avg));
+		upperBand.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), upperBandValue));
+		lowerBand.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), lowerBandValue));
+	}
 
 	@Override
 	public StockEventType isTriggered() {

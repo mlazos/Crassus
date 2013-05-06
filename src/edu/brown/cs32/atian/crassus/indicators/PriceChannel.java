@@ -41,8 +41,8 @@ public class PriceChannel implements Indicator {
 	private int lookBackPeriod;
 	private boolean isActive;
 	private boolean isVisible;
-	private double EPSILON = 0.1;
-	private double START_AMT = 10000;
+	private final double EPSILON = 0.1;
+	private final double START_AMT = 10000;
 	private double percentMade;
 	
 	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
@@ -92,6 +92,20 @@ public class PriceChannel implements Indicator {
 	@Override 
 	public String getName() {
 		return "Price Channel";
+	}
+	
+	public void incrementalUpdate(StockTimeFrameData datum) {
+		data.add(datum);
+		int lastIndex = data.size() - 1;
+		double[] periodHighLow = getHighLow(lastIndex - (lookBackPeriod - 1), lastIndex);
+		double periodHigh = periodHighLow[0];
+		double periodLow = periodHighLow[1];
+		double centreVal = (periodHigh + periodLow) / 2;
+		String timeLabel = datum.getTime();
+		long currTime = datum.getTimeInNumber();
+		upperChannel.add(new IndicatorDatum(timeLabel, currTime, periodHigh));
+		lowerChannel.add(new IndicatorDatum(timeLabel, currTime, periodLow));
+		centreLine.add(new IndicatorDatum(timeLabel, currTime, centreVal));
 	}
 	
 	/**

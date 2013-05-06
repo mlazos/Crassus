@@ -40,6 +40,9 @@ public class MACD implements Indicator {
 	private List<IndicatorDatum> signalLine;
 	private boolean isActive;
 	private boolean isVisible;
+	double prevSigEMA = 0;
+	double prevShortEMA = 0;
+	double prevLongEMA = 0;
 	
 	public MACD(List<StockTimeFrameData> data, int signalPeriod, int shorterPeriod, int longerPeriod
 			) throws IllegalArgumentException {
@@ -153,20 +156,37 @@ public class MACD implements Indicator {
 		return currMin;
 	}
 	
+	public void incrementalUpdate(StockTimeFrameData datum) {
+		
+		data.add(datum);
+		int lastIndex = data.size() - 1;
+		int i = lastIndex;
+		
+		double currSigEMA = calcEMA(prevSigEMA, signalPeriod, data.get(i).getAdjustedClose());
+		signalLine.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), currSigEMA));
+		prevSigEMA = currSigEMA;		// save prev EMA values for next EMA calculation
+	
+		double currShortEMA = calcEMA(prevShortEMA, shortPeriod, data.get(i).getAdjustedClose());
+		prevShortEMA = currShortEMA;
+		
+		double currLongEMA = calcEMA(prevLongEMA, longPeriod, data.get(i).getAdjustedClose());
+		MACDLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), currShortEMA - currLongEMA));
+		prevLongEMA = currLongEMA;
+		
+	}
+	
 	/**
 	 * Updates the MACD points.
 	 */
 	private void updateMACD() {
 
 		int startIndex = (min(signalPeriod, shortPeriod, longPeriod) - 1);
-		double prevSigEMA = 0;
-		double prevShortEMA = 0;
+		
 		double currShortEMA = 0;
-		double prevLongEMA = 0;
+
 		double currLongEMA;
 		for (int i = startIndex; i < data.size(); i++) {
 			
-
 			if (i >= signalPeriod - 1) {
 				if (i == signalPeriod - 1) {
 					double firstSignalEMA = calcSMA(i - signalPeriod + 1, i);
