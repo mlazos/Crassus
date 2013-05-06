@@ -53,13 +53,13 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		case 0://ticker
 			return stocks.getStockList().get(row).getTicker();
 		case 1://price
-			return stocks.getStockList().get(row).getStockRealTimeData().getCurrPrice();
+			return stocks.getStockList().get(row).getCurrPrice();
 		case 2://open
-			return stocks.getStockList().get(row).getStockRealTimeData().getOpenPrice();
+			return stocks.getStockList().get(row).getOpenPrice();
 		case 3://high
-			return stocks.getStockList().get(row).getStockRealTimeData().getTodayHigh();
+			return stocks.getStockList().get(row).getTodayHigh();
 		case 4://low
-			return stocks.getStockList().get(row).getStockRealTimeData().getTodayLow();
+			return stocks.getStockList().get(row).getTodayLow();
 		default:
 			return "ERR";
 		}
