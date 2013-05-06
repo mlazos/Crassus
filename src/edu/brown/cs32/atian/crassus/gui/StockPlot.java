@@ -39,8 +39,6 @@ public interface StockPlot {
 	public void setTimeFrame(TimeFrame timeFrame);
 	
 	public void addSeries(SeriesWrapper series);
-
-	public void addRsSeries(SeriesWrapper series);
 	
 	/**
 	 * Turn RS on or off

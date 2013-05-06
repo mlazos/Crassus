@@ -32,6 +32,11 @@ public class RSI implements Indicator {
 	private int period;
 	private boolean isActive;
 	private boolean isVisible;
+	private final double EPSILON = 0.01;
+	private final double START_AMT = 10000;
+	private double percentMade;
+	double avgGain = 0;
+	double avgLoss = 0;
 	
 	public RSI(List<StockTimeFrameData> data, int period) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
@@ -74,12 +79,39 @@ public class RSI implements Indicator {
 	}
 	
 	/**
+	 * Incrementally updates the RSI points given new datum.
+	 * 
+	 * @param datum		StockTimeFrameData
+	 */
+	void incrementalUpdate(StockTimeFrameData datum) {
+		data.add(datum);
+		
+		int lastIndex = data.size() - 1;
+		double currChange = data.get(lastIndex - 1).getAdjustedClose() - data.get(lastIndex - 2).getAdjustedClose();
+		// smoothing technique similar to exponential moving average calculation
+		if (currChange < 0) {														// currently a loss
+			avgLoss = ((avgLoss * (period - 1)) + Math.abs(currChange)) / period;
+			avgGain = (avgGain * (period - 1)) / period; 
+		} else {																	// currently a gain
+			avgLoss = (avgLoss * (period - 1)) / period;
+			avgGain = ((avgGain * (period - 1)) + currChange) / period;
+		}
+
+		double rs = avgGain / avgLoss;
+		double rsi = 100 - (100 / (1 + rs));
+		RSIPoints.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), rsi));
+		
+	}
+	
+	/**
 	 * Updates the RSI data points
 	 */
 	private void updateRSI() {
 		
-		double avgGain = 0;
-		double avgLoss = 0;
+		StockEventType currEvent = StockEventType.NONE;
+		double currAmt = START_AMT;
+		double numStocks = 0;
+		
 		double rs;
 		double rsi;
 		for (int i = 0; i + period < data.size(); i++) {
@@ -107,7 +139,26 @@ public class RSI implements Indicator {
 			rs = avgGain / avgLoss;
 			rsi = 100 - (100 / (1 + rs));
 			RSIPoints.add(new IndicatorDatum(data.get(i + period).getTime(), data.get(i + period).getTimeInNumber(), rsi));
+			
+			double currClose = data.get(i).getAdjustedClose();
+			
+			if (((rsi > 0.7 - EPSILON) && (currClose < 0.7 + EPSILON)) || (i == data.size() - 1)) {
+				if (currEvent.equals(StockEventType.BUY)) {		// if we have already bought then sell now or sell at whatever price is 
+					currAmt += numStocks * currClose;			// last price
+					numStocks = 0;								// sold all the stocks
+					currEvent = StockEventType.SELL;
+				}
+			}
+			
+			if (((currClose > 0.3 - EPSILON) && (currClose < 0.3 + EPSILON))) {
+				numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
+				currAmt = currAmt%currClose;					// keep amount left over
+				currEvent = StockEventType.BUY;
+			}
+			
 		}
+		
+		percentMade = ((currAmt - START_AMT) / START_AMT);
 	}
 	
 	/**
@@ -173,7 +224,6 @@ public class RSI implements Indicator {
 
 	@Override
 	public double getTestResults() {
-		// TODO Auto-generated method stub
-		return 0;
+		return percentMade;
 	}
 }

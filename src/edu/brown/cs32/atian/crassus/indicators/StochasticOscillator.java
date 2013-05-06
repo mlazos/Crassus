@@ -103,6 +103,22 @@ public class StochasticOscillator implements Indicator {
 		return highLow;
 	}
 	
+	public void incrementalUpdate(StockTimeFrameData datum) {
+		
+		data.add(datum);
+		int lastIndex = data.size() - 1;
+		double[] highLow = getHighLow(lastIndex - period + 1, lastIndex);
+		double high = highLow[0];
+		double low = highLow[1];
+		
+		double K = (datum.getAdjustedClose() - low) / (high - low) * 100;
+		stocOscillator.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), K));
+	
+		int i = stocOscillator.size() - 1;
+		double D = (stocOscillator.get(i).getValue() + stocOscillator.get(i-1).getValue() + stocOscillator.get(i-2).getValue()) / 3;
+		signalLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), D));
+	}
+	
 	private void updateStochasticOscillator() {
 		
 		for (int i = (period - 1); i < data.size(); i++) {
