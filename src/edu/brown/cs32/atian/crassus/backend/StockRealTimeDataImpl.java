@@ -195,7 +195,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
     public List<StockTimeFrameData> getRealTimeData() {
         return _realtimeData;
     }
-
+    
     @Override
     public String getChgAndPertChg() {
         return _changeAndPtgChange;

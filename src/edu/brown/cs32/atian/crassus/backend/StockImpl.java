@@ -36,7 +36,7 @@ public class StockImpl implements Stock {
 
     String _ticker;
     String _companyName = null;
-    StockHistData _minutely = null;
+    StockHistDataMinutely _minutely = null;
     StockHistData _daily = null;
     StockHistData _weekly = null;
     StockHistData _monthly = null;
@@ -188,9 +188,10 @@ public class StockImpl implements Stock {
 
                 }
             }
+            wordReader.close();
             return result;
         } catch (FileNotFoundException e) {
-            System.out.println("ERROR: no ticker file exist");
+            System.out.println("ERROR: no ticker file exist");            
             return null;
         } catch (IOException e) {
             System.out.println("ERROR: IO exception");
@@ -308,9 +309,16 @@ public class StockImpl implements Stock {
             }
         }
         _endTime = now;
-
-        if (_timeFrame == TimeFrame.DAILY) {;
-            cal.add(Calendar.DATE, -1);
+        
+        if (_timeFrame == TimeFrame.HOURLY) {;
+                cal.add(Calendar.HOUR, -1);
+        }
+        else if (_timeFrame == TimeFrame.DAILY) {;
+            if(now.getHours() <= 17 &&  now.getHours() >= 9) {
+                cal.add(Calendar.HOUR, -10);
+            } else {
+                cal.add(Calendar.DATE, -1);
+            }
         } else if (_timeFrame == TimeFrame.WEEKLY) {
             cal.add(Calendar.DATE, -7);
         } else if (_timeFrame == TimeFrame.MONTHLY) {
@@ -322,6 +330,7 @@ public class StockImpl implements Stock {
         }
         _startTime = cal.getTime();
     }
+    
 
     @Override
     public void setTimeFrame(TimeFrame timeFrame) {
@@ -361,7 +370,11 @@ public class StockImpl implements Stock {
         } else if (freq == StockFreqType.MONTHLY) {
             result.addAll( _monthly.getHistData());
         } else if (freq == StockFreqType.MINUTELY) {
-            result.addAll( _minutely.getHistData());
+            if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
+                result.addAll( _minutely.getHistData2());
+            } else {
+                result.addAll( _minutely.getHistData());
+            }
         }
 
         if (result.size() == 0) {
