@@ -19,5 +19,6 @@ public interface StockList {
     void refreshAll();
     List<String> getTickerSuggestion(String tickerPrefix);    
     Stock createStock(String ticker);
+    int getDataRefreshCycle();    // in Milisecond
 //    List<String> getCompanyNameSuggestion(String tickerPrefix);       
 }
