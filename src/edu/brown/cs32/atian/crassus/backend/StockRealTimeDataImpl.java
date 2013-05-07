@@ -38,6 +38,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
     public StockRealTimeDataImpl(String ticker) {
         _ticker = ticker;
         _realtimeData = new ArrayList<StockTimeFrameData>();
+        latestRecordDate = new Date();
     }
 
     private void getStockTableData() {
@@ -61,7 +62,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
             connection = (HttpURLConnection) serverAddress.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
-            connection.setReadTimeout(2000);
+            connection.setReadTimeout(1000);
 
             connection.connect();
 
