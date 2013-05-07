@@ -282,6 +282,12 @@ public class CrassusGUI implements GUI {
 		
 		plotMenu.addSeparator();
 		
+		JMenuItem mSetTimeScaleOneHour = new JMenuItem("Plot One Hour");
+		mSetTimeScaleOneHour.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.HOURLY);}
+				});
+		
 		JMenuItem mSetTimeScaleOneDay = new JMenuItem("Plot One Day");
 		mSetTimeScaleOneDay.addActionListener(
 				new ActionListener(){@Override
@@ -289,12 +295,12 @@ public class CrassusGUI implements GUI {
 				});
 		plotMenu.add(mSetTimeScaleOneDay);
 		
-		JMenuItem mSetTimeScaleOneWeek = new JMenuItem("Plot One Week");
-		mSetTimeScaleOneWeek.addActionListener(
-				new ActionListener(){@Override
-					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.WEEKLY);}
-				});
-		plotMenu.add(mSetTimeScaleOneWeek);
+//		JMenuItem mSetTimeScaleOneWeek = new JMenuItem("Plot One Week");
+//		mSetTimeScaleOneWeek.addActionListener(
+//				new ActionListener(){@Override
+//					public void actionPerformed(ActionEvent e) {plotPane.changeTimeFrame(TimeFrame.WEEKLY);}
+//				});
+//		plotMenu.add(mSetTimeScaleOneWeek);
 		
 		JMenuItem mSetTimeScaleOneMonth = new JMenuItem("Plot One Month");
 		mSetTimeScaleOneMonth.addActionListener(

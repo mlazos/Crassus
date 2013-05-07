@@ -125,8 +125,9 @@ public class CrassusPlotPane extends JPanel {
 		this.add(normalPane, BorderLayout.CENTER);
 		
 		timeframe = new JComboBox<String>();
+		timeframe.addItem("One Hour");
 		timeframe.addItem("One Day");
-		timeframe.addItem("One Week");
+		//timeframe.addItem("One Week");
 		timeframe.addItem("One Month");
 		timeframe.addItem("One Year");
 		timeframe.addItem("Five Years");
@@ -173,9 +174,11 @@ public class CrassusPlotPane extends JPanel {
 	private TimeFrame timeframeFromIndex(int index){
 		switch(index){
 		case 0:
-			return TimeFrame.DAILY;
+			return TimeFrame.HOURLY;
 		case 1:
-			return TimeFrame.WEEKLY;
+			return TimeFrame.DAILY;
+//		case 1:
+//			return TimeFrame.WEEKLY;
 		case 2:
 			return TimeFrame.MONTHLY;
 		case 3:
@@ -188,10 +191,12 @@ public class CrassusPlotPane extends JPanel {
 	
 	private int indexFromTimeFrame(TimeFrame tf){
 		switch(tf){
-		case DAILY:
+		case HOURLY:
 			return 0;
-		case WEEKLY:
+		case DAILY:
 			return 1;
+//		case WEEKLY:
+//			return 1;
 		case MONTHLY:
 			return 2;
 		case YEARLY:
@@ -256,6 +261,13 @@ public class CrassusPlotPane extends JPanel {
 			mSetTimeFreqWeekly.setEnabled(false);
 			mSetTimeFreqMonthly.setEnabled(false);
 			break;
+		case HOURLY:
+			timeFreq.addItem("Minutely");
+			mSetTimeFreqMinutely.setEnabled(true);
+			
+			mSetTimeFreqDaily.setEnabled(false);
+			mSetTimeFreqWeekly.setEnabled(false);
+			mSetTimeFreqMonthly.setEnabled(false);
 		}
 		
 		if(stock!=null)
