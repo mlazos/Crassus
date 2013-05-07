@@ -31,7 +31,7 @@ public class DemoStockDataImpl implements StockHistData {
     private String _high52Week = "N/A";
     private String _low52Week = "N/A";
     private String _changeAndPtgChange = "N/A";    
-    private int _dataSimFreq = 60;  // in second
+    private int _dataSimFreq = 10;  // in second
     final double STDMEANRATIO = 0.001;
 
     public DemoStockDataImpl(String ticker) {
@@ -101,6 +101,10 @@ public class DemoStockDataImpl implements StockHistData {
             double adjustedClose = close;
             
             StockTimeFrameData newTFData = new StockTimeFrameData(curr.toString(), open, high, low, close, volume, adjustedClose, false);;
+            StockTimeFrameData oldSecToLastFrame = _demoData.get(_demoData.size()-2);
+            if(oldSecToLastFrame.getTimeInNumber()+ 300 > newTFData.getTimeInNumber()) {
+                _demoData.remove(_demoData.size()-1);
+            }
             _demoData.add(newTFData);
             updateStockTableData(newTFData);            
         }
