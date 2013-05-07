@@ -12,4 +12,6 @@ public interface GUI {
 	 */
 	public void update();
 
+	public void updatePriceDataOnly();
+
 }

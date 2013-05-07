@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockEventType;
 
 public class CrassusIndicatorTableRenderer implements TableCellRenderer{// extends DefaultTableCellRenderer {
 
@@ -47,9 +48,9 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 		}
 		
 
-		if(row%5==0)//(stocks.getStockList().get(row).isTriggered() == StockEventType.BUY)
+		if(stock.getEventList().get(row).isTriggered() == StockEventType.BUY)
 			c.setBackground(new Color(170,230,170));
-		else if(row%5==1)//(stocks.getStockList().get(row).isTriggered() == StockEventType.SELL)
+		else if(stock.getEventList().get(row).isTriggered() == StockEventType.SELL)
 			c.setBackground(new Color(255,150,150));
 		else
 			c.setBackground(Color.WHITE);

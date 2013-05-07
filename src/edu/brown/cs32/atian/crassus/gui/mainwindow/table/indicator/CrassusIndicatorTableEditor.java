@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.EventObject;
 
 import javax.swing.AbstractCellEditor;
@@ -17,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
@@ -103,9 +102,9 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
             cb.setSelected(selected);
         }
 
-		if(row%5==0)//(stocks.getStockList().get(row).isTriggered() == StockEventType.BUY)
+		if(stock.getEventList().get(row).isTriggered() == StockEventType.BUY)
 			cb.setBackground(new Color(170,230,170));
-		else if(row%5==1)//(stocks.getStockList().get(row).isTriggered() == StockEventType.SELL)
+		else if(stock.getEventList().get(row).isTriggered() == StockEventType.SELL)
 			cb.setBackground(new Color(255,150,150));
 		else
 			cb.setBackground(Color.WHITE);

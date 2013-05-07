@@ -108,5 +108,10 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 
+	public void refreshPriceDataOnly() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

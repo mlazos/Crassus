@@ -7,15 +7,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
 
-import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,18 +19,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
-import edu.brown.cs32.atian.crassus.backend.StockImpl;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.gui.CrassusButton;
 import edu.brown.cs32.atian.crassus.gui.dialogs.TickerDialog;
@@ -47,7 +40,7 @@ import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 @SuppressWarnings("serial")
 public class CrassusStockTablePane extends JPanel {
 
-	public class ChangeStockListenerForwarder implements ListSelectionListener {
+	private class ChangeStockListenerForwarder implements ListSelectionListener {
 		private Stock lastStock;
 		int lastIndex = -1;
 		@Override public void valueChanged(ListSelectionEvent e) {
@@ -74,32 +67,20 @@ public class CrassusStockTablePane extends JPanel {
 	}
 
 	private static final Pattern p =  Pattern.compile("[^a-zA-Z0-9]");
-	public class NewTickerListener implements TickerDialogCloseListener {
+	private class NewTickerListener implements TickerDialogCloseListener {
 		@Override public void tickerDialogClosedWithTicker(String symbol) {
 			addTicker(symbol);
 		}
 	}
 
-	public class PlusButtonListener implements ActionListener {
+	private class PlusButtonListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
 			showNewTickerDialog();
 		}
 	}
 
-	public class CtrlTAction extends AbstractAction {
-		@Override public void actionPerformed(ActionEvent e) {
-			showNewTickerDialog();
-		}
-	}
-
-	public class MinusButtonListener implements ActionListener {
+	private class MinusButtonListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			removeSelectedTicker();
-		}
-	}
-
-	public class CtrlShiftTAction extends AbstractAction {
-		@Override public void actionPerformed(ActionEvent e) {
 			removeSelectedTicker();
 		}
 	}
@@ -172,19 +153,11 @@ public class CrassusStockTablePane extends JPanel {
 		
 		JButton addButton = new CrassusButton("+");
 		addButton.addActionListener(new PlusButtonListener());
-		addButton.setToolTipText("add new ticker");
-		addButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_DOWN_MASK),
-				"CTRL T");
-		addButton.getActionMap().put("CTRL T", new CtrlTAction());
+		addButton.setToolTipText("<html>add new ticker<br>CTRL +</html>");
 		
 		JButton removeButton = new CrassusButton("-");
 		removeButton.addActionListener(new MinusButtonListener());
-		removeButton.setToolTipText("remove selected ticker");
-		removeButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_DOWN_MASK|InputEvent.SHIFT_DOWN_MASK), 
-				"CTRL SHIFT T");
-		removeButton.getActionMap().put("CTRL SHIFT T", new CtrlShiftTAction());
+		removeButton.setToolTipText("<html>remove selected ticker<br>CTRL SHIFT -</html>");
 		
 		JPanel buttonHolder = new JPanel();
 		buttonHolder.setBackground(Color.WHITE);
@@ -249,13 +222,13 @@ public class CrassusStockTablePane extends JPanel {
 	public void refresh() {
 		model.refresh();
 	}
-
-
+	
 	public void changeStockListTo(StockList stocks) {
 		this.stocks = stocks;
 		renderer.changeStockListTo(stocks);
 		model.changeStockListTo(stocks);
 		selector.select(0);
 	}
-	
+
+
 }

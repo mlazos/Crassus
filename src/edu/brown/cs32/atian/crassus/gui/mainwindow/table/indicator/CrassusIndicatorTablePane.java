@@ -84,20 +84,8 @@ public class CrassusIndicatorTablePane extends JPanel {
 		}
 	}
 	
-	public class CtrlIAction extends AbstractAction {
-		@Override public void actionPerformed(ActionEvent e) {
-			showNewIndicatorDialog();
-		}
-	}
-
 	public class MinusButtonListener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent arg0) {
-			removeSelectedIndicator();
-		}
-	}
-
-	public class CtrlShiftIAction extends AbstractAction {
-		@Override public void actionPerformed(ActionEvent e) {
 			removeSelectedIndicator();
 		}
 	}
@@ -172,19 +160,11 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 		JButton addButton = new CrassusButton("+");
 		addButton.addActionListener(new PlusButtonListener());
-		addButton.setToolTipText("add new indicator");
-		addButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK),
-				"CTRL I");
-		addButton.getActionMap().put("CTRL I", new CtrlIAction());
+		addButton.setToolTipText("<html>add new indicator<br>CTRL I</html>");
 		
 		JButton removeButton = new CrassusButton("-");
 		removeButton.addActionListener(new MinusButtonListener());
-		removeButton.setToolTipText("remove selected indicator");
-		removeButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK|InputEvent.SHIFT_DOWN_MASK), 
-				"CTRL SHIFT I");
-		removeButton.getActionMap().put("CTRL SHIFT I", new CtrlShiftIAction());
+		removeButton.setToolTipText("<html>remove selected indicator<br>CTRL SHIFT I</html>");
 		
 		JPanel buttonHolder = new JPanel();
 		buttonHolder.setBackground(Color.WHITE);
@@ -214,6 +194,11 @@ public class CrassusIndicatorTablePane extends JPanel {
 	}
 
 	public void addIndicator(Indicator ind) {
+		
+//		//testing
+//		ind = new TestIndicator();
+//		//end testing
+		
 		ind.setActive(true);
 		ind.setVisible(true);
 		int previousIndex = table.getSelectedRow();
@@ -246,5 +231,9 @@ public class CrassusIndicatorTablePane extends JPanel {
 		if(stock!=null)
 			selector.select(indicatorIndex);
 		
+	}
+
+	public void refresh() {
+		model.refresh();
 	}
 }

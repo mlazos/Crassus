@@ -16,6 +16,7 @@ import javax.xml.transform.TransformerException;
 import org.xml.sax.SAXException;
 
 import edu.brown.cs32.atian.crassus.backend.DataSourceType;
+import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.backend.StockListImpl;
 import edu.brown.cs32.atian.crassus.file.FileIO;
@@ -23,13 +24,27 @@ import edu.brown.cs32.atian.crassus.gui.mainwindow.GUI;
 
 public class DotCrassusFileGui {
 	
+	
+	final private static int TIMER_REFRESH_PERIOD = 2000;
 
 	public class TimerListener implements ActionListener {
-		@Override public void actionPerformed(ActionEvent arg0) {
+		
+		private int counter = 0;
+		
+		@Override 
+		public void actionPerformed(ActionEvent arg0) {
 			while(true){
 				try{
-					stocks.refreshAll();
-					gui.update();
+					if(counter==5){
+						stocks.refreshAll();
+						gui.update();
+						counter = 0;
+					}
+					else{
+						stocks.refreshPriceDataOnly();
+						gui.updatePriceDataOnly();
+					}
+					counter++;
 					return;
 				}catch(Exception e){
 					String[] options = {"Try Again","Exit"};
@@ -156,7 +171,7 @@ public class DotCrassusFileGui {
 		
 		this.stocks = stocks;
 		
-		timer = new Timer(60000, new TimerListener());
+		timer = new Timer(TIMER_REFRESH_PERIOD, new TimerListener());
 		timer.setRepeats(true);
 		timer.start();
 		
@@ -184,7 +199,7 @@ public class DotCrassusFileGui {
 				this.f=file;
 				this.stocks = stocks;
 				
-				timer = new Timer(10000, new TimerListener());
+				timer = new Timer(TIMER_REFRESH_PERIOD, new TimerListener());
 				timer.setRepeats(true);
 				timer.start();
 				

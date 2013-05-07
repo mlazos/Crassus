@@ -64,7 +64,7 @@ public class CrassusGUI implements GUI {
 		@Override 
 		public void changeToStock(Stock stock) {
 			plotPane.changeToStock(stock);
-			eventBox.changeToStock(stock);
+			indicatorBox.changeToStock(stock);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class CrassusGUI implements GUI {
 	private CrassusPlotPane plotPane;
 	
 	private CrassusStockTablePane stockBox;
-	private CrassusIndicatorTablePane eventBox;
+	private CrassusIndicatorTablePane indicatorBox;
 	
 	private JPanel stockInfo;
 	
@@ -127,7 +127,7 @@ public class CrassusGUI implements GUI {
 		stockBox = new CrassusStockTablePane(frame,undoables);
 		stockBox.setChangeStockListener(new CompoundChangeStockListener());
 
-		eventBox = new CrassusIndicatorTablePane(frame,undoables, new RefreshPlotListener());
+		indicatorBox = new CrassusIndicatorTablePane(frame,undoables, new RefreshPlotListener());
 		
 		//make plot pane
 		plotPane = new CrassusPlotPane(undoables);
@@ -139,7 +139,7 @@ public class CrassusGUI implements GUI {
 				BorderFactory.createEmptyBorder(20,20,20,20),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
 		stockInfo.setLayout(new BorderLayout());
-		stockInfo.add(eventBox, BorderLayout.EAST);
+		stockInfo.add(indicatorBox, BorderLayout.EAST);
 		stockInfo.add(plotPane,BorderLayout.CENTER);
 		
 		frame.add(stockBox, BorderLayout.WEST);
@@ -362,7 +362,7 @@ public class CrassusGUI implements GUI {
 		mAddIndicator.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK));
 		mAddIndicator.addActionListener(
 				new ActionListener(){@Override
-					public void actionPerformed(ActionEvent arg0) {eventBox.showNewIndicatorDialog();}
+					public void actionPerformed(ActionEvent arg0) {indicatorBox.showNewIndicatorDialog();}
 				});
 		indicatorMenu.add(mAddIndicator);
 		
@@ -370,7 +370,7 @@ public class CrassusGUI implements GUI {
 		mRemoveIndicator.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK|InputEvent.SHIFT_DOWN_MASK));
 		mAddIndicator.addActionListener(
 				new ActionListener(){@Override
-					public void actionPerformed(ActionEvent e) {eventBox.removeSelectedIndicator();}
+					public void actionPerformed(ActionEvent e) {indicatorBox.removeSelectedIndicator();}
 				});
 		indicatorMenu.add(mRemoveIndicator);
 		
@@ -389,11 +389,11 @@ public class CrassusGUI implements GUI {
 
 		if(stocks.getStockList().isEmpty()){
 			plotPane.changeToStock(null);
-			eventBox.changeToStock(null);
+			indicatorBox.changeToStock(null);
 		}
 		else{
 			plotPane.changeToStock(stocks.getStockList().get(0));
-			eventBox.changeToStock(stocks.getStockList().get(0));
+			indicatorBox.changeToStock(stocks.getStockList().get(0));
 		}
 		undoables.clear();
 	}
@@ -410,7 +410,13 @@ public class CrassusGUI implements GUI {
 	@Override
 	public void update() {
 		stockBox.refresh();
+		indicatorBox.refresh();
 		plotPane.refresh();
+	}
+	
+	@Override
+	public void updatePriceDataOnly() {
+		stockBox.refresh();
 	}
 	
 	public void possiblyExit() {
