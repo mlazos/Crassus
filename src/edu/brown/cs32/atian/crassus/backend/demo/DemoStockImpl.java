@@ -10,7 +10,6 @@ import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.backend.StockHistData;
 import edu.brown.cs32.atian.crassus.backend.StockHistDataDaily;
-import edu.brown.cs32.atian.crassus.backend.StockHistDataMinutely;
 import edu.brown.cs32.atian.crassus.backend.StockHistDataMonthly;
 import edu.brown.cs32.atian.crassus.backend.StockHistDataWeekly;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
@@ -171,6 +170,7 @@ public class DemoStockImpl implements Stock {
                     
                 }
             }
+            wordReader.close();
             return result;
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: no ticker file exist");
@@ -286,9 +286,14 @@ public class DemoStockImpl implements Stock {
              }            
         }
         _endTime = now;
-
-        if (_timeFrame == TimeFrame.DAILY) {;
-            cal.add(Calendar.DATE, -1);
+        if (_timeFrame == TimeFrame.HOURLY) {;
+                cal.add(Calendar.HOUR, -1);
+        } else if (_timeFrame == TimeFrame.DAILY) {;
+            if(now.getHours() <= 17 &&  now.getHours() >= 9) {
+                cal.add(Calendar.HOUR, -10);
+            } else {
+                cal.add(Calendar.DATE, -1);
+            }
         } else if (_timeFrame == TimeFrame.WEEKLY) {
             cal.add(Calendar.DATE, -7);
         } else if (_timeFrame == TimeFrame.MONTHLY) {
@@ -328,17 +333,21 @@ public class DemoStockImpl implements Stock {
     public List<StockTimeFrameData> getStockPriceData(StockFreqType freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
 
         List<StockTimeFrameData> realTime = this._minutely.getHistData();
-        List<StockTimeFrameData> result = null;
+        List<StockTimeFrameData> result = new ArrayList<StockTimeFrameData>();
         if (freq == StockFreqType.MINUTELY) {
             return realTime;   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
         }
         // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
         if (freq == StockFreqType.DAILY) {
-            result = _daily.getHistData();
+            result.addAll(_daily.getHistData());
         } else if (freq == StockFreqType.WEEKLY) {
-            result = _weekly.getHistData();
+            result.addAll(_weekly.getHistData());
         } else if (freq == StockFreqType.MONTHLY) {
-            result = _monthly.getHistData();
+            if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
+                result.addAll( _minutely.getHistData());
+            } else {
+                result.addAll( _minutely.getHistData());
+            }
         }
 
         // latestRealTime is most recent data in realtime
