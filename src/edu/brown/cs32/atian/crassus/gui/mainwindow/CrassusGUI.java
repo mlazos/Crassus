@@ -35,6 +35,7 @@ import edu.brown.cs32.atian.crassus.gui.TimeFrame;
 import edu.brown.cs32.atian.crassus.gui.dialogs.DotCrassusFileGui;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.plot.CrassusPlotPane;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator.CrassusIndicatorTablePane;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator.TestIndicator;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock.CrassusStockTablePane;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStackListener;
@@ -348,10 +349,6 @@ public class CrassusGUI implements GUI {
 		
 		plotPane.setMenuItems(mSetTimeFreqMinutely,mSetTimeFreqDaily,mSetTimeFreqWeekly,mSetTimeFreqMonthly);
 		
-		//TODO etc......
-		
-		//TODO same for time frequencies.....
-		
 		//ADDING INDICATOR MENU
 		
 		JMenu indicatorMenu = new JMenu("Indicators");
@@ -375,6 +372,16 @@ public class CrassusGUI implements GUI {
 		indicatorMenu.add(mRemoveIndicator);
 		
 		//TODO sorting for indicators
+		
+		JMenu developerMenu = new JMenu("Developer Tools");
+		menuBar.add(developerMenu);
+		
+		JMenuItem mAddTestIndicator = new JMenuItem("Add A Test Indicator");
+		mAddTestIndicator.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent e) {indicatorBox.addIndicator(new TestIndicator());}
+				});
+		developerMenu.add(mAddTestIndicator);
 		
 		frame.setJMenuBar(menuBar);
 		

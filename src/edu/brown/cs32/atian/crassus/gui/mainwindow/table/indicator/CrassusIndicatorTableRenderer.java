@@ -15,6 +15,8 @@ import javax.swing.table.TableCellRenderer;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.TableColor;
+import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 public class CrassusIndicatorTableRenderer implements TableCellRenderer{// extends DefaultTableCellRenderer {
 
@@ -24,6 +26,8 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
+		
+		Indicator indicator = stock.getEventList().get(row);
 		
 		JComponent c = null;
 
@@ -48,12 +52,7 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 		}
 		
 
-		if(stock.getEventList().get(row).isTriggered() == StockEventType.BUY)
-			c.setBackground(new Color(170,230,170));
-		else if(stock.getEventList().get(row).isTriggered() == StockEventType.SELL)
-			c.setBackground(new Color(255,150,150));
-		else
-			c.setBackground(Color.WHITE);
+		c.setBackground(TableColor.getColor(indicator.isTriggered(),indicator.getActive()));
 		
 
 		if(c instanceof JCheckBox){

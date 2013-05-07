@@ -122,7 +122,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		table.setRowHeight(26);
 		table.setIntercellSpacing(new Dimension(0,2));
 		
-		editor = new CrassusIndicatorTableEditor(listener,undoables);
+		editor = new CrassusIndicatorTableEditor(listener,undoables,model);
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		renderer = new CrassusIndicatorTableRenderer();
 		
@@ -194,10 +194,6 @@ public class CrassusIndicatorTablePane extends JPanel {
 	}
 
 	public void addIndicator(Indicator ind) {
-		
-//		//testing
-//		ind = new TestIndicator();
-//		//end testing
 		
 		ind.setActive(true);
 		ind.setVisible(true);

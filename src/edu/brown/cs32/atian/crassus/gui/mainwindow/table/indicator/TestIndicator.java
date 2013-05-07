@@ -1,7 +1,16 @@
 package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JRadioButton;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
@@ -10,28 +19,57 @@ import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
 public class TestIndicator implements Indicator {
 
+	private StockEventType idealState = StockEventType.NONE;
+	
+	private JFrame frame;
+	
+	public TestIndicator(){
+		frame = new JFrame("Test Indicator");
+		frame.setLayout(new FlowLayout());
+		
+		ButtonGroup bGroup = new ButtonGroup();
+		
+		JRadioButton buyButton = new JRadioButton("Buy");
+		buyButton.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {idealState=StockEventType.BUY;}
+				});
+		bGroup.add(buyButton);
+		frame.add(buyButton);
+		
+		JRadioButton noneButton = new JRadioButton("None");
+		noneButton.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {idealState=StockEventType.NONE;}
+				});
+		bGroup.add(noneButton);
+		frame.add(noneButton);
+		
+		JRadioButton sellButton = new JRadioButton("Sell");
+		sellButton.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {idealState=StockEventType.SELL;}
+				});
+		bGroup.add(sellButton);
+		frame.add(sellButton);
+		
+		frame.pack();
+		frame.setResizable(false);
+
+		frame.setVisible(true);
+		
+	}
+	
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
-		// TODO Auto-generated method stub
-
+	
 	}
 
-	StockEventType state = StockEventType.NONE;
+	private StockEventType state = StockEventType.NONE;
 	
 	@Override
 	public void refresh(List<StockTimeFrameData> data) {
-		switch(state){
-		case BUY:
-			state = StockEventType.SELL;
-			return;
-		case SELL:
-			state = StockEventType.NONE;
-			return;
-		case NONE:
-		default:
-			state = StockEventType.BUY;
-			return;
-		}
+		state = idealState;
 	}
 
 	@Override
@@ -65,9 +103,7 @@ public class TestIndicator implements Indicator {
 
 	@Override
 	public StockEventType isTriggered() {
-		if(active)
-			return state;
-		return StockEventType.NONE;
+		return state;
 	}
 
 	@Override

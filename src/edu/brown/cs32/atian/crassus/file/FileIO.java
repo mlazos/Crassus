@@ -113,6 +113,9 @@ public class FileIO {
 			element.setAttribute("period", period);
 			
 		}
+		else{
+			return;
+		}
 		
 		parent.appendChild(element);
 		

@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockList;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.TableColor;
 
 @SuppressWarnings("serial")
 public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
@@ -29,12 +30,7 @@ public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 		
 		Stock s = stocks.getStockList().get(row);
 		
-		if(stocks.getStockList().get(row).isTriggered() == StockEventType.BUY)
-			c.setBackground(new Color(170,230,170));
-		else if(stocks.getStockList().get(row).isTriggered() == StockEventType.SELL)
-			c.setBackground(new Color(255,150,150));
-		else
-			c.setBackground(Color.WHITE);
+		c.setBackground(TableColor.getColor(s.isTriggered()));
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());

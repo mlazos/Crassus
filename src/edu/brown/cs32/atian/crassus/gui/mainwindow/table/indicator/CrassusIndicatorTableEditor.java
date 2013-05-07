@@ -17,6 +17,7 @@ import javax.swing.table.TableCellEditor;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.table.TableColor;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
@@ -45,6 +46,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 			indicator.setActive(cba.isSelected());
 			undoables.push(new AlertBoxUndoable(cba.isSelected(),table,row));
 			
+			model.alteredIndicator(row);
 			stopCellEditing();
 		}
 
@@ -64,7 +66,10 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 	
 	private CrassusPlotIsObsoleteListener listener;
 	
-	public CrassusIndicatorTableEditor(CrassusPlotIsObsoleteListener listener, UndoableStack undoables){
+	private CrassusIndicatorTableModel model;
+	
+	public CrassusIndicatorTableEditor(CrassusPlotIsObsoleteListener listener, UndoableStack undoables,
+			CrassusIndicatorTableModel model){
 		cbe = new CrassusCheckBoxEye();
 		cbe.addActionListener(new EyeBoxListener());
 		cba = new CrassusCheckBoxAlert();
@@ -72,6 +77,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		
 		this.listener = listener;
 		this.undoables = undoables;
+		this.model = model;
 	}
 	
 	@Override 
@@ -93,7 +99,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 
 		JCheckBox cb = (column==0) ? cbe : cba;
 		usingEye = (column==0);
-		indicator = stock.getEventList().get(row);
+		this.indicator = stock.getEventList().get(row);
 		this.table = table;
 		this.row = row;
 		
@@ -102,12 +108,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
             cb.setSelected(selected);
         }
 
-		if(stock.getEventList().get(row).isTriggered() == StockEventType.BUY)
-			cb.setBackground(new Color(170,230,170));
-		else if(stock.getEventList().get(row).isTriggered() == StockEventType.SELL)
-			cb.setBackground(new Color(255,150,150));
-		else
-			cb.setBackground(Color.WHITE);
+		cb.setBackground(TableColor.getColor(indicator.isTriggered()));
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(cb,BorderLayout.CENTER);

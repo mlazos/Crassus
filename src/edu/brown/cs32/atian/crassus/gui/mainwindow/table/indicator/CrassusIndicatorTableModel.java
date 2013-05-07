@@ -141,4 +141,8 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		this.fireTableRowsUpdated(0, getRowCount()-1);
 	}
 
+	public void alteredIndicator(int row) {
+		this.fireTableRowsUpdated(row, row);
+	}
+
 }
