@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,7 +61,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
             connection = (HttpURLConnection) serverAddress.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
-            connection.setReadTimeout(10000);
+            connection.setReadTimeout(2000);
 
             connection.connect();
 
@@ -80,7 +81,10 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
             _low52Week = splitted[3];
             _changeAndPtgChange  = splitted[7];
             latestRecordDate = new Date();
-        } catch (MalformedURLException e) {
+        } catch (SocketTimeoutException e) {
+            //e.printStackTrace();
+        }        
+        catch (MalformedURLException e) {
             e.printStackTrace();
 
         } catch (ProtocolException e) {
@@ -91,8 +95,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
-
-        }
+        } 
         
         //System.err.println("Update Real Time data at " + (new Date()).toString() + " price= " + _curr);
     }
