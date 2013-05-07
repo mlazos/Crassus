@@ -69,6 +69,7 @@ public class CrassusPlotPane extends JPanel {
 	private boolean rsOnState = false;
 	private JPanel normalPane;
 	private JSplitPane splitPane;
+	private JPanel almostUselessPane;
 	
 	private JComboBox<String> timeframe;
 	private JComboBox<String> timeFreq;
@@ -122,7 +123,11 @@ public class CrassusPlotPane extends JPanel {
 		normalPane.setBorder(BorderFactory.createEtchedBorder());
 		normalPane.add(primaryPanel);
 		
-		this.add(normalPane, BorderLayout.CENTER);
+		almostUselessPane = new JPanel();
+		almostUselessPane.setLayout(new BorderLayout());
+		almostUselessPane.setBorder(BorderFactory.createEmptyBorder());
+		almostUselessPane.add(normalPane,BorderLayout.CENTER);
+		this.add(almostUselessPane, BorderLayout.CENTER);
 		
 		timeframe = new JComboBox<String>();
 		timeframe.addItem("One Hour");
@@ -373,8 +378,8 @@ public class CrassusPlotPane extends JPanel {
 		if(stock==null){
 			if(rsOnState){
 				rsOnState = false;
-				this.remove(primaryPanel);
-				this.add(primaryPanelNormal);
+				almostUselessPane.remove(primaryPanel);
+				almostUselessPane.add(primaryPanelNormal,BorderLayout.CENTER);
 				primaryPanel = primaryPanelNormal;
 				primaryPanel.setImage(null);
 				this.setVisible(true);
@@ -413,42 +418,47 @@ public class CrassusPlotPane extends JPanel {
 			return;
 		}
 		
-		int panelWidth = this.getWidth();
-		int panelHeight = this.getHeight();
+		int width = almostUselessPane.getWidth();
+		int height = almostUselessPane.getHeight();
+		if(width <= 0 || height <= 0){
+			width = this.getWidth()-50;
+			height = this.getHeight()-80;
+		}
+		int dividerLocation = splitPane.getDividerLocation();
 
 		if(rsOnState!=plot.isRsOn()){
 			if(plot.isRsOn()){
 
-				this.remove(normalPane);
-				this.add(splitPane, BorderLayout.CENTER);
+				almostUselessPane.remove(normalPane);
+				almostUselessPane.add(splitPane, BorderLayout.CENTER);
 				primaryPanel = primaryPanelSplit;
 
-				splitPane.setDividerLocation((panelHeight-100)*3/4);
-
+				dividerLocation = (height-100)*3/4;
+				splitPane.setDividerLocation(dividerLocation);
 			}
 			else{
-				this.remove(splitPane);
-				this.add(normalPane, BorderLayout.CENTER);
+				almostUselessPane.remove(splitPane);
+				almostUselessPane.add(normalPane, BorderLayout.CENTER);
 				primaryPanel = primaryPanelNormal;
 			}
 			rsOnState = plot.isRsOn();
 		}
-
-		//this is pretty much a hack to fix a weird corner case -- really hard to get size from unused JSplitPane...
-		int width = rsOnState ? Math.max(80,panelWidth) : primaryPanelNormal.getWidth();
-		int height = rsOnState ? Math.max(80,splitPane.getDividerLocation()) : primaryPanelNormal.getHeight();
-		BufferedImage primary = plot.getPrimaryBufferedImage(width,height);
-		primaryPanel.setImage(primary);
-
-
+		
 		if(plot.isRsOn()){
-
+			//this is pretty much a hack to fix a weird corner case -- really hard to get size from unused JSplitPane...
+			int primeHeight = dividerLocation - splitPane.getInsets().top;
+			BufferedImage primary = plot.getPrimaryBufferedImage(width,primeHeight);
+			primaryPanel.setImage(primary);
+			
 			//again another size hack.... fuck Swing. Really, just fuck it. 
-			int rsWidth = rsOnState ? Math.max(80,panelWidth) : primaryPanelNormal.getWidth();
-			int rsHeight = rsOnState ? Math.max(80,panelHeight-splitPane.getDividerLocation()) : primaryPanelNormal.getHeight();
-			BufferedImage rs = plot.getRsBufferedImage(rsWidth,rsHeight);
+			int rsHeight = height - dividerLocation + splitPane.getInsets().bottom + splitPane.getDividerSize();
+			BufferedImage rs = plot.getRsBufferedImage(width,rsHeight);
 			rsPanel.setImage(rs);
 
+		}
+		else{
+			BufferedImage primary = plot.getPrimaryBufferedImage(width,height);
+			primaryPanel.setImage(primary);
 		}
 		
 		this.setVisible(true);
