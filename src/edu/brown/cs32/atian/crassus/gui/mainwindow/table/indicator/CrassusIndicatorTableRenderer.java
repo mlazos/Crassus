@@ -34,12 +34,14 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 		switch(column){
 		case 0:
 			JCheckBox cb1 = new CrassusCheckBoxEye();
+			cb1.setBackground(TableColor.getColor(indicator.isTriggered(),indicator.getActive()));
 			if(value.equals(true))
 				cb1.setSelected(true);
 			c = cb1;
 			break;
 		case 1:
 			JCheckBox cb2 = new CrassusCheckBoxAlert();
+			cb2.setBackground(TableColor.getColor(indicator.isTriggered(),indicator.getActive()));
 			if(value.equals(true))
 				cb2.setSelected(true);
 			c = cb2;
@@ -47,13 +49,12 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 		case 2:
 			JLabel label = new JLabel((String)value,JLabel.CENTER);
 			label.setOpaque(true);
+			label.setBackground(TableColor.getColor(indicator.isTriggered(),indicator.getActive()));
 			c = label;
 			break;
 		}
 		
 
-		c.setBackground(TableColor.getColor(indicator.isTriggered(),indicator.getActive()));
-		
 
 		if(c instanceof JCheckBox){
 			JPanel panel = new JPanel(new BorderLayout());

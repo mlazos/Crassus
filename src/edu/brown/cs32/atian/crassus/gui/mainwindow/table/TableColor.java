@@ -6,11 +6,11 @@ import edu.brown.cs32.atian.crassus.backend.StockEventType;
 
 public class TableColor {
 
-	public final static Color BUY = new Color(170,230,170);
-	public final static Color BUY_INACTIVE = new Color(200,240,200);
-	public final static Color SELL = new Color(255,150,150);
-	public final static Color SELL_INACTIVE = new Color(255,210,210);
-	public final static Color CONFLICT = new Color(255,255,0);
+	public final static Color BUY = new Color(130,230,130);
+	public final static Color BUY_INACTIVE = new Color(210,255,210);
+	public final static Color SELL = Color.red;//new Color(255,150,150);
+	public final static Color SELL_INACTIVE = new Color(255,230,230);
+	public final static Color CONFLICT = new Color(120,120,0);
 	public final static Color NONE = Color.white;
 	
 	public static Color getColor(StockEventType state){

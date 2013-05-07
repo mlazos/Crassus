@@ -103,16 +103,16 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		this.table = table;
 		this.row = row;
 		
-		if (value instanceof Boolean) {
-            boolean selected = (boolean) value;
-            cb.setSelected(selected);
-        }
-
 		cb.setBackground(TableColor.getColor(indicator.isTriggered()));
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(cb,BorderLayout.CENTER);
 		panel.setBackground(cb.getBackground());
+
+		if (value instanceof Boolean) {
+            boolean selected = (boolean) value;
+            cb.setSelected(selected);
+        }
 
 		if(column==0){
 			if(isSelected)

@@ -491,12 +491,14 @@ public class StockImpl implements Stock {
     @Override
     public StockEventType isTriggered() {
         StockEventType stType = StockEventType.NONE;
-
         for (Indicator ind : _events) {
-            stType = ind.isTriggered();
-            if (stType != StockEventType.NONE) {
-                return stType;
-            }
+        	if(ind.getActive()){
+        		StockEventType nextStType = ind.isTriggered();
+        		if (stType!=StockEventType.NONE && nextStType!=StockEventType.NONE && stType != nextStType) {
+        			return StockEventType.CONFLICT;
+        		}
+        		stType = nextStType;
+        	}
         }
 
         return stType;
