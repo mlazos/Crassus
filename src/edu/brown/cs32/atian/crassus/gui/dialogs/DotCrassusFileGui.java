@@ -184,7 +184,7 @@ public class DotCrassusFileGui {
 				this.f=file;
 				this.stocks = stocks;
 				
-				timer = new Timer(60000, new TimerListener());
+				timer = new Timer(10000, new TimerListener());
 				timer.setRepeats(true);
 				timer.start();
 				
