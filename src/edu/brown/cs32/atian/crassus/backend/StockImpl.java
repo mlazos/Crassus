@@ -432,7 +432,12 @@ public class StockImpl implements Stock {
         setStartAndEndTime();
         //}
     }
-
+    
+    @Override
+    public void refreshPriceDataOnly()  { // won't refresh indicator
+        refreshStockPrice();
+    }
+    
     @Override
     public void addToPlot(StockPlot stockPlot) {
         TimeSeries series = new TimeSeries(_ticker);

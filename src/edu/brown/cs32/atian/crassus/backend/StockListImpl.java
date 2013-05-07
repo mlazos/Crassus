@@ -84,6 +84,13 @@ public class StockListImpl implements StockList {
         }         
     }
     
+    @Override 
+    public void refreshPriceDataOnly() {   // won't refresh indicators    
+        for(Stock s : _stocks) {
+            s.refreshPriceDataOnly();
+        }        
+    }
+    
     @Override    
     public Stock createStock(String ticker) {
         if(_dataSourceType == DataSourceType.YAHOOFINANCE) {

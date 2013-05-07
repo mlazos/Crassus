@@ -49,6 +49,8 @@ public interface Stock {
     
     void refresh();
     
+    void refreshPriceDataOnly();   // won't refresh indicator
+    
     void addToPlot(StockPlot stockPlot);   
     
     Date getStartTime();
