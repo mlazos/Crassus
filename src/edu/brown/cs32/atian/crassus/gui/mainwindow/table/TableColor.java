@@ -14,6 +14,8 @@ public class TableColor {
 	public final static Color NONE = Color.white;
 	
 	public static Color getColor(StockEventType state){
+		if(state==null)
+			return NONE;
 		switch(state){
 		case BUY:
 			return BUY;
@@ -28,6 +30,8 @@ public class TableColor {
 	}
 	
 	public static Color getColor(StockEventType state, boolean isActive){
+		if(state==null)
+			return NONE;
 		if(isActive)
 			return getColor(state);
 		
