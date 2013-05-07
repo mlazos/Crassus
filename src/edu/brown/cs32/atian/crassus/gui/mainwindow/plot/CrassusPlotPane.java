@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -56,7 +58,7 @@ public class CrassusPlotPane extends JPanel {
 	public class ResizeListener implements ComponentListener {
 		@Override public void componentHidden(ComponentEvent arg0) {}
 		@Override public void componentMoved(ComponentEvent arg0) {}
-		@Override public void componentResized(ComponentEvent arg0) {refresh();}
+		@Override public void componentResized(ComponentEvent arg0) {refreshButNoNewData();}
 		@Override public void componentShown(ComponentEvent arg0) {}
 	}
 
@@ -96,19 +98,24 @@ public class CrassusPlotPane extends JPanel {
 		primaryPanelNormal = new CrassusImageDisplayer();
 		
 		primaryPanelSplit = new CrassusImageDisplayer();
-		primaryPanelSplit.setMinimumSize(new Dimension(200,200));
+		primaryPanelSplit.setMinimumSize(new Dimension(100,100));
 		primaryPanelSplit.setPreferredSize(new Dimension(250,250));
 		
 		primaryPanel = primaryPanelNormal;
 		
 		rsPanel = new CrassusImageDisplayer();
-		rsPanel.setMinimumSize(new Dimension(140,140));
-		rsPanel.setPreferredSize(new Dimension(180,180));
+		rsPanel.setMinimumSize(new Dimension(80,80));
 		
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,primaryPanelSplit,rsPanel);
 		splitPane.setBorder(BorderFactory.createEtchedBorder());
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setResizeWeight(.75);
+		splitPane.setContinuousLayout(true);
+		splitPane.addPropertyChangeListener(
+				JSplitPane.DIVIDER_LOCATION_PROPERTY,
+				new PropertyChangeListener(){@Override
+					public void propertyChange(PropertyChangeEvent arg0) {refreshButNoNewData();}
+				});
 		
 		normalPane = new JPanel();
 		normalPane.setLayout(new BorderLayout());
@@ -348,13 +355,30 @@ public class CrassusPlotPane extends JPanel {
 		timeFreqOldIndex = index;
 	}
 
+	PlotWrapper plot;
+	
 	public void refresh(){
-		//check width of primaryPanel because when pane is swapped out it will be zero, plot object flips out
-		if(stock==null || primaryPanel.getWidth()==0){
-			primaryPanel.setImage(null);
+		if(stock==null){
+			if(plot!=null && rsOnState){
+				rsOnState = false;
+				this.remove(primaryPanel);
+				this.add(primaryPanelNormal);
+				primaryPanel = primaryPanelNormal;
+				primaryPanel.setImage(null);
+				this.setVisible(true);
+				this.revalidate();
+				this.repaint();
+				return;
+			}
+			else{
+				primaryPanel.setImage(null);
+				this.revalidate();
+				this.repaint();
+				return;
+			}
 		}
 		else{
-			PlotWrapper plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
+			plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
 			plot.setAxesTitles("Time", "Price");
 			
 			stock.addToPlot(plot);
@@ -363,55 +387,75 @@ public class CrassusPlotPane extends JPanel {
 					ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
 				}
 			}
-			System.out.println("ok at point 1");
-			if(rsOnState!=plot.isRsOn()){
-				if(plot.isRsOn()){
-					System.out.println("ok at point 2a");
-					
-					this.remove(normalPane);
-					this.add(splitPane, BorderLayout.CENTER);
-					primaryPanel = primaryPanelSplit;
-					
-					splitPane.setDividerLocation(.75);
-				}
-				else{
-					System.out.println("ok at point 2b");
-					this.remove(splitPane);
-					this.add(normalPane, BorderLayout.CENTER);
-					primaryPanel = primaryPanelNormal;
-				}
-				rsOnState = plot.isRsOn();
-			}
-			System.out.println("ok at point 3");
-			int width = primaryPanel.getWidth();
-			if(width==0)
-				width = this.getWidth();
-			int height = primaryPanel.getHeight();
-			if(height==0)
-				height = this.getHeight();
-			BufferedImage primary = plot.getPrimaryBufferedImage(width,height);
-			primaryPanel.setImage(primary);
-			
-			
-			System.out.println("ok at point 4");
-			if(plot.isRsOn()){
-				System.out.println("ok at point 5");
-				int rsWidth = rsPanel.getWidth();
-				if(rsWidth==0)
-					rsWidth = this.getWidth();
-				int rsHeight = rsPanel.getHeight();
-				if(rsHeight==0)
-					rsHeight = this.getHeight();
-				BufferedImage rs = plot.getRsBufferedImage(rsWidth,rsHeight);
-				rsPanel.setImage(rs);
-				
-				rsPanel.revalidate();
-				rsPanel.repaint();
-			}
 		}
+		refreshButNoNewData();
+	}
 	
-		primaryPanel.revalidate();
-		primaryPanel.repaint();
+	private void refreshButNoNewData(){
+		if(plot==null){
+			
+			primaryPanel.setImage(null);
+			
+			this.revalidate();
+			this.repaint();
+			return;
+		}
+		
+		int panelWidth = this.getWidth();
+		int panelHeight = this.getHeight();
+
+		if(rsOnState!=plot.isRsOn()){
+			if(plot.isRsOn()){
+
+				this.remove(normalPane);
+				this.add(splitPane, BorderLayout.CENTER);
+				primaryPanel = primaryPanelSplit;
+
+				splitPane.setDividerLocation(panelHeight*3/4);
+
+			}
+			else{
+				this.remove(splitPane);
+				this.add(normalPane, BorderLayout.CENTER);
+				primaryPanel = primaryPanelNormal;
+			}
+			rsOnState = plot.isRsOn();
+		}
+
+		//this is pretty much a hack to fix a weird corner case (only happens first time). Wish I knew why it was occurring....
+		int width = primaryPanel.getWidth();
+		int height = primaryPanel.getHeight();
+		if(width==0 || height==0){
+			width = panelWidth;
+			height = splitPane.getDividerLocation();
+			System.out.println("width: "+width);
+			System.out.println("height: "+height);
+		}
+		BufferedImage primary = plot.getPrimaryBufferedImage(width,height);
+		primaryPanel.setImage(primary);
+
+
+		if(plot.isRsOn()){
+
+			//again another size hack.... fuck Swing. Really, just fuck it. 
+			int rsWidth = rsPanel.getWidth();
+			int rsHeight = rsPanel.getHeight();
+			if(rsWidth==0 || rsHeight==0){
+				rsWidth = panelWidth;
+				rsHeight = panelHeight-70-splitPane.getDividerLocation();
+				System.out.println("width 2: "+rsWidth);
+				System.out.println("height 2: "+rsHeight);
+				System.out.println("this.getHeight(): "+this.getHeight());
+				System.out.println("divider loc: "+splitPane.getDividerLocation());
+			}
+			BufferedImage rs = plot.getRsBufferedImage(rsWidth,rsHeight);
+			rsPanel.setImage(rs);
+
+		}
+		
+		this.setVisible(true);
+		this.revalidate();
+		this.repaint();
 	}
 
 	public void setMenuItems(
