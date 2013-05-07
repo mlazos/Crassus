@@ -403,12 +403,12 @@ public class DemoStockImpl implements Stock {
         TimeSeries series = new TimeSeries(_ticker);
 
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
-        System.out.println("start");
+        //System.out.println("start");
         for (StockTimeFrameData tf : stockPriceData) {
             // tf.getTimeInNumber() return time represented by a second value 
             long tmp = tf.getTimeInNumber() * 1000;    // from second to Millisecond
             
-            System.out.println(tmp);
+            //System.out.println(tmp);
             
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(tmp);
@@ -423,7 +423,7 @@ public class DemoStockImpl implements Stock {
                 series.add(new Second(date), tf.getAdjustedClose());
             }
         }
-        System.out.println("end");
+        //System.out.println("end");
         SeriesWrapper sw = new SeriesWrapper(series, Color.BLACK);
         stockPlot.addSeries(sw);
     }
