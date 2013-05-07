@@ -388,7 +388,7 @@ public class DemoStockImpl implements Stock {
 
     @Override
     public void refresh() {
-        refreshStockPrice();
+        //refreshStockPrice();
         refreshIndicator();
         setStartAndEndTime();
     }

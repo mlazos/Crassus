@@ -425,7 +425,7 @@ public class StockImpl implements Stock {
 
     @Override
     public void refresh() {
-        refreshStockPrice();
+        //refreshStockPrice();
         refreshIndicator();
         //_startTime = computeStartTime();
         //if(this._autoRefresh) {
