@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
@@ -171,6 +172,7 @@ public class DemoStockImpl implements Stock {
                 }
             }
             wordReader.close();
+            result = StringEscapeUtils.unescapeHtml4(result); 
             return result;
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: no ticker file exist");

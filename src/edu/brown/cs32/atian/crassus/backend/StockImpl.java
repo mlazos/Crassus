@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
-
+import org.apache.commons.lang3.StringEscapeUtils;
 /**
  *
  * @author lyzhang
@@ -189,6 +189,7 @@ public class StockImpl implements Stock {
                 }
             }
             wordReader.close();
+            result = StringEscapeUtils.unescapeHtml4(result); 
             return result;
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: no ticker file exist");            
