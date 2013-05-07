@@ -61,8 +61,12 @@ public class CrassusPlotPane extends JPanel {
 	}
 
 	private CrassusImageDisplayer primaryPanel;
+	private CrassusImageDisplayer primaryPanelNormal;
+	private CrassusImageDisplayer primaryPanelSplit;
 	private CrassusImageDisplayer rsPanel;
-	private boolean rsOnState;
+	private boolean rsOnState = false;
+	private JPanel normalPane;
+	private JSplitPane splitPane;
 	
 	private JComboBox<String> timeframe;
 	private JComboBox<String> timeFreq;
@@ -89,16 +93,29 @@ public class CrassusPlotPane extends JPanel {
 						BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)),
 				BorderFactory.createEmptyBorder(5,5,5,5)));
 		
-		primaryPanel = new CrassusImageDisplayer();
+		primaryPanelNormal = new CrassusImageDisplayer();
+		
+		primaryPanelSplit = new CrassusImageDisplayer();
+		primaryPanelSplit.setMinimumSize(new Dimension(200,200));
+		primaryPanelSplit.setPreferredSize(new Dimension(250,250));
+		
+		primaryPanel = primaryPanelNormal;
 		
 		rsPanel = new CrassusImageDisplayer();
+		rsPanel.setMinimumSize(new Dimension(140,140));
+		rsPanel.setPreferredSize(new Dimension(180,180));
 		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,primaryPanel,rsPanel);
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,primaryPanelSplit,rsPanel);
+		splitPane.setBorder(BorderFactory.createEtchedBorder());
 		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(350);
-		this.add(splitPane,BorderLayout.CENTER);
-		//splitPane.setDividerLocation(splitPane.getSize().width - splitPane.getInsets().bottom - splitPane.getDividerSize() - 100);
-		splitPane.setResizeWeight(1.0);
+		splitPane.setResizeWeight(.75);
+		
+		normalPane = new JPanel();
+		normalPane.setLayout(new BorderLayout());
+		normalPane.setBorder(BorderFactory.createEtchedBorder());
+		normalPane.add(primaryPanel);
+		
+		this.add(normalPane, BorderLayout.CENTER);
 		
 		timeframe = new JComboBox<String>();
 		timeframe.addItem("One Day");
@@ -131,8 +148,9 @@ public class CrassusPlotPane extends JPanel {
 		
 		this.add(timePanel, BorderLayout.SOUTH);
 		
-		primaryPanel.addComponentListener(new ResizeListener());
-		rsPanel.addComponentListener(new ResizeListener());
+//		primaryPanel.addComponentListener(new ResizeListener());
+//		rsPanel.addComponentListener(new ResizeListener());
+		this.addComponentListener(new ResizeListener());
 	}
 
 	public void changeToStock(Stock stock){
@@ -345,12 +363,46 @@ public class CrassusPlotPane extends JPanel {
 					ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
 				}
 			}
-			
-			BufferedImage primary = plot.getPrimaryBufferedImage(primaryPanel.getWidth(), primaryPanel.getHeight());
+			System.out.println("ok at point 1");
+			if(rsOnState!=plot.isRsOn()){
+				if(plot.isRsOn()){
+					System.out.println("ok at point 2a");
+					
+					this.remove(normalPane);
+					this.add(splitPane, BorderLayout.CENTER);
+					primaryPanel = primaryPanelSplit;
+					
+					splitPane.setDividerLocation(.75);
+				}
+				else{
+					System.out.println("ok at point 2b");
+					this.remove(splitPane);
+					this.add(normalPane, BorderLayout.CENTER);
+					primaryPanel = primaryPanelNormal;
+				}
+				rsOnState = plot.isRsOn();
+			}
+			System.out.println("ok at point 3");
+			int width = primaryPanel.getWidth();
+			if(width==0)
+				width = this.getWidth();
+			int height = primaryPanel.getHeight();
+			if(height==0)
+				height = this.getHeight();
+			BufferedImage primary = plot.getPrimaryBufferedImage(width,height);
 			primaryPanel.setImage(primary);
 			
+			
+			System.out.println("ok at point 4");
 			if(plot.isRsOn()){
-				BufferedImage rs = plot.getRsBufferedImage(rsPanel.getWidth(), rsPanel.getHeight());
+				System.out.println("ok at point 5");
+				int rsWidth = rsPanel.getWidth();
+				if(rsWidth==0)
+					rsWidth = this.getWidth();
+				int rsHeight = rsPanel.getHeight();
+				if(rsHeight==0)
+					rsHeight = this.getHeight();
+				BufferedImage rs = plot.getRsBufferedImage(rsWidth,rsHeight);
 				rsPanel.setImage(rs);
 				
 				rsPanel.revalidate();
