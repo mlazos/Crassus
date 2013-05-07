@@ -432,7 +432,7 @@ public class DemoStockImpl implements Stock {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
 
         for (Indicator ind : _events) {
-            ind.refresh(stockPriceData, _startTime, _endTime);
+            ind.refresh(stockPriceData);
         }
     }
 
