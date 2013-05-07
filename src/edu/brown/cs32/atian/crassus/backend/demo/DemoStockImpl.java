@@ -388,11 +388,16 @@ public class DemoStockImpl implements Stock {
 
     @Override
     public void refresh() {
-        refreshStockPrice();
+        //refreshStockPrice();
         refreshIndicator();
         setStartAndEndTime();
     }
 
+    @Override
+    public void refreshPriceDataOnly() {
+        refreshStockPrice();;
+    }    
+    
     @Override
     public void addToPlot(StockPlot stockPlot) {
         TimeSeries series = new TimeSeries(_ticker);
