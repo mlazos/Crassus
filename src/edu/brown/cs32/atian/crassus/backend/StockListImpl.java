@@ -92,4 +92,9 @@ public class StockListImpl implements StockList {
             return new DemoStockImpl(ticker,_dataSourceType);
         }
     }
+    
+    @Override
+    public int getDataRefreshCycle() {    // in Milisecond    
+        return 10000;
+    }
 }
