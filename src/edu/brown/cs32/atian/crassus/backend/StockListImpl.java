@@ -5,6 +5,7 @@
 package edu.brown.cs32.atian.crassus.backend;
 
 import edu.brown.cs32.atian.crassus.backend.AutoComplete.AutoCorrect;
+import edu.brown.cs32.atian.crassus.backend.demo.DemoStockImpl;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +86,10 @@ public class StockListImpl implements StockList {
     
     @Override    
     public Stock createStock(String ticker) {
-        return new StockImpl(ticker,_dataSourceType);
+        if(_dataSourceType == DataSourceType.YAHOOFINANCE) {
+            return new StockImpl(ticker,_dataSourceType);
+        } else {
+            return new DemoStockImpl(ticker,_dataSourceType);
+        }
     }
 }
