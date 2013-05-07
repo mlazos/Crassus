@@ -359,7 +359,7 @@ public class CrassusPlotPane extends JPanel {
 	
 	public void refresh(){
 		if(stock==null){
-			if(plot!=null && rsOnState){
+			if(rsOnState){
 				rsOnState = false;
 				this.remove(primaryPanel);
 				this.add(primaryPanelNormal);
@@ -411,7 +411,7 @@ public class CrassusPlotPane extends JPanel {
 				this.add(splitPane, BorderLayout.CENTER);
 				primaryPanel = primaryPanelSplit;
 
-				splitPane.setDividerLocation(panelHeight*3/4);
+				splitPane.setDividerLocation((panelHeight-100)*3/4);
 
 			}
 			else{
@@ -422,15 +422,9 @@ public class CrassusPlotPane extends JPanel {
 			rsOnState = plot.isRsOn();
 		}
 
-		//this is pretty much a hack to fix a weird corner case (only happens first time). Wish I knew why it was occurring....
-		int width = primaryPanel.getWidth();
-		int height = primaryPanel.getHeight();
-		if(width==0 || height==0){
-			width = panelWidth;
-			height = splitPane.getDividerLocation();
-			System.out.println("width: "+width);
-			System.out.println("height: "+height);
-		}
+		//this is pretty much a hack to fix a weird corner case -- really hard to get size from unused JSplitPane...
+		int width = rsOnState ? Math.max(80,panelWidth) : primaryPanelNormal.getWidth();
+		int height = rsOnState ? Math.max(80,splitPane.getDividerLocation()) : primaryPanelNormal.getHeight();
 		BufferedImage primary = plot.getPrimaryBufferedImage(width,height);
 		primaryPanel.setImage(primary);
 
@@ -438,16 +432,8 @@ public class CrassusPlotPane extends JPanel {
 		if(plot.isRsOn()){
 
 			//again another size hack.... fuck Swing. Really, just fuck it. 
-			int rsWidth = rsPanel.getWidth();
-			int rsHeight = rsPanel.getHeight();
-			if(rsWidth==0 || rsHeight==0){
-				rsWidth = panelWidth;
-				rsHeight = panelHeight-70-splitPane.getDividerLocation();
-				System.out.println("width 2: "+rsWidth);
-				System.out.println("height 2: "+rsHeight);
-				System.out.println("this.getHeight(): "+this.getHeight());
-				System.out.println("divider loc: "+splitPane.getDividerLocation());
-			}
+			int rsWidth = rsOnState ? Math.max(80,panelWidth) : primaryPanelNormal.getWidth();
+			int rsHeight = rsOnState ? Math.max(80,panelHeight-splitPane.getDividerLocation()) : primaryPanelNormal.getHeight();
 			BufferedImage rs = plot.getRsBufferedImage(rsWidth,rsHeight);
 			rsPanel.setImage(rs);
 
