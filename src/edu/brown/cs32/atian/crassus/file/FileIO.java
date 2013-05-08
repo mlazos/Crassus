@@ -22,6 +22,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import edu.brown.cs32.atian.crassus.backend.DataSourceType;
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockFreqType;
 import edu.brown.cs32.atian.crassus.backend.StockImpl;
@@ -263,7 +264,7 @@ public class FileIO {
 		
 		Element root = doc.getDocumentElement();
 		
-		StockList stocks = new StockListImpl();
+		StockList stocks = new StockListImpl(DataSourceType.YAHOOFINANCE);
 		
 		NodeList nList = root.getChildNodes();
 		

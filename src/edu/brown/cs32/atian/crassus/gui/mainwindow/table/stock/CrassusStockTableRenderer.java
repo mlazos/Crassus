@@ -57,8 +57,7 @@ public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 
 		panel.setToolTipText("<html>"+s.getCompanyName()+"<br>"
 				+"52-week high: "+s.getWeek52High()+"<br>"
-				+"52-week low:  "+s.getWeek52Low()+"<br>"
-				+"percent change: "+s.getChgAndPertChg()+"</html>");
+				+"52-week low:  "+s.getWeek52Low()+"</html>");
 		
 		return panel;
 	}

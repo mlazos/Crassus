@@ -126,12 +126,11 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	public void changeStockListTo(StockList stocks) {
 		this.stocks = stocks;
 		this.fireTableDataChanged();
+		state.clear();
 		for(int row=0; row<stocks.getStockList().size(); row++){
 			Stock stock = stocks.getStockList().get(row);
 			StockEventType stState = stock.isTriggered();
-			if(stState != state.get(row)){
-				state.set(row, stState);
-			}
+			state.add(row, stState);
 		}
 	}
 

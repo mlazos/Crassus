@@ -103,7 +103,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		this.table = table;
 		this.row = row;
 		
-		cb.setBackground(TableColor.getColor(indicator.isTriggered()));
+		cb.setBackground(TableColor.getColor(indicator.isTriggered(),indicator.getActive()));
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(cb,BorderLayout.CENTER);

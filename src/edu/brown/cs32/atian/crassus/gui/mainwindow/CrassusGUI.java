@@ -369,7 +369,7 @@ public class CrassusGUI implements GUI {
 		
 		JMenuItem mRemoveIndicator = new JMenuItem("Remove Selected Indicator");
 		mRemoveIndicator.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK|InputEvent.SHIFT_DOWN_MASK));
-		mAddIndicator.addActionListener(
+		mRemoveIndicator.addActionListener(
 				new ActionListener(){@Override
 					public void actionPerformed(ActionEvent e) {indicatorBox.removeSelectedIndicator();}
 				});
