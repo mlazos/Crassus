@@ -12,6 +12,6 @@ public interface GUI {
 	 */
 	public void update();
 
-	public void updateStockBox();
+	public void updateTables();
 
 }

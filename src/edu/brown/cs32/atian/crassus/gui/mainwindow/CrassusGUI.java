@@ -425,7 +425,7 @@ public class CrassusGUI implements GUI {
 	}
 	
 	@Override
-	public void updateStockBox() {
+	public void updateTables() {
 		indicatorBox.refresh();
 		stockBox.refresh();
 	}

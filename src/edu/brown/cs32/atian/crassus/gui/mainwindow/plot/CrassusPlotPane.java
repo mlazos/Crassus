@@ -372,9 +372,11 @@ public class CrassusPlotPane extends JPanel {
 		timeFreqOldIndex = index;
 	}
 
-	PlotWrapper plot;
+	private PlotWrapper plot;
+	private StockFreqType plottedFreqType = StockFreqType.MINUTELY;
 	
 	public void refresh(){
+		
 		if(stock==null){
 			if(rsOnState){
 				rsOnState = false;
@@ -395,14 +397,19 @@ public class CrassusPlotPane extends JPanel {
 			}
 		}
 		else{
-			plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
-			plot.setAxesTitles("Time", "Price");
-			
-			stock.addToPlot(plot);
-			for (Indicator ind: stock.getEventList()){
-				if (ind.getVisible()) {
-					ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
+			//check that either timescale changed or stock has minutely data before replotting
+			StockFreqType currFreq = timeFreqFromIndex(timeFreq.getSelectedIndex());
+			if(currFreq!=plottedFreqType || currFreq==StockFreqType.MINUTELY){
+				plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
+				plot.setAxesTitles("Time", "Price");
+
+				stock.addToPlot(plot);
+				for (Indicator ind: stock.getEventList()){
+					if (ind.getVisible()) {
+						ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
+					}
 				}
+				plottedFreqType = currFreq;
 			}
 		}
 		refreshButNoNewData();

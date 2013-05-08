@@ -35,14 +35,14 @@ public class DotCrassusFileGui {
 		public void actionPerformed(ActionEvent arg0) {
 			while(true){
 				try{
-					if(counter==5){
+					if(counter==30){
 						stocks.refreshAll();
 						gui.update();
 						counter = 0;
 					}
 					else{
 						stocks.refreshPriceDataOnly();
-						gui.updateStockBox();
+						gui.updateTables();
 					}
 					counter++;
 					return;
