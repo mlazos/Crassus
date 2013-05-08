@@ -35,7 +35,7 @@ public class DotCrassusFileGui {
 		public void actionPerformed(ActionEvent arg0) {
 			while(true){
 				try{
-					if(counter==30){
+					if(counter==2){
 						stocks.refreshAll();
 						gui.update();
 						counter = 0;

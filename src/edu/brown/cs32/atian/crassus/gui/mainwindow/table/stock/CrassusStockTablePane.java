@@ -43,7 +43,8 @@ public class CrassusStockTablePane extends JPanel {
 	private class ChangeStockListenerForwarder implements ListSelectionListener {
 		private Stock lastStock;
 		int lastIndex = -1;
-		@Override public void valueChanged(ListSelectionEvent e) {
+		@Override 
+		public void valueChanged(ListSelectionEvent e) {
 			if(listener!=null){
 				int index = table.getSelectedRow();
 				if(index==-1){
@@ -219,8 +220,8 @@ public class CrassusStockTablePane extends JPanel {
 		this.listener = listener;
 	}
 
-	public void refresh() {
-		model.refresh();
+	public boolean refresh() {
+		return model.refresh();
 	}
 	
 	public void changeStockListTo(StockList stocks) {

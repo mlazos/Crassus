@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
@@ -415,19 +416,37 @@ public class CrassusGUI implements GUI {
 		
 		changeStockListTo(fileGui.fileNew());
 	}
+	
+	private void notifyUser(){
+//		String[] options = {"Switch To Crassus","Keep Doing What I Was Doing"};
+//		int value = JOptionPane.showOptionDialog(frame, "One of your stocks has been triggered by an indicator. What would you like to do?", 
+//				"Crassus",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, 
+//				null, options, options[0]);
+//		if(value == 0){
+//			frame.toFront();
+//			frame.repaint();
+//		}
+		if(!frame.isActive())
+			JOptionPane.showMessageDialog(frame,"One of your stocks has been triggered by an indicator.");
+	}
 
 	@Override
 	public void update() {
 		indicatorBox.refresh();
 		plotPane.refresh();
-		stockBox.refresh();
-		
+		boolean shouldNotifyUser = stockBox.refresh();
+		if(shouldNotifyUser){
+			notifyUser();
+		}
 	}
 	
 	@Override
 	public void updateTables() {
 		indicatorBox.refresh();
-		stockBox.refresh();
+		boolean shouldNotifyUser = stockBox.refresh();
+		if(shouldNotifyUser){
+			notifyUser();
+		}
 	}
 	
 	public void possiblyExit() {

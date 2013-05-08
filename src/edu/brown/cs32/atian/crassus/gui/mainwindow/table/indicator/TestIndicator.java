@@ -69,7 +69,7 @@ public class TestIndicator implements Indicator {
 	
 	@Override
 	public void refresh(List<StockTimeFrameData> data) {
-		//state = idealState;
+		state = idealState;
 	}
 
 	@Override

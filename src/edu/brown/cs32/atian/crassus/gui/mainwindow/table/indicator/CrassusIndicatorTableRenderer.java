@@ -26,7 +26,6 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		
 		Indicator indicator = stock.getEventList().get(row);
 		
 		JComponent c = null;
