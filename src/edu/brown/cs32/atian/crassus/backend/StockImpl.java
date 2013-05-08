@@ -86,7 +86,7 @@ public class StockImpl implements Stock {
         if (_companyName.equalsIgnoreCase(_ticker)) {
             throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!");
         }
-
+        initialize();
 
     }
 
