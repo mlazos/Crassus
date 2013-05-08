@@ -64,6 +64,7 @@ public class StockImpl implements Stock {
         if (_companyName.equalsIgnoreCase(_ticker)) {
             throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!");
         }
+        initialize();
     }
 
     public StockImpl(String ticker, DataSourceType dataSourceType) {
@@ -251,13 +252,13 @@ public class StockImpl implements Stock {
             }
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         }
         return _companyName;

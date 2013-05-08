@@ -84,18 +84,20 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
             latestRecordDate = new Date();
         } catch (SocketTimeoutException e) {
             //e.printStackTrace();
+            // nothing can be done here
         }        
         catch (MalformedURLException e) {
-            e.printStackTrace();
-
+            //e.printStackTrace();
+            // nothing can be done here
         } catch (ProtocolException e) {
-            e.printStackTrace();
-
+            //e.printStackTrace();
+            // nothing can be done here
         } catch (IOException e) {
-            e.printStackTrace();
-
+            //e.printStackTrace();
+            // nothing can be done here
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            // nothing can be done here            
         } 
         
         //System.err.println("Update Real Time data at " + (new Date()).toString() + " price= " + _curr);

@@ -55,7 +55,7 @@ public class DemoStockImpl implements Stock {
     StockFreqType _currFreq = StockFreqType.MINUTELY;    // be default se use daily
     Date _startTime;
     Date _endTime;
-    DataSourceType _dataSourceType = DataSourceType.YAHOOFINANCE;
+    DataSourceType _dataSourceType = DataSourceType.DEMODATA;
 
     public DemoStockImpl(String ticker, DataSourceType dataSourceType) {
         _dataSourceType = dataSourceType;
@@ -74,6 +74,7 @@ public class DemoStockImpl implements Stock {
         if (_companyName.equalsIgnoreCase(_ticker)) {
             throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!");
         }
+        initialize();
     }
 
     @Override    
@@ -336,15 +337,17 @@ public class DemoStockImpl implements Stock {
 
         List<StockTimeFrameData> realTime = this._minutely.getHistData();
         List<StockTimeFrameData> result = new ArrayList<StockTimeFrameData>();
-        if (freq == StockFreqType.MINUTELY) {
-            return realTime;   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
-        }
+//        if (freq == StockFreqType.MINUTELY) {
+//            return realTime;   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
+//        }
         // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
         if (freq == StockFreqType.DAILY) {
             result.addAll(_daily.getHistData());
         } else if (freq == StockFreqType.WEEKLY) {
             result.addAll(_weekly.getHistData());
         } else if (freq == StockFreqType.MONTHLY) {
+            result.addAll(_monthly.getHistData());
+        } else if (freq == StockFreqType.MINUTELY) {
             if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
                 result.addAll( _minutely.getHistData());
             } else {

@@ -53,6 +53,7 @@ public class DemoStockDataImpl implements StockHistData {
         List<StockTimeFrameData> _theTrueData = _theTrueStockHistData.getHistData2();
         _demoData.addAll(_theTrueData);
         _theTrueStockHistData = null;
+        Init();
     }
 
     private void updateStockTableData(StockTimeFrameData newTFData) {
