@@ -53,6 +53,9 @@ public class DemoStockImpl implements Stock {
     ArrayList<Indicator> _events = null;
     TimeFrame _timeFrame = TimeFrame.DAILY;
     StockFreqType _currFreq = StockFreqType.MINUTELY;    // be default se use daily
+    boolean _refreshIndicator = true;
+    long _lastTimeStampSentToIndicator = 0;	
+	
     Date _startTime;
     Date _endTime;
     DataSourceType _dataSourceType = DataSourceType.DEMODATA;
@@ -244,11 +247,14 @@ public class DemoStockImpl implements Stock {
 
     @Override
     public void setCurrFreq(StockFreqType currFreq) {
-        _currFreq = currFreq;
-        this.refreshStockPrice();
-        this.refreshIndicator();
-    }
+        if (this._currFreq != currFreq) {
+            _currFreq = currFreq;
+            _refreshIndicator = true;
+            this.refreshStockPrice();
+            this.refreshIndicator();            
+        }
 
+    }
     private void setStartAndEndTime() {
 
         Calendar cal = Calendar.getInstance();
@@ -449,9 +455,24 @@ public class DemoStockImpl implements Stock {
 
     private void refreshIndicator() {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
+        int length = stockPriceData.size();
+        if (length == 0) {
+            return;
+        }
 
         for (Indicator ind : _events) {
-            ind.refresh(stockPriceData);
+            if (_refreshIndicator) {
+                ind.refresh(stockPriceData);
+                _lastTimeStampSentToIndicator = stockPriceData.get(length - 1).getTimeInNumber();
+                _refreshIndicator = false;
+
+            } else {
+                StockTimeFrameData latestData = stockPriceData.get(length - 1);
+                if (latestData.getTimeInNumber() > _lastTimeStampSentToIndicator) {
+                    ind.incrementalUpdate(latestData);
+                    _lastTimeStampSentToIndicator = latestData.getTimeInNumber();
+                }
+            }
         }
     }
 
