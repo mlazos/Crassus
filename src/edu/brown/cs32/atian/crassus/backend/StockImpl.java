@@ -259,6 +259,7 @@ public class StockImpl implements Stock {
             _companyName = "";
         } catch (IOException e) {
             //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
             _companyName = "";
         }
         return _companyName;

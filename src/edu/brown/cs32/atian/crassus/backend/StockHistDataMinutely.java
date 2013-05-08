@@ -112,13 +112,14 @@ public class StockHistDataMinutely implements StockHistData {
             
             return true;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
             return false;
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -200,13 +201,14 @@ public class StockHistDataMinutely implements StockHistData {
             
             return true;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
             return false;
         } catch (NumberFormatException e) {
             e.printStackTrace();

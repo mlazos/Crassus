@@ -95,6 +95,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
         } catch (IOException e) {
             //e.printStackTrace();
             // nothing can be done here
+            System.out.println("Error: Cannot connect to data server");
         } catch (NumberFormatException e) {
             //e.printStackTrace();
             // nothing can be done here            
