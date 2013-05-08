@@ -1,9 +1,7 @@
 package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -11,7 +9,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.undo.UndoManager;
 
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
@@ -29,7 +26,9 @@ public class RSIPanel extends JPanel
 	private JDialog parent;
 	private JTextField period;
 	private String periodtt = "<html>The number of days to use when calculating the RSI.</html>";
-
+	private JLabel yearlyGain = new JLabel("Expected Yearly Gain: (Not tested yet)");
+	private JLabel monthlyGain = new JLabel("Expected Monthly Gain: (Not tested yet)");
+	private JLabel weeklyGain = new JLabel("Expected Weekly Gain: (Not tested yet)");
 	public RSIPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
 	{
 		
@@ -37,10 +36,6 @@ public class RSIPanel extends JPanel
 		this.parent = parent;
 		this.stock = stock;
 		
-		final String undo = "undo";
-		final String redo = "redo";
-		final KeyStroke undoKey = KeyStroke.getKeyStroke("control Z");
-		final KeyStroke redoKey = KeyStroke.getKeyStroke("control Y");
 		final UndoManager undoM = new UndoManager();
 		
 		NumberVerifier inputValidator = new NumberVerifier(this);
@@ -59,6 +54,12 @@ public class RSIPanel extends JPanel
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));
 		parameters.add(periodInput);
 		
+		JPanel expectedGains = new JPanel();
+		expectedGains.setLayout(new BoxLayout(expectedGains, BoxLayout.Y_AXIS));
+		expectedGains.add(yearlyGain);
+		expectedGains.add(monthlyGain);
+		expectedGains.add(weeklyGain);
+		
 		//middle panel
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
@@ -76,6 +77,7 @@ public class RSIPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
+		this.add(expectedGains);
 		
 	}
 	
@@ -124,12 +126,46 @@ public class RSIPanel extends JPanel
 		
 	}
 	
-	class TestListener implements ActionListener
+	class TestListener extends AbstractTestListener
 	{
+		public TestListener()
+		{
+			super(parent, yearlyGain, monthlyGain, weeklyGain);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			String periodArg = period.getText();
+			
+			if(periodArg == null)
+			{
+				showErrorDialog("You must enter a value.");
+			}
+			else
+			{
+				try
+				{
+					Indicator indDaily = new RSI(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
+					
+					
+					Indicator indWeekly = new RSI(stock.getStockPriceData(StockFreqType.WEEKLY), Integer.parseInt(periodArg));
+					
+					
+					Indicator indMonthly = new RSI(stock.getStockPriceData(StockFreqType.MONTHLY), Integer.parseInt(periodArg));
+					
+					
+					test(indDaily, indWeekly, indMonthly);
+				}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
+			}
 			
 		}
 		
