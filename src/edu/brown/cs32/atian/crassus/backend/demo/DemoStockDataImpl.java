@@ -31,7 +31,7 @@ public class DemoStockDataImpl implements StockHistData {
     private String _low52Week = "N/A";
     private String _changeAndPtgChange = "N/A";
     private int _dataSimFreq = 2;  // in second
-    final double STDMEANRATIO = 0.002;
+    final double STDMEANRATIO = 0.001;
 
     public DemoStockDataImpl(String ticker) {
         _ticker = ticker;
@@ -48,9 +48,9 @@ public class DemoStockDataImpl implements StockHistData {
         _changeAndPtgChange = _theTrueStockRealTimeData.getChgAndPertChg();
         _theTrueStockRealTimeData = null;
 
-        StockHistData _theTrueStockHistData = new StockHistDataMinutely(_ticker);
+        StockHistDataMinutely _theTrueStockHistData = new StockHistDataMinutely(_ticker);
         _theTrueStockHistData.Init();
-        List<StockTimeFrameData> _theTrueData = _theTrueStockHistData.getHistData();
+        List<StockTimeFrameData> _theTrueData = _theTrueStockHistData.getHistData2();
         _demoData.addAll(_theTrueData);
         _theTrueStockHistData = null;
     }
@@ -118,7 +118,7 @@ public class DemoStockDataImpl implements StockHistData {
 
             StockTimeFrameData newTFData = new StockTimeFrameData(curr.toString(), open, high, low, close, volume, adjustedClose, false);;
             StockTimeFrameData oldSecToLastFrame = _demoData.get(_demoData.size() - 2);
-            if (oldSecToLastFrame.getTimeInNumber() + 300 > newTFData.getTimeInNumber()) {
+            if (oldSecToLastFrame.getTimeInNumber() + 60 > newTFData.getTimeInNumber()) {
                 _demoData.remove(_demoData.size() - 1);
             }
             _demoData.add(newTFData);

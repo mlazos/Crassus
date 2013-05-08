@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
  */
 public class StockHistDataMinutely implements StockHistData {
     private String _ticker;
-    private List<StockTimeFrameData> _histData;
-    private List<StockTimeFrameData> _histData2;
+    private List<StockTimeFrameData> _histData;   // 15 days data at 3-min
+    private List<StockTimeFrameData> _histData2;   // 1 day data at 1-min
     private Date latestCheckTime = null;
     private Date latestCheckTime2 = null;    
    
@@ -35,7 +35,8 @@ public class StockHistDataMinutely implements StockHistData {
     }
 
     public boolean Init() {
-        return Init2() && Init1();
+        //return Init2() && Init1();
+        return Init2();   // ONE-WEEK has been removed.  no need to support 3-minute data.
     }    
     
     private boolean Init1() {

@@ -282,13 +282,13 @@ public class StockImpl implements Stock {
 
             if (dayOfWeek == Calendar.SATURDAY) {   // if Saturday 
                 cal.add(Calendar.DATE, -1);
-                cal.set(Calendar.HOUR_OF_DAY, 17);
+                cal.set(Calendar.HOUR_OF_DAY, 16);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 now = cal.getTime();    // change now to friday 5PM
             } else if (dayOfWeek == Calendar.SUNDAY) {   // if Sunday
                 cal.add(Calendar.DATE, -2);
-                cal.set(Calendar.HOUR_OF_DAY, 17);
+                cal.set(Calendar.HOUR_OF_DAY, 16);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 now = cal.getTime();           // change now to friday 5PM  
@@ -302,10 +302,19 @@ public class StockImpl implements Stock {
 
                 if (cal.before(tmpCal)) {         // compare cal, which is now, with tmpCal (Monday 9:30AM)
                     cal.add(Calendar.DATE, -3);
-                    cal.set(Calendar.HOUR_OF_DAY, 17);
+                    cal.set(Calendar.HOUR_OF_DAY, 16);
                     cal.set(Calendar.MINUTE, 0);
                     cal.set(Calendar.SECOND, 0);
                     now = cal.getTime();             // change now to friday 5PM  
+                }
+            }
+            
+            if(dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
+                if(now.getHours() > 16) {
+                    cal.set(Calendar.HOUR_OF_DAY, 16);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);                    
+                    now = cal.getTime();  
                 }
             }
         }
@@ -315,7 +324,7 @@ public class StockImpl implements Stock {
                 cal.add(Calendar.HOUR, -1);
         }
         else if (_timeFrame == TimeFrame.DAILY) {;
-            if(now.getHours() <= 17 &&  now.getHours() >= 9) {
+            if(now.getHours() <= 16 &&  now.getHours() >= 9) {
                 cal.add(Calendar.HOUR, -10);
             } else {
                 cal.add(Calendar.DATE, -1);
@@ -371,11 +380,11 @@ public class StockImpl implements Stock {
         } else if (freq == StockFreqType.MONTHLY) {
             result.addAll( _monthly.getHistData());
         } else if (freq == StockFreqType.MINUTELY) {
-            if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
+//            if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
                 result.addAll( _minutely.getHistData2());
-            } else {
-                result.addAll( _minutely.getHistData());
-            }
+//            } else {
+//                result.addAll( _minutely.getHistData());
+//            }
         }
 
         if (result.size() == 0) {
