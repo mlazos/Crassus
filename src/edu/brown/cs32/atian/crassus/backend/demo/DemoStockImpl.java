@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
@@ -52,9 +53,12 @@ public class DemoStockImpl implements Stock {
     ArrayList<Indicator> _events = null;
     TimeFrame _timeFrame = TimeFrame.DAILY;
     StockFreqType _currFreq = StockFreqType.MINUTELY;    // be default se use daily
+    boolean _refreshIndicator = true;
+    long _lastTimeStampSentToIndicator = 0;	
+	
     Date _startTime;
     Date _endTime;
-    DataSourceType _dataSourceType = DataSourceType.YAHOOFINANCE;
+    DataSourceType _dataSourceType = DataSourceType.DEMODATA;
 
     public DemoStockImpl(String ticker, DataSourceType dataSourceType) {
         _dataSourceType = dataSourceType;
@@ -73,6 +77,7 @@ public class DemoStockImpl implements Stock {
         if (_companyName.equalsIgnoreCase(_ticker)) {
             throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!");
         }
+        initialize();
     }
 
     @Override    
@@ -171,6 +176,7 @@ public class DemoStockImpl implements Stock {
                 }
             }
             wordReader.close();
+            result = StringEscapeUtils.unescapeHtml4(result); 
             return result;
         } catch (FileNotFoundException e) {
             System.out.println("ERROR: no ticker file exist");
@@ -241,11 +247,14 @@ public class DemoStockImpl implements Stock {
 
     @Override
     public void setCurrFreq(StockFreqType currFreq) {
-        _currFreq = currFreq;
-        this.refreshStockPrice();
-        this.refreshIndicator();
-    }
+        if (this._currFreq != currFreq) {
+            _currFreq = currFreq;
+            _refreshIndicator = true;
+            this.refreshStockPrice();
+            this.refreshIndicator();            
+        }
 
+    }
     private void setStartAndEndTime() {
 
         Calendar cal = Calendar.getInstance();
@@ -334,15 +343,17 @@ public class DemoStockImpl implements Stock {
 
         List<StockTimeFrameData> realTime = this._minutely.getHistData();
         List<StockTimeFrameData> result = new ArrayList<StockTimeFrameData>();
-        if (freq == StockFreqType.MINUTELY) {
-            return realTime;   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
-        }
+//        if (freq == StockFreqType.MINUTELY) {
+//            return realTime;   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
+//        }
         // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
         if (freq == StockFreqType.DAILY) {
             result.addAll(_daily.getHistData());
         } else if (freq == StockFreqType.WEEKLY) {
             result.addAll(_weekly.getHistData());
         } else if (freq == StockFreqType.MONTHLY) {
+            result.addAll(_monthly.getHistData());
+        } else if (freq == StockFreqType.MINUTELY) {
             if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
                 result.addAll( _minutely.getHistData());
             } else {
@@ -444,9 +455,24 @@ public class DemoStockImpl implements Stock {
 
     private void refreshIndicator() {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
+        int length = stockPriceData.size();
+        if (length == 0) {
+            return;
+        }
 
         for (Indicator ind : _events) {
-            ind.refresh(stockPriceData);
+            if (_refreshIndicator) {
+                ind.refresh(stockPriceData);
+                _lastTimeStampSentToIndicator = stockPriceData.get(length - 1).getTimeInNumber();
+                _refreshIndicator = false;
+
+            } else {
+                StockTimeFrameData latestData = stockPriceData.get(length - 1);
+                if (latestData.getTimeInNumber() > _lastTimeStampSentToIndicator) {
+                    ind.incrementalUpdate(latestData);
+                    _lastTimeStampSentToIndicator = latestData.getTimeInNumber();
+                }
+            }
         }
     }
 

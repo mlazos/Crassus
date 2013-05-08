@@ -1,17 +1,17 @@
 package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.undo.UndoManager;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
@@ -24,6 +24,7 @@ public class BolingerBandPanel extends JPanel
 {
 
 	/**
+	 * @author mlazos
 	 * This is the panel that is displayed for Bolinger Bands Events
 	 */
 	private static final long serialVersionUID = 1L;
@@ -33,6 +34,9 @@ public class BolingerBandPanel extends JPanel
 	private JDialog parent;
 	private JTextField periods;
 	private JTextField bandWidth;
+	private JLabel yearlyGain = new JLabel("Expected Yearly Gain: (Not tested yet)");
+	private JLabel monthlyGain = new JLabel("Expected Monthly Gain: (Not tested yet)");
+	private JLabel weeklyGain = new JLabel("Expected Weekly Gain: (Not tested yet)");
 	private String periodstt = "<html>The number of days when calculating the standard deviation and simple moving average.</html>";
 	private String bandWidthtt = "<html>The number of standard deviations for the outer bands.</html>";
 	
@@ -42,7 +46,6 @@ public class BolingerBandPanel extends JPanel
 		this.closeListener = closeListener;
 		this.parent = parent;
 		this.stock = stock;
-		
 		
 		final UndoManager undoM = new UndoManager();
 		
@@ -73,6 +76,13 @@ public class BolingerBandPanel extends JPanel
 		parameters.add(periodsInput);
 		parameters.add(bandWidthInput);
 		
+		JPanel expectedGains = new JPanel();
+		expectedGains.setLayout(new BoxLayout(expectedGains, BoxLayout.Y_AXIS));
+		expectedGains.add(yearlyGain);
+		expectedGains.add(monthlyGain);
+		expectedGains.add(weeklyGain);
+		expectedGains.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20,20,20,125), new EtchedBorder()));
+		
 		//middle panel
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
@@ -90,6 +100,8 @@ public class BolingerBandPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
+		this.add(expectedGains);
+		
 
 		
 	}
@@ -148,12 +160,47 @@ public class BolingerBandPanel extends JPanel
 		
 	}
 	
-	class TestListener implements ActionListener
+	class TestListener extends AbstractTestListener
 	{
+		public TestListener()
+		{
+			super(parent, yearlyGain, monthlyGain, weeklyGain);
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			String periodsArg = periods.getText();
+			String bandWidthArg = bandWidth.getText();
+			
+			if(periodsArg == null || bandWidthArg == null)
+			{
+				showErrorDialog("You must enter values.");
+			}
+			else
+			{
+				try
+				{
+					Indicator indDaily = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), 
+							Integer.parseInt(bandWidthArg));
+					
+					Indicator indWeekly = new BollingerBands(stock.getStockPriceData(StockFreqType.WEEKLY), Integer.parseInt(periodsArg), 
+							Integer.parseInt(bandWidthArg));
+					
+					Indicator indMonthly = new BollingerBands(stock.getStockPriceData(StockFreqType.MONTHLY), Integer.parseInt(periodsArg), 
+							Integer.parseInt(bandWidthArg));
+					
+					test(indDaily, indWeekly, indMonthly);
+				}
+				catch(NumberFormatException nfe)
+				{
+					showErrorDialog();
+				}
+				catch(IllegalArgumentException iae)
+				{
+					showErrorDialog(iae.getMessage());
+				}
+			}
 			
 		}
 		

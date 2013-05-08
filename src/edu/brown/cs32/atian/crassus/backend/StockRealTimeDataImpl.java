@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +38,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
     public StockRealTimeDataImpl(String ticker) {
         _ticker = ticker;
         _realtimeData = new ArrayList<StockTimeFrameData>();
+        latestRecordDate = new Date();
     }
 
     private void getStockTableData() {
@@ -60,7 +62,7 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
             connection = (HttpURLConnection) serverAddress.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
-            connection.setReadTimeout(10000);
+            connection.setReadTimeout(1000);
 
             connection.connect();
 
@@ -80,19 +82,24 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
             _low52Week = splitted[3];
             _changeAndPtgChange  = splitted[7];
             latestRecordDate = new Date();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-
+        } catch (SocketTimeoutException e) {
+            //e.printStackTrace();
+            // nothing can be done here
+        }        
+        catch (MalformedURLException e) {
+            //e.printStackTrace();
+            // nothing can be done here
         } catch (ProtocolException e) {
-            e.printStackTrace();
-
+            //e.printStackTrace();
+            // nothing can be done here
         } catch (IOException e) {
-            e.printStackTrace();
-
+            //e.printStackTrace();
+            // nothing can be done here
+            System.out.println("Error: Cannot connect to data server");
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-
-        }
+            //e.printStackTrace();
+            // nothing can be done here            
+        } 
         
         //System.err.println("Update Real Time data at " + (new Date()).toString() + " price= " + _curr);
     }

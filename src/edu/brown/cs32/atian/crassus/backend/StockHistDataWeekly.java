@@ -96,15 +96,16 @@ public class StockHistDataWeekly implements StockHistData {
             }
             return true;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //System.exit(1);
             return false;
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //System.exit(1);
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
             //System.exit(1);
             return false;
         } catch (NumberFormatException e) {

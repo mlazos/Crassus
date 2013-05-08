@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -44,6 +45,10 @@ public class StockImpl implements Stock {
     ArrayList<Indicator> _events = null;
     TimeFrame _timeFrame = TimeFrame.DAILY;
     StockFreqType _currFreq = StockFreqType.MINUTELY;    // be default se use daily
+    
+    boolean _refreshIndicator = true;
+    long _lastTimeStampSentToIndicator = 0;
+    
     Date _startTime;
     Date _endTime;
     DataSourceType _dataSourceType = DataSourceType.YAHOOFINANCE;
@@ -64,6 +69,7 @@ public class StockImpl implements Stock {
         if (_companyName.equalsIgnoreCase(_ticker)) {
             throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!");
         }
+        initialize();
     }
 
     public StockImpl(String ticker, DataSourceType dataSourceType) {
@@ -85,7 +91,7 @@ public class StockImpl implements Stock {
         if (_companyName.equalsIgnoreCase(_ticker)) {
             throw new IllegalArgumentException("Error: ticker " + ticker + " does not exist!");
         }
-
+        initialize();
 
     }
 
@@ -189,9 +195,10 @@ public class StockImpl implements Stock {
                 }
             }
             wordReader.close();
+            result = StringEscapeUtils.unescapeHtml4(result);
             return result;
         } catch (FileNotFoundException e) {
-            System.out.println("ERROR: no ticker file exist");            
+            System.out.println("ERROR: no ticker file exist");
             return null;
         } catch (IOException e) {
             System.out.println("ERROR: IO exception");
@@ -250,13 +257,14 @@ public class StockImpl implements Stock {
             }
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
             _companyName = "";
         }
         return _companyName;
@@ -264,9 +272,13 @@ public class StockImpl implements Stock {
 
     @Override
     public void setCurrFreq(StockFreqType currFreq) {
-        _currFreq = currFreq;
-        this.refreshStockPrice();
-        this.refreshIndicator();
+        if (this._currFreq != currFreq) {
+            _currFreq = currFreq;
+            _refreshIndicator = true;
+            this.refreshStockPrice();
+            this.refreshIndicator();            
+        }
+
     }
 
     private void setStartAndEndTime() {
@@ -281,13 +293,13 @@ public class StockImpl implements Stock {
 
             if (dayOfWeek == Calendar.SATURDAY) {   // if Saturday 
                 cal.add(Calendar.DATE, -1);
-                cal.set(Calendar.HOUR_OF_DAY, 17);
+                cal.set(Calendar.HOUR_OF_DAY, 16);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 now = cal.getTime();    // change now to friday 5PM
             } else if (dayOfWeek == Calendar.SUNDAY) {   // if Sunday
                 cal.add(Calendar.DATE, -2);
-                cal.set(Calendar.HOUR_OF_DAY, 17);
+                cal.set(Calendar.HOUR_OF_DAY, 16);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 now = cal.getTime();           // change now to friday 5PM  
@@ -301,20 +313,28 @@ public class StockImpl implements Stock {
 
                 if (cal.before(tmpCal)) {         // compare cal, which is now, with tmpCal (Monday 9:30AM)
                     cal.add(Calendar.DATE, -3);
-                    cal.set(Calendar.HOUR_OF_DAY, 17);
+                    cal.set(Calendar.HOUR_OF_DAY, 16);
                     cal.set(Calendar.MINUTE, 0);
                     cal.set(Calendar.SECOND, 0);
                     now = cal.getTime();             // change now to friday 5PM  
                 }
             }
+
+            if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
+                if (now.getHours() > 16) {
+                    cal.set(Calendar.HOUR_OF_DAY, 16);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    now = cal.getTime();
+                }
+            }
         }
         _endTime = now;
-        
+
         if (_timeFrame == TimeFrame.HOURLY) {;
-                cal.add(Calendar.HOUR, -1);
-        }
-        else if (_timeFrame == TimeFrame.DAILY) {;
-            if(now.getHours() <= 17 &&  now.getHours() >= 9) {
+            cal.add(Calendar.HOUR, -1);
+        } else if (_timeFrame == TimeFrame.DAILY) {;
+            if (now.getHours() <= 16 && now.getHours() >= 9) {
                 cal.add(Calendar.HOUR, -10);
             } else {
                 cal.add(Calendar.DATE, -1);
@@ -330,7 +350,6 @@ public class StockImpl implements Stock {
         }
         _startTime = cal.getTime();
     }
-    
 
     @Override
     public void setTimeFrame(TimeFrame timeFrame) {
@@ -360,7 +379,7 @@ public class StockImpl implements Stock {
 
         List<StockTimeFrameData> realTime = this._realTime.getRealTimeData();
         List<StockTimeFrameData> result = new ArrayList<StockTimeFrameData>();
-       
+
         // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
 
         if (freq == StockFreqType.DAILY) {
@@ -368,13 +387,13 @@ public class StockImpl implements Stock {
         } else if (freq == StockFreqType.WEEKLY) {
             result.addAll(_weekly.getHistData());
         } else if (freq == StockFreqType.MONTHLY) {
-            result.addAll( _monthly.getHistData());
+            result.addAll(_monthly.getHistData());
         } else if (freq == StockFreqType.MINUTELY) {
-            if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
-                result.addAll( _minutely.getHistData2());
-            } else {
-                result.addAll( _minutely.getHistData());
-            }
+//            if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
+            result.addAll(_minutely.getHistData2());
+//            } else {
+//                result.addAll( _minutely.getHistData());
+//            }
         }
 
         if (result.size() == 0) {
@@ -445,12 +464,12 @@ public class StockImpl implements Stock {
         setStartAndEndTime();
         //}
     }
-    
+
     @Override
-    public void refreshPriceDataOnly()  { // won't refresh indicator
+    public void refreshPriceDataOnly() { // won't refresh indicator
         refreshStockPrice();
     }
-    
+
     @Override
     public void addToPlot(StockPlot stockPlot) {
         TimeSeries series = new TimeSeries(_ticker);
@@ -485,9 +504,24 @@ public class StockImpl implements Stock {
 
     private void refreshIndicator() {
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
+        int length = stockPriceData.size();
+        if (length == 0) {
+            return;
+        }
 
         for (Indicator ind : _events) {
-            ind.refresh(stockPriceData);
+            if (_refreshIndicator) {
+                ind.refresh(stockPriceData);
+                _lastTimeStampSentToIndicator = stockPriceData.get(length - 1).getTimeInNumber();
+                _refreshIndicator = false;
+
+            } else {
+                StockTimeFrameData latestData = stockPriceData.get(length - 1);
+                if (latestData.getTimeInNumber() > _lastTimeStampSentToIndicator) {
+                    ind.incrementalUpdate(latestData);
+                    _lastTimeStampSentToIndicator = latestData.getTimeInNumber();
+                }
+            }
         }
     }
 

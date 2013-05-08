@@ -95,22 +95,37 @@ public class EventWindowFrame implements EventWindow {
 		
 		if(prevIndicator instanceof BollingerBands)
 		{
+			BollingerBands ind = (BollingerBands)prevIndicator;
 			currentPanel = bb;
+			bb.setPeriods(Integer.toString(ind.getPeriod()));
+			bb.setBandWidth(Integer.toString(ind.getBandWidth()));
 		}else if(prevIndicator instanceof PriceChannel)
 		{
+			PriceChannel ind = (PriceChannel)prevIndicator;
 			currentPanel = pc;
+			pc.setLookBack(Integer.toString(ind.getLookBackPeriod())); 
 		}else if(prevIndicator instanceof MACD)
 		{
+			MACD ind = (MACD)prevIndicator;
 			currentPanel = mp;
+			mp.setSignal(Integer.toString(ind.getSignalPeriod()));
+			mp.setShort(Integer.toString(ind.getShortPeriod()));
+			mp.setLong(Integer.toString(ind.getLongPeriod()));
 		}else if(prevIndicator instanceof RSI)
 		{
+			RSI ind = (RSI)prevIndicator;
 			currentPanel = rsp;
+			rsp.setPeriod(Integer.toString(ind.getPeriod()));
 		}else if(prevIndicator instanceof PivotPoints)
 		{
+			PivotPoints ind = (PivotPoints)prevIndicator;
 			currentPanel = pp;
+			pp.setSelected(ind.getPivotOption());
 		}else if(prevIndicator instanceof StochasticOscillator)
 		{
+			StochasticOscillator ind = (StochasticOscillator)prevIndicator;
 			currentPanel = sop;
+			sop.setPeriod(Integer.toString(ind.getPeriod()));
 		}
 		
 		//add dropdown to main Frame

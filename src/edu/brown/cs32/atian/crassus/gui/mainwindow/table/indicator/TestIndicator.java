@@ -69,6 +69,11 @@ public class TestIndicator implements Indicator {
 	
 	@Override
 	public void refresh(List<StockTimeFrameData> data) {
+		//state = idealState;
+	}
+
+	@Override
+	public void incrementalUpdate(StockTimeFrameData datum) {
 		state = idealState;
 	}
 

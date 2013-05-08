@@ -42,7 +42,7 @@ public class DotCrassusFileGui {
 					}
 					else{
 						stocks.refreshPriceDataOnly();
-						gui.refreshStockBox();
+						gui.updateStockBox();
 					}
 					counter++;
 					return;
