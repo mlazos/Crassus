@@ -12,7 +12,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.EtchedBorder;
@@ -46,17 +44,16 @@ import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStackListener;
  */
 public class CrassusGUI implements GUI {
 	
-	/*
-	 * inner classes appear in same order that they do in the constructor.
-	 */
-	
-	//TODO change above inner classes and possibly below inner classes to anonymous inner classes
-
-	private class RefreshPlotListener implements CrassusPlotIsObsoleteListener {
+	private class RefreshPlotListener implements CrassusStockWasAlteredListener {
 		
 		@Override
-		public void informPlotIsObsolete() {
+		public void plotChanged() {
 			plotPane.refresh();
+		}
+
+		@Override
+		public void stockBoxChanged() {
+			stockBox.refresh();
 		}
 	}
 
@@ -395,7 +392,6 @@ public class CrassusGUI implements GUI {
 		
 	}
 	
-
 	public void changeStockListTo(StockList stocks) {
 
 		stockBox.changeStockListTo(stocks);
@@ -422,13 +418,14 @@ public class CrassusGUI implements GUI {
 
 	@Override
 	public void update() {
-		stockBox.refresh();
 		indicatorBox.refresh();
 		plotPane.refresh();
+		stockBox.refresh();
+		
 	}
 	
 	@Override
-	public void updatePriceDataOnly() {
+	public void refreshStockBox() {
 		stockBox.refresh();
 	}
 	

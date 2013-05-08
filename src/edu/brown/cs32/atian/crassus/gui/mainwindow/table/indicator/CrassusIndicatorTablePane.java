@@ -35,7 +35,7 @@ import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.gui.CrassusButton;
 import edu.brown.cs32.atian.crassus.gui.WindowCloseListener;
 import edu.brown.cs32.atian.crassus.gui.indicatorwindows.EventWindowFrame;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusStockWasAlteredListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.SelectUndoable;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
@@ -101,7 +101,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 	private JFrame _frame;
 	private Stock stock;
 
-	public CrassusIndicatorTablePane(JFrame frame, UndoableStack undoables, CrassusPlotIsObsoleteListener listener){
+	public CrassusIndicatorTablePane(JFrame frame, UndoableStack undoables, CrassusStockWasAlteredListener listener){
 		_frame = frame;
 		this.undoables = undoables;
 		

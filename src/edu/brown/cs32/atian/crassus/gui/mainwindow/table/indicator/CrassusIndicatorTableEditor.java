@@ -16,7 +16,7 @@ import javax.swing.table.TableCellEditor;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusStockWasAlteredListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.TableColor;
 import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStack;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
@@ -30,7 +30,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 		public void actionPerformed(ActionEvent arg0) {
 			
 			indicator.setVisible(cbe.isSelected());
-			listener.informPlotIsObsolete();
+			listener.plotChanged();
 			undoables.push(new EyeBoxUndoable(cbe.isSelected(),listener,table,row));
 			
 			stopCellEditing();
@@ -46,7 +46,7 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 			indicator.setActive(cba.isSelected());
 			undoables.push(new AlertBoxUndoable(cba.isSelected(),table,row));
 			
-			model.alteredIndicator(row);
+			model.setTriggerState(row,cba.isSelected());
 			stopCellEditing();
 		}
 
@@ -64,11 +64,11 @@ public class CrassusIndicatorTableEditor extends AbstractCellEditor implements T
 	
 	private boolean usingEye;
 	
-	private CrassusPlotIsObsoleteListener listener;
+	private CrassusStockWasAlteredListener listener;
 	
 	private CrassusIndicatorTableModel model;
 	
-	public CrassusIndicatorTableEditor(CrassusPlotIsObsoleteListener listener, UndoableStack undoables,
+	public CrassusIndicatorTableEditor(CrassusStockWasAlteredListener listener, UndoableStack undoables,
 			CrassusIndicatorTableModel model){
 		cbe = new CrassusCheckBoxEye();
 		cbe.addActionListener(new EyeBoxListener());

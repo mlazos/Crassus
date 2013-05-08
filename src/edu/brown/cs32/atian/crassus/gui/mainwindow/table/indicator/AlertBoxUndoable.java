@@ -2,7 +2,7 @@ package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 
 import javax.swing.JTable;
 
-import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusStockWasAlteredListener;
 import edu.brown.cs32.atian.crassus.gui.undoable.Undoable;
 
 public class AlertBoxUndoable implements Undoable {

@@ -1,9 +1,12 @@
 package edu.brown.cs32.atian.crassus.gui.mainwindow.table.indicator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
-import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusPlotIsObsoleteListener;
+import edu.brown.cs32.atian.crassus.gui.mainwindow.CrassusStockWasAlteredListener;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 import edu.brown.cs32.atian.crassus.indicators.Indicator;
 
@@ -13,9 +16,9 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 	private Stock stock;
 	private CrassusTableRowSelector selector;
 	
-	private CrassusPlotIsObsoleteListener listener;
+	private CrassusStockWasAlteredListener listener;
 	
-	public CrassusIndicatorTableModel(CrassusTableRowSelector selector, CrassusPlotIsObsoleteListener listener){
+	public CrassusIndicatorTableModel(CrassusTableRowSelector selector, CrassusStockWasAlteredListener listener){
 		this.selector = selector;
 		this.listener = listener;
 	}
@@ -100,7 +103,7 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		selector.select(i);
 		
 		if(ind.getVisible())
-			listener.informPlotIsObsolete();
+			listener.plotChanged();
 	}
 
 	public void addLastIndicator(Indicator ind) {
@@ -110,7 +113,7 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		selector.select(i);
 		
 		if(ind.getVisible())
-			listener.informPlotIsObsolete();
+			listener.plotChanged();
 	}
 
 	public Indicator removeIndicator(int i) {
@@ -122,7 +125,7 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		this.fireTableRowsDeleted(i, i);
 		
 		if(ind.getVisible()) 
-			listener.informPlotIsObsolete();
+			listener.plotChanged();
 		
 		return ind;
 	}
@@ -141,8 +144,9 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		this.fireTableRowsUpdated(0, getRowCount()-1);
 	}
 
-	public void alteredIndicator(int row) {
+	public void setTriggerState(int row, boolean selected) {
 		this.fireTableRowsUpdated(row, row);
+		listener.stockBoxChanged();
 	}
 
 }

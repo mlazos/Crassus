@@ -501,21 +501,25 @@ public class StockImpl implements Stock {
         return _endTime;
     }
 
-    @Override
-    public StockEventType isTriggered() {
-        StockEventType stType = StockEventType.NONE;
-        for (Indicator ind : _events) {
-        	if(ind.getActive()){
-        		StockEventType nextStType = ind.isTriggered();
-        		if (stType!=StockEventType.NONE && nextStType!=StockEventType.NONE && stType != nextStType) {
-        			return StockEventType.CONFLICT;
-        		}
-        		stType = nextStType;
-        	}
-        }
-
-        return stType;
-    }
+    @Override 
+    public StockEventType isTriggered() { 
+        StockEventType stType = StockEventType.NONE; 
+        for (Indicator ind : _events) { 
+        	if(ind.getActive()){ 
+        		StockEventType indType = ind.isTriggered(); 
+        		if(indType==null) 
+        			indType=StockEventType.NONE; 
+        		if (stType!=StockEventType.NONE && indType!=StockEventType.NONE && stType != indType) { 
+        			return StockEventType.CONFLICT; 
+        		} 
+        		if (indType!=StockEventType.NONE){ 
+        			stType = indType; 
+        		} 
+        	} 
+        } 
+         
+        return stType; 
+    } 
     private int selectedIndicatorIndex = -1;
 
     @Override
