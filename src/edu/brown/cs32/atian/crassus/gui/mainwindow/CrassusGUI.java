@@ -375,6 +375,14 @@ public class CrassusGUI implements GUI {
 				});
 		indicatorMenu.add(mRemoveIndicator);
 		
+		JMenuItem mEditIndicator = new JMenuItem("Edit Selected Indicator");
+		mEditIndicator.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK|InputEvent.ALT_DOWN_MASK));
+		mEditIndicator.addActionListener(
+				new ActionListener(){@Override
+					public void actionPerformed(ActionEvent arg0) {indicatorBox.showChangeIndicatorDialog();}
+				});
+		indicatorMenu.add(mEditIndicator);
+		
 		//TODO sorting for indicators
 		
 		JMenu developerMenu = new JMenu("Developer Tools");

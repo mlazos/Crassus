@@ -104,6 +104,8 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		
 		if(ind.getVisible())
 			listener.plotChanged();
+		if(ind.getActive())
+			listener.stockBoxChanged();
 	}
 
 	public void addLastIndicator(Indicator ind) {
@@ -114,6 +116,8 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		
 		if(ind.getVisible())
 			listener.plotChanged();
+		if(ind.getActive())
+			listener.stockBoxChanged();
 	}
 
 	public Indicator removeIndicator(int i) {
@@ -126,12 +130,22 @@ public class CrassusIndicatorTableModel extends AbstractTableModel {
 		
 		if(ind.getVisible()) 
 			listener.plotChanged();
+		if(ind.getActive())
+			listener.stockBoxChanged();
 		
 		return ind;
 	}
 
 	public Indicator removeLastIndicator() {
 		return removeIndicator(stock.getEventList().size()-1);
+	}
+
+	public Indicator changeIndicator(int index, Indicator ind) {
+		Indicator prevInd = stock.getEventList().set(index, ind);
+		this.fireTableRowsUpdated(index,index);
+		listener.plotChanged();
+		listener.stockBoxChanged();
+		return prevInd;
 	}
 
 	public void changeToStock(Stock stock) {

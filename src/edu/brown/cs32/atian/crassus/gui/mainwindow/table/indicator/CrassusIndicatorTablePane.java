@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -135,6 +137,23 @@ public class CrassusIndicatorTablePane extends JPanel {
 		
 		table.getSelectionModel().addListSelectionListener(new ChangeIndicatorListener());
 		
+		table.addMouseListener(
+				new MouseListener(){
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if(e.getClickCount()==2){
+							System.out.println("double-click");
+							showChangeIndicatorDialog();
+						}
+					}
+
+					@Override public void mouseEntered(MouseEvent arg0) {}
+					@Override public void mouseExited(MouseEvent arg0) {}
+					@Override public void mousePressed(MouseEvent arg0) {}
+					@Override public void mouseReleased(MouseEvent arg0) {}
+				});
+		
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
@@ -186,6 +205,38 @@ public class CrassusIndicatorTablePane extends JPanel {
 			EventWindowFrame eventWindow = new EventWindowFrame(_frame, new NewIndicatorListener(), stock);
 			eventWindow.display();
 		}
+	}
+	
+	public void showChangeIndicatorDialog() {
+		if(stock==null){
+			return;
+		}
+		else{
+			int index = stock.getSelectedIndicatorIndex();
+			Indicator indicator = stock.getEventList().get(index);
+			EventWindowFrame eventWindow = new EventWindowFrame(
+					_frame,
+					new WindowCloseListener(){
+
+						@Override
+						public void windowClosedWithEvent(Indicator indicator) {
+							changeIndicator(indicator);
+						}
+
+						@Override public void windowClosedWithCancel() {}
+					},
+					stock,
+					indicator);
+			eventWindow.display();
+		}
+	}
+
+	protected void changeIndicator(Indicator ind) {
+		ind.setActive(true);
+		ind.setVisible(true);
+		int index = stock.getSelectedIndicatorIndex();
+		Indicator prevInd = model.changeIndicator(index,ind);
+		undoables.push(new ChangeIndicatorUndoable(model, index, prevInd, ind));
 	}
 
 	public void addIndicator(Indicator ind) {
