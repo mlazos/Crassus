@@ -109,7 +109,7 @@ public class StockHistDataWeekly implements StockHistData {
             //System.exit(1);
             return false;
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //System.exit(1);
             return false;
         }

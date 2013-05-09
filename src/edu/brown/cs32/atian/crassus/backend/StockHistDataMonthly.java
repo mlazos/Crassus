@@ -99,19 +99,19 @@ public class StockHistDataMonthly implements StockHistData {
             }
             return true;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //System.exit(1);
             return false;
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //System.exit(1);
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //System.exit(1);
             return false;
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //System.exit(1);
             return false;
         }
