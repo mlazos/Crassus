@@ -233,13 +233,13 @@ public class DemoStockImpl implements Stock {
             }
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             _companyName = "";
         }
         return _companyName;
@@ -341,11 +341,9 @@ public class DemoStockImpl implements Stock {
     @Override
     public List<StockTimeFrameData> getStockPriceData(StockFreqType freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
 
-        List<StockTimeFrameData> realTime = this._minutely.getHistData();
+        List<StockTimeFrameData> realTime = this._minutely.getHistData();        
         List<StockTimeFrameData> result = new ArrayList<StockTimeFrameData>();
-//        if (freq == StockFreqType.MINUTELY) {
-//            return realTime;   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
-//        }
+
         // we other frequency (daily, weekly, monthly) we need to combine all history data with  today's most recent data.
         if (freq == StockFreqType.DAILY) {
             result.addAll(_daily.getHistData());
@@ -354,13 +352,13 @@ public class DemoStockImpl implements Stock {
         } else if (freq == StockFreqType.MONTHLY) {
             result.addAll(_monthly.getHistData());
         } else if (freq == StockFreqType.MINUTELY) {
-            if(this._timeFrame == TimeFrame.HOURLY || this._timeFrame == TimeFrame.DAILY) {
-                result.addAll( _minutely.getHistData());
-            } else {
-                result.addAll( _minutely.getHistData());
-            }
+            result.addAll( _minutely.getHistData());
         }
 
+        if (freq == StockFreqType.MINUTELY) {                
+            return result;   // just return MINUTELY data, which includes most recent 15 days' minute by minute data including most recent minute
+        }
+        
         // latestRealTime is most recent data in realtime
         StockTimeFrameData latestRealTime = new StockTimeFrameData(realTime.get(realTime.size() - 1));
         if (realTime.size() >= 1) {
@@ -463,13 +461,26 @@ public class DemoStockImpl implements Stock {
         for (Indicator ind : _events) {
             if (_refreshIndicator) {
                 ind.refresh(stockPriceData);
+                // print debug info 
+//                System.out.println(" refresh");
+//                System.out.println("Size refreshed: " + stockPriceData.size());
+//                System.out.println("last Time: " + stockPriceData.get(length - 1).getTimeInNumber());
+//                System.out.println("last Price: " + stockPriceData.get(length - 1).getClose());     
+                
                 _lastTimeStampSentToIndicator = stockPriceData.get(length - 1).getTimeInNumber();
+      
                 _refreshIndicator = false;
 
             } else {
+//                 System.out.println("incremental refresh");
                 StockTimeFrameData latestData = stockPriceData.get(length - 1);
-                if (latestData.getTimeInNumber() > _lastTimeStampSentToIndicator) {
-                    ind.incrementalUpdate(latestData);
+//                System.out.println("latestData timeStamp" + latestData.getTimeInNumber());
+//                System.out.println("latestData price" + latestData.getClose());   
+                if (latestData.getTimeInNumber() >= _lastTimeStampSentToIndicator) {
+                    
+                    ind.incrementalUpdate(latestData);                    // print debug info 
+//                    System.out.println("_lastTimeStampSentToIndicator" + _lastTimeStampSentToIndicator);                    
+                    
                     _lastTimeStampSentToIndicator = latestData.getTimeInNumber();
                 }
             }
