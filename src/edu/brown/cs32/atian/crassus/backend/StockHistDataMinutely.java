@@ -122,7 +122,7 @@ public class StockHistDataMinutely implements StockHistData {
             System.out.println("Error: Cannot connect to data server");
             return false;
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         }
     }
@@ -211,7 +211,7 @@ public class StockHistDataMinutely implements StockHistData {
             System.out.println("Error: Cannot connect to data server");
             return false;
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         }
     }
