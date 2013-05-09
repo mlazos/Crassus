@@ -458,29 +458,29 @@ public class DemoStockImpl implements Stock {
         if (length == 0) {
             return;
         }
-
+    
         try {
-        for (Indicator ind : _events) {
             if (_refreshIndicator) {
-                ind.refresh(stockPriceData); 
-                 System.out.println("Stock " + this.getTicker() + " sent data of size " + length + " with latest timeStamp " + stockPriceData.get(length-1).getTimeInNumber() +  " and latest price " + stockPriceData.get(length-1).getClose() + " to refresh of indicator " + ind.getName());
+                for (Indicator ind : _events) {
+                    ind.refresh(stockPriceData);
+                    System.out.println("Stock " + this.getTicker() + " sent data of size " + length + " with latest timeStamp " + stockPriceData.get(length - 1).getTimeInNumber() + " and latest price " + stockPriceData.get(length - 1).getClose() + " to refresh of indicator " + ind.getName());
+                }
                 _lastTimeStampSentToIndicator = stockPriceData.get(length - 1).getTimeInNumber();
-      
                 _refreshIndicator = false;
 
             } else {
+                //System.out.println(ind.getName());
                 StockTimeFrameData latestData = stockPriceData.get(length - 1);
-                if (latestData.getTimeInNumber() >= _lastTimeStampSentToIndicator) {
-                    
-                    ind.incrementalUpdate(latestData);                                   
-                    System.out.println("Stock " + this.getTicker() + " sent data of timeStamp " + latestData.getTimeInNumber() +  " with latest price " + latestData.getClose() + " to incrementalUpdate of indicator " + ind.getName());
-
+                //if (latestData.getTimeInNumber() > _lastTimeStampSentToIndicator) {
+                    for (Indicator ind : _events) {
+                        ind.incrementalUpdate(latestData);
+                        System.out.println("Stock " + this.getTicker() + " sent data of timeStamp " + latestData.getTimeInNumber() + " with updated price " + latestData.getClose() + " to incrementalUpdate of indicator " + ind.getName());                 
+                    }
                     _lastTimeStampSentToIndicator = latestData.getTimeInNumber();
-                }
-            }
-        }
-        } catch(Exception e) {
-            e.printStackTrace();
+                //}
+            }   
+        } catch (Exception e) {
+            e.printStackTrace();  // remove before demo
         }
     }
 
