@@ -142,10 +142,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						if(e.getClickCount()==2){
-							System.out.println("double-click");
-							showChangeIndicatorDialog();
-						}
+						if(e.getClickCount()==2){showChangeIndicatorDialog();}
 					}
 
 					@Override public void mouseEntered(MouseEvent arg0) {}
@@ -208,11 +205,13 @@ public class CrassusIndicatorTablePane extends JPanel {
 	}
 	
 	public void showChangeIndicatorDialog() {
-		if(stock==null){
+		if(stock==null || stock.getEventList()==null){
 			return;
 		}
 		else{
 			int index = stock.getSelectedIndicatorIndex();
+			if(index==-1 || index > stock.getEventList().size()-1)
+				return;
 			Indicator indicator = stock.getEventList().get(index);
 			EventWindowFrame eventWindow = new EventWindowFrame(
 					_frame,
