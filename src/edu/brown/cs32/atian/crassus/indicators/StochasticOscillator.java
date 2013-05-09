@@ -150,7 +150,7 @@ public class StochasticOscillator implements Indicator {
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 		
 		stockPlot.setRSTitles("Stochastic Oscillator", "Time", "");
-		SeriesWrapper stochasticOscillator = stockPlot.getTimeSeries(stocOscillator, "Stochastic Oscillator", startTime, endTime, Color.red);
+		SeriesWrapper stochasticOscillator = stockPlot.getTimeSeries(stocOscillator, "Stochastic Oscillator", startTime, endTime, Color.black);
 		//SeriesWrapper signalline = stockPlot.getTimeSeries(stocOscillator, "Signal Line", startTime, endTime, Color.black);
 			
 		try {

@@ -237,7 +237,7 @@ public class MACD implements Indicator {
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
 		stockPlot.setRSTitles("Moving Average Convergence Divergence", "Time", "");
-		SeriesWrapper macd = stockPlot.getTimeSeries(MACDLine, "Moving Average Convergence Divergence", startTime, endTime, Color.red);
+		SeriesWrapper macd = stockPlot.getTimeSeries(MACDLine, "Moving Average Convergence Divergence", startTime, endTime, Color.magenta);
 		
 		try {
 			stockPlot.setRS(true);

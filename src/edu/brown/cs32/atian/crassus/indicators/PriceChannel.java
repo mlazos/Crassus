@@ -181,9 +181,9 @@ public class PriceChannel implements Indicator {
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
-		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperChannel, "Upper Channel", startTime, endTime, Color.pink);
+		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperChannel, "Upper Channel", startTime, endTime, Color.orange);
 		SeriesWrapper middleSeries = stockPlot.getTimeSeries(centreLine, "Centre Line", startTime, endTime, Color.cyan);
-		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerChannel, "Lower Channel", startTime, endTime, Color.green);
+		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerChannel, "Lower Channel", startTime, endTime, Color.MAGENTA);
 		
 		stockPlot.addSeries(upperSeries);
 		stockPlot.addSeries(middleSeries);
