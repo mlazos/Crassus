@@ -24,8 +24,8 @@ import edu.brown.cs32.atian.crassus.gui.mainwindow.GUI;
 
 public class DotCrassusFileGui {
 	
-	
-	final private static int TIMER_REFRESH_PERIOD = 2000;
+	private int cycleRatio;
+	//final private static int TIMER_REFRESH_PERIOD = 2000;
 
 	public class TimerListener implements ActionListener {
 		
@@ -39,7 +39,7 @@ public class DotCrassusFileGui {
 			}
 			while(true){
 				try{
-					if(counter==5){
+					if(counter==cycleRatio){
 						//stocks.refreshAll();
 						gui.update();
 						counter = 0;
@@ -178,7 +178,8 @@ public class DotCrassusFileGui {
 		
 		this.stocks = stocks;
 		
-		timer = new Timer(TIMER_REFRESH_PERIOD, new TimerListener());
+		cycleRatio = stocks.getStartEndTimeCycle()/stocks.getDataAndIndicatorCycle();
+		timer = new Timer(stocks.getDataAndIndicatorCycle(), new TimerListener());
 		timer.setRepeats(true);
 		timer.start();
 		
@@ -206,7 +207,8 @@ public class DotCrassusFileGui {
 				this.f=file;
 				this.stocks = stocks;
 				
-				timer = new Timer(TIMER_REFRESH_PERIOD, new TimerListener());
+				cycleRatio = stocks.getStartEndTimeCycle()/stocks.getDataAndIndicatorCycle();
+				timer = new Timer(stocks.getDataAndIndicatorCycle(), new TimerListener());
 				timer.setRepeats(true);
 				timer.start();
 				

@@ -434,8 +434,10 @@ public class CrassusGUI implements GUI {
 //			frame.toFront();
 //			frame.repaint();
 //		}
-		if(!frame.isActive())
+		if(!frame.isActive()){
 			JOptionPane.showMessageDialog(frame,"One of your stocks has been triggered by an indicator.");
+			frame.toFront();
+		}
 	}
 
 	@Override
