@@ -156,8 +156,8 @@ public class StochasticOscillator implements Indicator {
 		} catch (CantTurnRsOnAfterChartsRetreivedException e) {
 			e.printStackTrace();
 		}
-		stockPlot.addRsSeries(stochasticOscillator);
-		stockPlot.addRsSeries(signalline);
+		stockPlot.addRsSeries(stochasticOscillator);     // red line
+		stockPlot.addRsSeries(signalline);               // black line
 	}
 
 	@Override

@@ -30,8 +30,8 @@ public class DemoStockDataImpl implements StockHistData {
     private String _high52Week = "N/A";
     private String _low52Week = "N/A";
     private String _changeAndPtgChange = "N/A";
-    private int _dataSimFreq = 2;  // in second
-    final double STDMEANRATIO = 0.001;
+    private int _dataSimFreq = 1;  // in second
+    final double STDMEANRATIO = 0.005;
 
     public DemoStockDataImpl(String ticker) {
         _ticker = ticker;
