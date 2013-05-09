@@ -278,7 +278,6 @@ public class StockImpl implements Stock {
             this.refreshStockPrice();
             this.refreshIndicator();            
         }
-
     }
 
     private void setStartAndEndTime() {
@@ -422,7 +421,6 @@ public class StockImpl implements Stock {
                 latestRealTime.setTime(date);
                 latestRealTime.setIsHist(true);
 
-
                 // after 4PM of each trading day, the history data will already include today's data, and we don't need to add today's data to history data
                 if (!result.get(result.size() - 1).getTime().equalsIgnoreCase(latestRealTime.getTime())) {
                     // append today's latest price info at the end of history data and return.
@@ -457,17 +455,13 @@ public class StockImpl implements Stock {
 
     @Override
     public void refresh() {
-        //refreshStockPrice();
-        refreshIndicator();
-        //_startTime = computeStartTime();
-        //if(this._autoRefresh) {
         setStartAndEndTime();
-        //}
     }
 
     @Override
-    public void refreshPriceDataOnly() { // won't refresh indicator
+    public void refreshPriceDataOnly() {   // move refreshIndicator() to here, change the name of method later
         refreshStockPrice();
+        refreshIndicator();
     }
 
     @Override
