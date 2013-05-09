@@ -22,7 +22,7 @@ import java.util.Random;
 public class DemoStockDataImpl implements StockHistData {
 
     private String _ticker;
-    private List<StockTimeFrameData> _demoData;
+    private  List<StockTimeFrameData> _demoData ;
     private String _high = "N/A";
     private String _low = "N/A";
     private String _open = "N/A";
@@ -95,7 +95,8 @@ public class DemoStockDataImpl implements StockHistData {
     }
 
     @Override
-    public boolean Init() {
+    public synchronized boolean Init() {
+ 
         if (_demoData.size() == 0) {
             return false;
         }
@@ -117,21 +118,34 @@ public class DemoStockDataImpl implements StockHistData {
             double close = getNormalRandomNumber(mean, std);
             double adjustedClose = close;
 
+            //System.out.println("added data" + curr.toString());
             StockTimeFrameData newTFData = new StockTimeFrameData(curr.toString(), open, high, low, close, volume, adjustedClose, false);;
             StockTimeFrameData oldSecToLastFrame = _demoData.get(_demoData.size() - 2);
-            if (oldSecToLastFrame.getTimeInNumber() + 60 > newTFData.getTimeInNumber()) {
+            if (oldSecToLastFrame.getTimeInNumber() + 59 > newTFData.getTimeInNumber()) {
                 _demoData.remove(_demoData.size() - 1);
             }
-            _demoData.add(newTFData);
+            if(newTFData.getTimeInNumber() > _demoData.get(_demoData.size() - 1).getTimeInNumber()) {
+                _demoData.add(newTFData);
+            }
             updateStockTableData(newTFData);
         }
-
+        //printAllData();
         return true;
-    }
 
+    }
+   
     @Override
     public List<StockTimeFrameData> getHistData() {
-        return _demoData;
+        List<StockTimeFrameData> newRT = new ArrayList<StockTimeFrameData>();
+        for(int i = 0; i < _demoData.size(); i++) {
+            if(newRT.size() == 0) {
+                newRT.add(_demoData.get(i));
+            } else if(_demoData.get(i).getTimeInNumber() > newRT.get(newRT.size()-1).getTimeInNumber() ) {
+                newRT.add(_demoData.get(i));
+            }
+        }       
+  
+        return newRT;
     }
 
     public String getChgAndPertChg() {
