@@ -39,7 +39,7 @@ import edu.brown.cs32.atian.crassus.indicators.StochasticOscillator;
 
 public class FileIO {
 	
-	public final static DataSourceType DATA_SOURCE_TYPE = DataSourceType.DEMODATA;
+	public static DataSourceType DATA_SOURCE_TYPE = DataSourceType.DEMODATA;
 
 	private void writeIndicator(Document doc, Element parent, Indicator indicator) {
 		
