@@ -39,7 +39,7 @@ public class DotCrassusFileGui {
 			}
 			while(true){
 				try{
-					if(counter==2){
+					if(counter==5){
 						//stocks.refreshAll();
 						gui.update();
 						counter = 0;
