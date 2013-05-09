@@ -1,11 +1,14 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
+import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
+import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /**
@@ -228,10 +231,19 @@ public class MACD implements Indicator {
 		}
 	}
 	
+	
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
-		// TODO Auto-generated method stub
+
+		SeriesWrapper macd = stockPlot.getTimeSeries(MACDLine, "Moving Average Convergence Divergence", startTime, endTime, Color.red);
 		
+		try {
+			stockPlot.setRS(true);
+		} catch (CantTurnRsOnAfterChartsRetreivedException e) {
+			e.printStackTrace();
+		}
+		stockPlot.addRsSeries(macd);
+
 	}
 
 	@Override

@@ -204,6 +204,7 @@ public class BollingerBands implements Indicator {
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
 
+		
 		int lastIndex = data.size() - 1;
 		
 		double avg = calcSMA(lastIndex - (period - 1), lastIndex);

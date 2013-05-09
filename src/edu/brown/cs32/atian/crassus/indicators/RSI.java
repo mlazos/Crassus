@@ -84,7 +84,7 @@ public class RSI implements Indicator {
 	 * 
 	 * @param datum		StockTimeFrameData
 	 */
-	void incrementalUpdate(StockTimeFrameData datum) {
+	public void incrementalUpdate(StockTimeFrameData datum) {
 		
 		int lastIndex = data.size() - 1;
 		double currChange = data.get(lastIndex - 1).getAdjustedClose() - data.get(lastIndex - 2).getAdjustedClose();
@@ -198,7 +198,7 @@ public class RSI implements Indicator {
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(RSIPoints, "Relative Strength Index", startTime, endTime, Color.red);
-		
+
 		try {
 			stockPlot.setRS(true);
 		} catch (CantTurnRsOnAfterChartsRetreivedException e) {
