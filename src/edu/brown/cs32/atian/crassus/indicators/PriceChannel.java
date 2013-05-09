@@ -45,6 +45,9 @@ public class PriceChannel implements Indicator {
 	private final double START_AMT = 10000;
 	private double percentMade = 0;
 	private StockEventType currentEvent;
+	private double uVal;
+	private double lVal;
+	private double currLatest;
 	
 	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
 		this.data = data;
@@ -96,6 +99,7 @@ public class PriceChannel implements Indicator {
 	}
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
+		currLatest = datum.getAdjustedClose();
 		int lastIndex = data.size() - 1;
 		double[] periodHighLow = getHighLow(lastIndex - (lookBackPeriod - 1), lastIndex);
 		double periodHigh = periodHighLow[0];
@@ -106,6 +110,8 @@ public class PriceChannel implements Indicator {
 		upperChannel.add(new IndicatorDatum(timeLabel, currTime, periodHigh));
 		lowerChannel.add(new IndicatorDatum(timeLabel, currTime, periodLow));
 		centreLine.add(new IndicatorDatum(timeLabel, currTime, centreVal));
+		uVal = periodHigh;
+		lVal = periodLow;
 	}
 	
 	/**
@@ -200,15 +206,11 @@ public class PriceChannel implements Indicator {
 	@Override
 	public StockEventType isTriggered() {
 		
-		double currClose = data.get(data.size() - 1).getAdjustedClose();
-		double upperBandValue = upperChannel.get(upperChannel.size() - 1).getValue();
-		double lowerBandValue = lowerChannel.get(upperChannel.size() - 1).getValue();
-		
-		if (((currClose > upperBandValue - EPSILON) && (currClose < upperBandValue + EPSILON))) {
+		if ((currLatest > uVal)) {
 			currentEvent = StockEventType.SELL;
 		}
 		
-		else if (((currClose > lowerBandValue - EPSILON) && (currClose < lowerBandValue + EPSILON))) {
+		else if ((currLatest < lVal)) {
 			currentEvent = StockEventType.BUY;
 		}
 		

@@ -49,6 +49,8 @@ public class PivotPoints implements Indicator {
 	private StockEventType currentEvent = StockEventType.NONE;
 	
 	public PivotPoints(List<StockTimeFrameData> data, String pivotOption) {
+		
+		System.out.println("pivotPoints constructor data size=" + data.size());
 		this.data = data;
 		this.pivotOption = pivotOption;
 		pivotPoints = new ArrayList<IndicatorDatum>();
@@ -139,6 +141,7 @@ public class PivotPoints implements Indicator {
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
 
+		System.out.println("Pivot Points: data size=" + data.size());
 		int lastIndex = data.size() - 1;
 		StockTimeFrameData previous = data.get(lastIndex - 1);
 		String currTimeLabel = datum.getTime();
