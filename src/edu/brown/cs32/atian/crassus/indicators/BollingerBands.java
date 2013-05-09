@@ -33,7 +33,7 @@ public class BollingerBands implements Indicator {
 	private boolean isVisible;
 	private final double START_AMT = 10000;
 	private final double EPSILON = 0.1;
-	private double percentMade;
+	private double percentMade = 0;
 	private StockEventType currentEvent = StockEventType.NONE;
 	
 	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {

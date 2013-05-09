@@ -43,6 +43,10 @@ public class PivotPoints implements Indicator {
 	private boolean isVisible;
 	private boolean isActive;
 	private String pivotOption;
+	private final double START_AMT = 10000;
+	private final double EPSILON = 0.1;
+	private double percentMade = 0;
+	private StockEventType currentEvent = StockEventType.NONE;
 	
 	public PivotPoints(List<StockTimeFrameData> data, String pivotOption) {
 		this.data = data;
@@ -203,6 +207,10 @@ public class PivotPoints implements Indicator {
 	 */
 	private void updatePivot() {
 		
+		StockEventType currEvent = StockEventType.NONE;
+		double currAmt = START_AMT;
+		int numStocks = 0;
+		
 		// first value has no previous
 		for (int i = 1; i < data.size(); i++) {
 			StockTimeFrameData previous = data.get(i - 1);
@@ -232,6 +240,25 @@ public class PivotPoints implements Indicator {
 			
 			}
 			
+			double currClose = data.get(i).getAdjustedClose();
+			if (((currClose > r1 - EPSILON) && (currClose < r1 + EPSILON)) || (i == data.size() - 1)) {
+				if (currEvent.equals(StockEventType.BUY)) {			// if we have already bought then sell now or sell at whatever price is 
+					currAmt += numStocks * currClose;				// last price
+					numStocks = 0;									// sold all the stocks
+					currEvent = StockEventType.SELL;
+					System.out.println("currEvent=[" + currEvent + "], currPrice=["+ currClose + "]");
+				}
+			}
+			
+			else if (((currClose > s1 - EPSILON) && (currClose < s1 + EPSILON))) {
+				if (currEvent.equals(StockEventType.SELL) || currEvent.equals(StockEventType.NONE)) {
+					numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
+					currAmt = currAmt%currClose;					// keep amount left over
+					currEvent = StockEventType.BUY;
+					System.out.println("currEvent=[" + currEvent + "], currPrice=["+ currClose + "]");
+				}
+			}
+			
 			pivotPoints.add(new IndicatorDatum(currTimeLabel, currTime, pivot));
 			support1.add(new IndicatorDatum(currTimeLabel, currTime, s1));
 			support2.add(new IndicatorDatum(currTimeLabel, currTime, s2));
@@ -241,6 +268,8 @@ public class PivotPoints implements Indicator {
 			resistance2.add(new IndicatorDatum(currTimeLabel, currTime, r2));
 			resistance3.add(new IndicatorDatum(currTimeLabel, currTime, r3));
 		}
+		
+		percentMade = ((currAmt - START_AMT) / START_AMT);
 	}
 	
 	/**
@@ -248,6 +277,10 @@ public class PivotPoints implements Indicator {
 	 * has one resistance and one support line from the pivot.
 	 */
 	private void updateDemark() {
+		
+		StockEventType currEvent = StockEventType.NONE;
+		double currAmt = START_AMT;
+		int numStocks = 0;
 		
 		// first value has no previous
 		for (int i = 1; i < data.size(); i++) {
@@ -274,10 +307,31 @@ public class PivotPoints implements Indicator {
 			double s1 = x/2 - high;
 			double r1 = x/2 - low;
 			
+			double currClose = data.get(i).getAdjustedClose();
+			if (((currClose > r1 - EPSILON) && (currClose < r1 + EPSILON)) || (i == data.size() - 1)) {
+				if (currEvent.equals(StockEventType.BUY)) {			// if we have already bought then sell now or sell at whatever price is 
+					currAmt += numStocks * currClose;				// last price
+					numStocks = 0;									// sold all the stocks
+					currEvent = StockEventType.SELL;
+					System.out.println("currEvent=[" + currEvent + "], currPrice=["+ currClose + "]");
+				}
+			}
+			
+			else if (((currClose > s1 - EPSILON) && (currClose < s1 + EPSILON))) {
+				if (currEvent.equals(StockEventType.SELL) || currEvent.equals(StockEventType.NONE)) {
+					numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
+					currAmt = currAmt%currClose;					// keep amount left over
+					currEvent = StockEventType.BUY;
+					System.out.println("currEvent=[" + currEvent + "], currPrice=["+ currClose + "]");
+				}
+			}
+			
 			pivotPoints.add(new IndicatorDatum(currTimeLabel, currTime, pivot));
 			support1.add(new IndicatorDatum(currTimeLabel, currTime, s1));
 			resistance1.add(new IndicatorDatum(currTimeLabel, currTime, r1));
 		}
+		
+		percentMade = ((currAmt - START_AMT) / START_AMT);
 	}
 	
 
@@ -305,16 +359,32 @@ public class PivotPoints implements Indicator {
 		this.isActive = isActive;
 	}
 
+	// assumes that the indicator data has already been refreshed.
 	@Override
 	public StockEventType isTriggered() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		double currClose = data.get(data.size() - 1).getAdjustedClose();
+		double upperBandValue = resistance1.get(resistance1.size() - 1).getValue();
+		double lowerBandValue = support1.get(support1.size() - 1).getValue();
+		
+		if (((currClose > upperBandValue - EPSILON) && (currClose < upperBandValue + EPSILON))) {
+			currentEvent = StockEventType.SELL;
+		}
+		
+		else if (((currClose > lowerBandValue - EPSILON) && (currClose < lowerBandValue + EPSILON))) {
+			currentEvent = StockEventType.BUY;
+		}
+		
+		else {
+			currentEvent = StockEventType.NONE;
+		}
+		
+		return currentEvent;
 	}
 
 	@Override
 	public double getTestResults() {
-		// TODO Auto-generated method stub
-		return 0;
+		return percentMade;
 	}
 	
 

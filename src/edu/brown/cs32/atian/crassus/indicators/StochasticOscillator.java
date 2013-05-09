@@ -40,6 +40,7 @@ public class StochasticOscillator implements Indicator {
 	private List<IndicatorDatum> signalLine;
     private boolean isActive;
     private boolean isVisible;
+    private double percentMade = 0;
 	
 	public StochasticOscillator(List<StockTimeFrameData> data, int period) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
@@ -133,10 +134,10 @@ public class StochasticOscillator implements Indicator {
 			stocOscillator.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), K));
 		}
 		
-		for (int i = 2; i < stocOscillator.size(); i++) {		// calc SMA of K
+		/*for (int i = 2; i < stocOscillator.size(); i++) {		// calc SMA of K
 			double D = (stocOscillator.get(i).getValue() + stocOscillator.get(i-1).getValue() + stocOscillator.get(i-2).getValue()) / 3;
 			signalLine.add(new IndicatorDatum(data.get(i).getTime(), data.get(i).getTimeInNumber(), D));
-		}
+		}*/
 		
 	}
 	
@@ -148,8 +149,9 @@ public class StochasticOscillator implements Indicator {
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 		
+		stockPlot.setRSTitles("Stochastic Oscillator", "Time", "");
 		SeriesWrapper stochasticOscillator = stockPlot.getTimeSeries(stocOscillator, "Stochastic Oscillator", startTime, endTime, Color.red);
-		SeriesWrapper signalline = stockPlot.getTimeSeries(stocOscillator, "Signal Line", startTime, endTime, Color.black);
+		//SeriesWrapper signalline = stockPlot.getTimeSeries(stocOscillator, "Signal Line", startTime, endTime, Color.black);
 			
 		try {
 			stockPlot.setRS(true);
@@ -157,7 +159,7 @@ public class StochasticOscillator implements Indicator {
 			e.printStackTrace();
 		}
 		stockPlot.addRsSeries(stochasticOscillator);     // red line
-		stockPlot.addRsSeries(signalline);               // black line
+		//stockPlot.addRsSeries(signalline);               // black line
 	}
 
 	@Override
@@ -168,13 +170,11 @@ public class StochasticOscillator implements Indicator {
 
 	@Override
 	public StockEventType isTriggered() {
-		// TODO Auto-generated method stub
-		return null;
+		return StockEventType.NONE;
 	}
 
 	@Override
 	public double getTestResults() {
-		// TODO Auto-generated method stub
-		return 0;
+		return percentMade;
 	}
 }

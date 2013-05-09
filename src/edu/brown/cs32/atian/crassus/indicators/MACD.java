@@ -46,6 +46,7 @@ public class MACD implements Indicator {
 	double prevSigEMA = 0;
 	double prevShortEMA = 0;
 	double prevLongEMA = 0;
+	private double percentMade = 0;
 	
 	public MACD(List<StockTimeFrameData> data, int signalPeriod, int shorterPeriod, int longerPeriod
 			) throws IllegalArgumentException {
@@ -235,6 +236,7 @@ public class MACD implements Indicator {
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
+		stockPlot.setRSTitles("Moving Average Convergence Divergence", "Time", "");
 		SeriesWrapper macd = stockPlot.getTimeSeries(MACDLine, "Moving Average Convergence Divergence", startTime, endTime, Color.red);
 		
 		try {
@@ -254,13 +256,11 @@ public class MACD implements Indicator {
 
 	@Override
 	public StockEventType isTriggered() {
-		// TODO Auto-generated method stub
-		return null;
+		return StockEventType.NONE;
 	}
 
 	@Override
 	public double getTestResults() {
-		// TODO Auto-generated method stub
-		return 0;
+		return percentMade;
 	}
 }

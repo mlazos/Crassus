@@ -43,7 +43,7 @@ public class PriceChannel implements Indicator {
 	private boolean isVisible;
 	private final double EPSILON = 0.1;
 	private final double START_AMT = 10000;
-	private double percentMade;
+	private double percentMade = 0;
 	private StockEventType currentEvent;
 	
 	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
