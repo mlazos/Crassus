@@ -26,9 +26,9 @@ public class StochOscillPanel extends JPanel {
 	private Stock stock;
 	private JDialog parent;
 	private JTextField period;
-	private JLabel yearlyGain = new JLabel("Expected Yearly Gain: (Not tested yet)");
-	private JLabel monthlyGain = new JLabel("Expected Monthly Gain: (Not tested yet)");
-	private JLabel weeklyGain = new JLabel("Expected Weekly Gain: (Not tested yet)");
+	private JLabel yearlyGain = new JLabel("Yearly: (Not tested)");
+	private JLabel monthlyGain = new JLabel("Monthly: (Not tested)");
+	private JLabel weeklyGain = new JLabel("Weekly: (Not tested)");
 	private String periodtt = "<html>The number of days to use when calculating the high-low range.</html>";
 
 	public StochOscillPanel(WindowCloseListener closeListener, JDialog parent, Stock stock)
@@ -56,11 +56,7 @@ public class StochOscillPanel extends JPanel {
 		parameters.setLayout(new BoxLayout(parameters, BoxLayout.Y_AXIS));
 		parameters.add(periodInput);
 		
-		JPanel expectedGains = new JPanel();
-		expectedGains.setLayout(new BoxLayout(expectedGains, BoxLayout.Y_AXIS));
-		expectedGains.add(yearlyGain);
-		expectedGains.add(monthlyGain);
-		expectedGains.add(weeklyGain);
+		ExpectedGainsPanel ep = new ExpectedGainsPanel(weeklyGain, monthlyGain, yearlyGain);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -79,7 +75,7 @@ public class StochOscillPanel extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
-		this.add(expectedGains);
+		this.add(ep);
 
 		
 	}
