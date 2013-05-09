@@ -36,7 +36,7 @@ public class BolingerBandPanel extends JPanel
 	private JTextField bandWidth;
 	private JLabel yearlyGain = new JLabel("Yearly: (Not tested)");
 	private JLabel monthlyGain = new JLabel("Monthly: (Not tested)");
-	private JLabel weeklyGain = new JLabel("Weekly: (Not tested)");
+	private JLabel weeklyGain = new JLabel("Daily: (Not tested)");
 	private String periodstt = "<html>The number of days when calculating the standard deviation and simple moving average.</html>";
 	private String bandWidthtt = "<html>The number of standard deviations for the outer bands.</html>";
 	
