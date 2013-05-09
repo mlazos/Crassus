@@ -452,38 +452,35 @@ public class DemoStockImpl implements Stock {
     }
 
     private void refreshIndicator() {
+        System.out.println("refreshIndicator called");
         List<StockTimeFrameData> stockPriceData = getStockPriceData(_currFreq);
         int length = stockPriceData.size();
         if (length == 0) {
             return;
         }
 
+        try {
         for (Indicator ind : _events) {
             if (_refreshIndicator) {
-                ind.refresh(stockPriceData);
-                // print debug info 
-//                System.out.println(" refresh");
-//                System.out.println("Size refreshed: " + stockPriceData.size());
-//                System.out.println("last Time: " + stockPriceData.get(length - 1).getTimeInNumber());
-//                System.out.println("last Price: " + stockPriceData.get(length - 1).getClose());     
-                
+                ind.refresh(stockPriceData); 
+                 System.out.println("Stock " + this.getTicker() + " sent data of size " + length + " with latest timeStamp " + stockPriceData.get(length-1).getTimeInNumber() +  " and latest price " + stockPriceData.get(length-1).getClose() + " to refresh of indicator " + ind.getName());
                 _lastTimeStampSentToIndicator = stockPriceData.get(length - 1).getTimeInNumber();
       
                 _refreshIndicator = false;
 
             } else {
-//                 System.out.println("incremental refresh");
                 StockTimeFrameData latestData = stockPriceData.get(length - 1);
-//                System.out.println("latestData timeStamp" + latestData.getTimeInNumber());
-//                System.out.println("latestData price" + latestData.getClose());   
                 if (latestData.getTimeInNumber() >= _lastTimeStampSentToIndicator) {
                     
-                    ind.incrementalUpdate(latestData);                    // print debug info 
-//                    System.out.println("_lastTimeStampSentToIndicator" + _lastTimeStampSentToIndicator);                    
-                    
+                    ind.incrementalUpdate(latestData);                                   
+                    System.out.println("Stock " + this.getTicker() + " sent data of timeStamp " + latestData.getTimeInNumber() +  " with latest price " + latestData.getClose() + " to incrementalUpdate of indicator " + ind.getName());
+
                     _lastTimeStampSentToIndicator = latestData.getTimeInNumber();
                 }
             }
+        }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -500,9 +497,12 @@ public class DemoStockImpl implements Stock {
     @Override 
     public StockEventType isTriggered() { 
         StockEventType stType = StockEventType.NONE; 
+        try {
         for (Indicator ind : _events) { 
         	if(ind.getActive()){ 
+                      
         		StockEventType indType = ind.isTriggered(); 
+             
         		if(indType==null) 
         			indType=StockEventType.NONE; 
         		if (stType!=StockEventType.NONE && indType!=StockEventType.NONE && stType != indType) { 
@@ -513,7 +513,9 @@ public class DemoStockImpl implements Stock {
         		} 
         	} 
         } 
-         
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         return stType; 
     } 
     private int selectedIndicatorIndex = -1;
