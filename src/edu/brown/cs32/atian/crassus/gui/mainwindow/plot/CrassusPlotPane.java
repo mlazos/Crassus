@@ -397,20 +397,17 @@ public class CrassusPlotPane extends JPanel {
 			}
 		}
 		else{
-			//check that either timescale changed or stock has minutely data before replotting
 			StockFreqType currFreq = timeFreqFromIndex(timeFreq.getSelectedIndex());
-			if(currFreq!=plottedFreqType || currFreq==StockFreqType.MINUTELY){
-				plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
-				plot.setAxesTitles("Time", "Price");
+			plot = new PlotWrapper(stock.getCompanyName(), timeframeFromIndex(timeframe.getSelectedIndex()));
+			plot.setAxesTitles("Time", "Price");
 
-				stock.addToPlot(plot);
-				for (Indicator ind: stock.getEventList()){
-					if (ind.getVisible()) {
-						ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
-					}
+			stock.addToPlot(plot);
+			for (Indicator ind: stock.getEventList()){
+				if (ind.getVisible()) {
+					ind.addToPlot(plot, stock.getStartTime(), stock.getEndTime());
 				}
-				plottedFreqType = currFreq;
 			}
+			plottedFreqType = currFreq;
 		}
 		refreshButNoNewData();
 	}
