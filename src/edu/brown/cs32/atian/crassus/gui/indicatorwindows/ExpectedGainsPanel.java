@@ -1,6 +1,7 @@
 package edu.brown.cs32.atian.crassus.gui.indicatorwindows;
 
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -18,6 +19,8 @@ public class ExpectedGainsPanel extends JPanel
 		JPanel expectedGains = new JPanel();
 		expectedGains.setLayout(new BoxLayout(expectedGains, BoxLayout.Y_AXIS));
 		JLabel title = new JLabel("Expected Gains");
+		Font font = title.getFont();
+		title.setFont(new Font(font.getFontName(), Font.PLAIN, 14));
 		title.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(5,5,5,5), new EtchedBorder()));
 		expectedGains.add(title);
 		expectedGains.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20,20,20,20), new EtchedBorder()));

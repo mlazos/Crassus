@@ -31,16 +31,16 @@ public abstract class AbstractTestListener implements ActionListener
 	{
 		String yearlyGain = "Five Year: " + Double.toString(indYearly.getTestResults()) + "%";
 		String monthlyGain = "Monthly: " + Double.toString(indMonthly.getTestResults()) + "%";
-		String dailyGain = "Daily Gain: " + Double.toString(indDaily.getTestResults()) + "%";
+		String dailyGain = "Daily: " + Double.toString(indDaily.getTestResults()) + "%";
 		
-		System.out.println("testCalled");
+		//System.out.println("testCalled");
 		
 		outputYearly.setText(yearlyGain);
-		System.out.println(yearlyGain);
+		//System.out.println(yearlyGain);
 		outputMonthly.setText(monthlyGain);
-		System.out.println(monthlyGain);
+		//System.out.println(monthlyGain);
 		outputDaily.setText(dailyGain);
-		System.out.println(dailyGain);
+		//System.out.println(dailyGain);
 		outputYearly.setVisible(true);
 		outputMonthly.setVisible(true);
 		outputDaily.setVisible(true);
