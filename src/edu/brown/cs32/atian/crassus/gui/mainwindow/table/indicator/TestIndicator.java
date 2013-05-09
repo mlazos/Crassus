@@ -73,6 +73,11 @@ public class TestIndicator implements Indicator {
 	}
 
 	@Override
+	public void incrementalUpdate(StockTimeFrameData datum) {
+		state = idealState;
+	}
+
+	@Override
 	public double getTestResults() {
 		// TODO Auto-generated method stub
 		return 0;

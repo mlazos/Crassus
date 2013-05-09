@@ -29,9 +29,9 @@ public abstract class AbstractTestListener implements ActionListener
 	
 	public void test(Indicator indYearly, Indicator indMonthly, Indicator indDaily)
 	{
-		String yearlyGain = "Expected Five Year Gain: " + Double.toString(indYearly.getTestResults()) + "%";
-		String monthlyGain = "Expected Monthly Gain: " + Double.toString(indMonthly.getTestResults()) + "%";
-		String dailyGain = "Expected Daily Gain: " + Double.toString(indDaily.getTestResults()) + "%";
+		String yearlyGain = "Five Year: " + Double.toString(indYearly.getTestResults()) + "%";
+		String monthlyGain = "Monthly: " + Double.toString(indMonthly.getTestResults()) + "%";
+		String dailyGain = "Daily Gain: " + Double.toString(indDaily.getTestResults()) + "%";
 		
 		System.out.println("testCalled");
 		

@@ -1,8 +1,12 @@
 package edu.brown.cs32.atian.crassus.gui.mainwindow.table.stock;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 import edu.brown.cs32.atian.crassus.backend.Stock;
+import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockList;
 import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector;
 
@@ -10,6 +14,7 @@ import edu.brown.cs32.atian.crassus.gui.mainwindow.table.CrassusTableRowSelector
 public class CrassusStockTableModel extends AbstractTableModel {
 	
 	private StockList stocks;
+	private List<StockEventType> state = new ArrayList<>();
 	
 	private CrassusTableRowSelector selector;
 	
@@ -67,6 +72,7 @@ public class CrassusStockTableModel extends AbstractTableModel {
 
 	public void addLastStock(Stock stock) {
 		stocks.add(stock);
+		state.add(stock.isTriggered());
 		this.fireTableRowsInserted(stocks.getStockList().size()-1, stocks.getStockList().size()-1);
 		selector.select(stocks.getStockList().size()-1);
 	}
@@ -76,6 +82,7 @@ public class CrassusStockTableModel extends AbstractTableModel {
 			return;
 		
 		this.stocks.getStockList().add(i,stock);
+		this.state.add(i,stock.isTriggered());
 		this.fireTableRowsInserted(i, i);
 		selector.select(i);
 	}
@@ -91,12 +98,25 @@ public class CrassusStockTableModel extends AbstractTableModel {
 
 		selector.deselect(i);
 		Stock stock = stocks.getStockList().remove(i);
+		state.remove(i);
 		this.fireTableRowsDeleted(i,i);
 		return stock;
 	}
 
-	public void refresh() {
+	public boolean refresh() {
 		this.fireTableRowsUpdated(0,stocks.getStockList().size()-1);
+		boolean flag = false;
+		for(int row=0; row<stocks.getStockList().size(); row++){
+			Stock stock = stocks.getStockList().get(row);
+			StockEventType stState = stock.isTriggered();
+			if(stState != state.get(row)){
+				state.set(row, stState);
+				if(stState == StockEventType.BUY || stState == StockEventType.CONFLICT || stState == StockEventType.SELL){
+					flag = true;
+				}
+			}
+		}
+		return flag;
 	}
 
 	public Stock getStock(int index) {
@@ -106,12 +126,14 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	public void changeStockListTo(StockList stocks) {
 		this.stocks = stocks;
 		this.fireTableDataChanged();
+		state.clear();
+		for(int row=0; row<stocks.getStockList().size(); row++){
+			Stock stock = stocks.getStockList().get(row);
+			StockEventType stState = stock.isTriggered();
+			state.add(row, stState);
+		}
 	}
 
-	public void refreshPriceDataOnly() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 }

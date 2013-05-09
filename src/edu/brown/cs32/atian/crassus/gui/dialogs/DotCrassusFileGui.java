@@ -30,22 +30,26 @@ public class DotCrassusFileGui {
 	public class TimerListener implements ActionListener {
 		
 		private int counter = 0;
-		
+		private long lasttime = 0L;
 		@Override 
 		public void actionPerformed(ActionEvent arg0) {
+			long time = System.currentTimeMillis();
+			if(time-lasttime < 1500){
+				return;
+			}
 			while(true){
 				try{
-					if(counter==5){
+					if(counter==30){
 						stocks.refreshAll();
 						gui.update();
 						counter = 0;
 					}
 					else{
 						stocks.refreshPriceDataOnly();
-						gui.updatePriceDataOnly();
+						gui.updateTables();
 					}
 					counter++;
-					return;
+					break;
 				}catch(Exception e){
 					String[] options = {"Try Again","Exit"};
 					int result = JOptionPane.showOptionDialog(frame, 
@@ -55,11 +59,12 @@ public class DotCrassusFileGui {
 						
 						if(maybeSave("Would you like to save before you exit?")){
 							frame.dispose();
-							return;
+							break;
 						}
 					}
 				}
 			}
+			lasttime = System.currentTimeMillis();
 		}
 	}
 	

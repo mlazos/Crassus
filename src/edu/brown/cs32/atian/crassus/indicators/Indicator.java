@@ -18,6 +18,7 @@ public interface Indicator {
 	 */
 	void refresh(List<StockTimeFrameData> data);
 	
+        void incrementalUpdate(StockTimeFrameData datum);
 	/*
 	 * Tests the indicator against data which should have been
 	 * passed into the Indicator's constructor.

@@ -41,6 +41,9 @@ public class PlotWrapper implements StockPlot
 	private boolean rsChartGenerated = false;
 	private String xAxisTitle = "X";
 	private String yAxisTitle = "Y";
+	private String rsXAxisTitle = "X";
+	private String rsYAxisTitle = "Y";
+	private String rsChartTitle = "RSI";
 	private JFreeChart primaryChart;
 	private JFreeChart rsChart;
 	
@@ -122,7 +125,7 @@ public class PlotWrapper implements StockPlot
 			rsChartGenerated = true;
 		}
 		
-		JFreeChart chart = generateChart("Relative Strength Index", rsSeries, rsSeriesColors);
+		JFreeChart chart = generateRSChart(rsSeries, rsSeriesColors);
 		
 		rsChart = chart;
 		
@@ -130,7 +133,7 @@ public class PlotWrapper implements StockPlot
 	}
 
 	@Override
-	public void setRS(boolean isRsOn) throws CantTurnRsOnAfterChartsRetreivedException
+	public void setRS(boolean isRsOn) //throws CantTurnRsOnAfterChartsRetreivedException
 	{
 		if(!primaryChartGenerated)
 		{
@@ -138,7 +141,7 @@ public class PlotWrapper implements StockPlot
 		}
 		else
 		{
-			throw new CantTurnRsOnAfterChartsRetreivedException();
+			//throw new CantTurnRsOnAfterChartsRetreivedException();
 		}
 	}
 	
@@ -156,11 +159,33 @@ public class PlotWrapper implements StockPlot
 		return chart;
 	}
 	
+	private JFreeChart generateRSChart(TimeSeriesCollection series, List<Color> colors)
+	{
+		JFreeChart chart = ChartFactory.createTimeSeriesChart(rsChartTitle, rsXAxisTitle, rsYAxisTitle, series, false, false, false);
+		XYPlot plot  = (XYPlot)chart.getPlot();
+		XYItemRenderer ren = plot.getRenderer();
+		
+		for(int i = 0; i < colors.size(); i++)
+		{
+			ren.setSeriesPaint(i, colors.get(i));
+		}
+		
+		return chart;
+	}
+	
 	public void setAxesTitles(String xAxisTitle, String yAxisTitle)
 	{
 		this.xAxisTitle = xAxisTitle;
 		this.yAxisTitle = yAxisTitle;
 	}
+	
+	public void setRSTitles(String chartTitle, String xAxisTitle, String yAxisTitle)
+	{
+		this.rsChartTitle = chartTitle;
+		this.rsXAxisTitle = xAxisTitle;
+		this.rsYAxisTitle = yAxisTitle;
+	}
+	
 	
 	
 	public static void main(String[] args)
@@ -183,11 +208,13 @@ public class PlotWrapper implements StockPlot
 		SeriesWrapper s1 = new SeriesWrapper(series1, Color.RED);
 		SeriesWrapper s2 = new SeriesWrapper(series2, Color.BLUE);
 		
-		try {
-			pw.setRS(true);
-		} catch (CantTurnRsOnAfterChartsRetreivedException e1) {
-			e1.printStackTrace();
-		}
+		//try {
+		pw.setRS(true);
+
+		//} catch (CantTurnRsOnAfterChartsRetreivedException e1) {
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
+		//}
 		
 		pw.addRsSeries(s1);
 		pw.addRsSeries(s2);

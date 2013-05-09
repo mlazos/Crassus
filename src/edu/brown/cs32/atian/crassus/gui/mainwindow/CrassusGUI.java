@@ -12,7 +12,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,17 +45,16 @@ import edu.brown.cs32.atian.crassus.gui.undoable.UndoableStackListener;
  */
 public class CrassusGUI implements GUI {
 	
-	/*
-	 * inner classes appear in same order that they do in the constructor.
-	 */
-	
-	//TODO change above inner classes and possibly below inner classes to anonymous inner classes
-
-	private class RefreshPlotListener implements CrassusPlotIsObsoleteListener {
+	private class RefreshPlotListener implements CrassusStockWasAlteredListener {
 		
 		@Override
-		public void informPlotIsObsolete() {
+		public void plotChanged() {
 			plotPane.refresh();
+		}
+
+		@Override
+		public void stockBoxChanged() {
+			stockBox.refresh();
 		}
 	}
 
@@ -371,7 +369,7 @@ public class CrassusGUI implements GUI {
 		
 		JMenuItem mRemoveIndicator = new JMenuItem("Remove Selected Indicator");
 		mRemoveIndicator.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK|InputEvent.SHIFT_DOWN_MASK));
-		mAddIndicator.addActionListener(
+		mRemoveIndicator.addActionListener(
 				new ActionListener(){@Override
 					public void actionPerformed(ActionEvent e) {indicatorBox.removeSelectedIndicator();}
 				});
@@ -395,7 +393,6 @@ public class CrassusGUI implements GUI {
 		
 	}
 	
-
 	public void changeStockListTo(StockList stocks) {
 
 		stockBox.changeStockListTo(stocks);
@@ -419,17 +416,37 @@ public class CrassusGUI implements GUI {
 		
 		changeStockListTo(fileGui.fileNew());
 	}
+	
+	private void notifyUser(){
+//		String[] options = {"Switch To Crassus","Keep Doing What I Was Doing"};
+//		int value = JOptionPane.showOptionDialog(frame, "One of your stocks has been triggered by an indicator. What would you like to do?", 
+//				"Crassus",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, 
+//				null, options, options[0]);
+//		if(value == 0){
+//			frame.toFront();
+//			frame.repaint();
+//		}
+		if(!frame.isActive())
+			JOptionPane.showMessageDialog(frame,"One of your stocks has been triggered by an indicator.");
+	}
 
 	@Override
 	public void update() {
-		stockBox.refresh();
 		indicatorBox.refresh();
 		plotPane.refresh();
+		boolean shouldNotifyUser = stockBox.refresh();
+		if(shouldNotifyUser){
+			notifyUser();
+		}
 	}
 	
 	@Override
-	public void updatePriceDataOnly() {
-		stockBox.refresh();
+	public void updateTables() {
+		indicatorBox.refresh();
+		boolean shouldNotifyUser = stockBox.refresh();
+		if(shouldNotifyUser){
+			notifyUser();
+		}
 	}
 	
 	public void possiblyExit() {

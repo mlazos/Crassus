@@ -32,9 +32,9 @@ public class MACDPanel extends JPanel
 	private JTextField signalP;
 	private JTextField shortP;
 	private JTextField longP;
-	private JLabel yearlyGain = new JLabel("Expected Yearly Gain: (Not tested yet)");
-	private JLabel monthlyGain = new JLabel("Expected Monthly Gain: (Not tested yet)");
-	private JLabel weeklyGain = new JLabel("Expected Weekly Gain: (Not tested yet)");
+	private JLabel yearlyGain = new JLabel("Yearly: (Not tested)");
+	private JLabel monthlyGain = new JLabel("Monthly: (Not tested)");
+	private JLabel weeklyGain = new JLabel("Weekly: (Not tested)");
 	private String signalPtt = "<html>The number of days used to calculate the moving average of the difference <br> between the shorter and longer moving averages</html>";
 	private String longPtt = "<html>The number of days used to calculate <br> the shorter period moving average.</html>";
 	private String shortPtt = "<html>The number of days used to calculate <br> the longer period moving average.</html>";
@@ -83,11 +83,7 @@ public class MACDPanel extends JPanel
 		parameters.add(shorterInput);
 		parameters.add(longerInput);
 		
-		JPanel expectedGains = new JPanel();
-		expectedGains.setLayout(new BoxLayout(expectedGains, BoxLayout.Y_AXIS));
-		expectedGains.add(yearlyGain);
-		expectedGains.add(monthlyGain);
-		expectedGains.add(weeklyGain);
+		ExpectedGainsPanel ep = new ExpectedGainsPanel(weeklyGain, monthlyGain, yearlyGain);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -106,7 +102,7 @@ public class MACDPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
-		this.add(expectedGains);
+		this.add(ep);
 
 		
 	}
