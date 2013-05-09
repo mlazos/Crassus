@@ -99,7 +99,11 @@ public class StockRealTimeDataImpl implements StockRealTimeData {
         } catch (NumberFormatException e) {
             //e.printStackTrace();
             // nothing can be done here            
-        } 
+        }  catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
+  
+        }
         
         //System.err.println("Update Real Time data at " + (new Date()).toString() + " price= " + _curr);
     }
