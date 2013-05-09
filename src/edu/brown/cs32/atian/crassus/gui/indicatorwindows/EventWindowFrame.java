@@ -86,6 +86,8 @@ public class EventWindowFrame implements EventWindow {
 		frame.setModal(true);
 		frame.setResizable(false);
 		
+		int selected = 0;
+		
 		BolingerBandPanel bb = new BolingerBandPanel(closeListener, frame, stock);
 		MACDPanel mp = new MACDPanel(closeListener, frame, stock);
 		PivotPanel pp = new PivotPanel(closeListener, frame, stock);
@@ -99,11 +101,13 @@ public class EventWindowFrame implements EventWindow {
 			currentPanel = bb;
 			bb.setPeriods(Integer.toString(ind.getPeriod()));
 			bb.setBandWidth(Integer.toString(ind.getBandWidth()));
+			selected = 0;
 		}else if(prevIndicator instanceof PriceChannel)
 		{
 			PriceChannel ind = (PriceChannel)prevIndicator;
 			currentPanel = pc;
 			pc.setLookBack(Integer.toString(ind.getLookBackPeriod())); 
+			selected = 1;
 		}else if(prevIndicator instanceof MACD)
 		{
 			MACD ind = (MACD)prevIndicator;
@@ -111,19 +115,23 @@ public class EventWindowFrame implements EventWindow {
 			mp.setSignal(Integer.toString(ind.getSignalPeriod()));
 			mp.setShort(Integer.toString(ind.getShortPeriod()));
 			mp.setLong(Integer.toString(ind.getLongPeriod()));
+			selected = 2;
 		}else if(prevIndicator instanceof RSI)
 		{
 			RSI ind = (RSI)prevIndicator;
 			currentPanel = rsp;
 			rsp.setPeriod(Integer.toString(ind.getPeriod()));
+			selected = 3;
 		}else if(prevIndicator instanceof PivotPoints)
 		{
 			PivotPoints ind = (PivotPoints)prevIndicator;
 			currentPanel = pp;
 			pp.setSelected(ind.getPivotOption());
+			selected = 4;
 		}else if(prevIndicator instanceof StochasticOscillator)
 		{
 			StochasticOscillator ind = (StochasticOscillator)prevIndicator;
+			selected = 5;
 			currentPanel = sop;
 			sop.setPeriod(Integer.toString(ind.getPeriod()));
 		}
@@ -138,6 +146,7 @@ public class EventWindowFrame implements EventWindow {
 		
 		
 		JComboBox<JPanel> selectEvent = new JComboBox<JPanel>(eventList);
+		selectEvent.setSelectedIndex(selected);
 		selectEvent.addActionListener(new WindowChanger());
 		JPanel dropDownPanel = new JPanel();
 		dropDownPanel.setMinimumSize(new Dimension(250,20));
