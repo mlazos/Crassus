@@ -134,8 +134,7 @@ public class PivotPoints implements Indicator {
 
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
-		
-		data.add(datum);
+
 		int lastIndex = data.size() - 1;
 		StockTimeFrameData previous = data.get(lastIndex - 1);
 		String currTimeLabel = datum.getTime();

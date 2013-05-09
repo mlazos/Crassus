@@ -158,7 +158,6 @@ public class MACD implements Indicator {
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
 		
-		data.add(datum);
 		int lastIndex = data.size() - 1;
 		int i = lastIndex;
 		

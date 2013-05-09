@@ -34,6 +34,7 @@ public class BollingerBands implements Indicator {
 	private final double START_AMT = 10000;
 	private final double EPSILON = 0.1;
 	private double percentMade;
+	private StockEventType currentEvent = StockEventType.NONE;
 	
 	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
@@ -141,6 +142,9 @@ public class BollingerBands implements Indicator {
 	 */
 	private void updateBollingerBands() {
 		
+		System.out.println("UPDATE CALLED!!!");
+		System.out.println("data size=" + data.size());
+		
 		StockEventType currEvent = StockEventType.NONE;
 		double currAmt = START_AMT;
 		double numStocks = 0;
@@ -153,19 +157,23 @@ public class BollingerBands implements Indicator {
 			double currClose = data.get(i).getAdjustedClose();
 			
 			if (((currClose > upperBandValue - EPSILON) && (currClose < upperBandValue + EPSILON)) || (i == data.size() - 1)) {
-				if (currEvent.equals(StockEventType.BUY)) {		// if we have already bought then sell now or sell at whatever price is 
-					currAmt += numStocks * currClose;			// last price
-					numStocks = 0;								// sold all the stocks
+				if (currEvent.equals(StockEventType.BUY)) {			// if we have already bought then sell now or sell at whatever price is 
+					currAmt += numStocks * currClose;				// last price
+					numStocks = 0;									// sold all the stocks
 					currEvent = StockEventType.SELL;
+					System.out.println("currEvent=[" + currEvent + "], currPrice=["+ currClose + "], currTime=" + data.get(i + period - 1).getTime());
 				}
 			}
 			
-			if (((currClose > lowerBandValue - EPSILON) && (currClose < lowerBandValue + EPSILON))) {
-				numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
-				currAmt = currAmt%currClose;					// keep amount left over
-				currEvent = StockEventType.BUY;
+			else if (((currClose > lowerBandValue - EPSILON) && (currClose < lowerBandValue + EPSILON))) {
+				if (currEvent.equals(StockEventType.SELL) || currEvent.equals(StockEventType.NONE)) {
+					numStocks += Math.floor(currAmt/currClose);		// buy whole number of stocks
+					currAmt = currAmt%currClose;					// keep amount left over
+					currEvent = StockEventType.BUY;
+					System.out.println("currEvent=[" + currEvent + "], currPrice=["+ currClose + "], currTime=" + data.get(i + period - 1).getTime());
+				}
 			}
-
+			
 			middleBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), data.get(i + period - 1).getTimeInNumber(), avg));
 			upperBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), data.get(i + period - 1).getTimeInNumber(), upperBandValue));
 			lowerBand.add(new IndicatorDatum(data.get(i + period - 1).getTime(), data.get(i + period - 1).getTimeInNumber(), lowerBandValue));
@@ -183,7 +191,7 @@ public class BollingerBands implements Indicator {
 	List<IndicatorDatum> getMiddleBand() {
 		return middleBand;
 	}
-	
+
 	List<IndicatorDatum> getLowerBand() {
 		return lowerBand;
 	}
@@ -195,7 +203,7 @@ public class BollingerBands implements Indicator {
 	}
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
-		data.add(datum);
+
 		int lastIndex = data.size() - 1;
 		
 		double avg = calcSMA(lastIndex - (period - 1), lastIndex);
@@ -209,13 +217,28 @@ public class BollingerBands implements Indicator {
 		lowerBand.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), lowerBandValue));
 	}
 
+	
+	// assumes that the indicator data has already been refreshed.
 	@Override
 	public StockEventType isTriggered() {
-		// TODO Auto-generated method stub
-		/*		for (i = period - 1; i < data.size(); i++) {
 		
-		}*/
-		return null;
+		double currClose = data.get(data.size() - 1).getAdjustedClose();
+		double upperBandValue = upperBand.get(upperBand.size() - 1).getValue();
+		double lowerBandValue = lowerBand.get(upperBand.size() - 1).getValue();
+		
+		if (((currClose > upperBandValue - EPSILON) && (currClose < upperBandValue + EPSILON))) {
+			currentEvent = StockEventType.SELL;
+		}
+		
+		else if (((currClose > lowerBandValue - EPSILON) && (currClose < lowerBandValue + EPSILON))) {
+			currentEvent = StockEventType.BUY;
+		}
+		
+		else {
+			currentEvent = StockEventType.NONE;
+		}
+		
+		return currentEvent;
 	}
 
 	@Override
