@@ -101,7 +101,12 @@ public class StockListImpl implements StockList {
     }
     
     @Override
-    public int getDataRefreshCycle() {    // in Milisecond    
-        return 10000;
+    public int getDataAndIndicatorCycle() {    // in Milisecond
+        return 2000;
+    }
+    
+    @Override
+    public int getStartEndTimeCycle() {    // in Milisecond    
+        return 30000;
     }
 }

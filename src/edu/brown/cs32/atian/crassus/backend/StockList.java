@@ -20,6 +20,7 @@ public interface StockList {
     void refreshPriceDataOnly();   // won't refresh indicators
     List<String> getTickerSuggestion(String tickerPrefix);    
     Stock createStock(String ticker);
-    int getDataRefreshCycle();    // in Milisecond
+    int getDataAndIndicatorCycle();    // in Milisecond
+    int getStartEndTimeCycle();    // in Milisecond
 //    List<String> getCompanyNameSuggestion(String tickerPrefix);       
 }
