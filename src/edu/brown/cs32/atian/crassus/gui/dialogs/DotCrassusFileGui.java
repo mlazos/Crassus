@@ -39,8 +39,8 @@ public class DotCrassusFileGui {
 			}
 			while(true){
 				try{
-					if(counter==30){
-						stocks.refreshAll();
+					if(counter==2){
+						//stocks.refreshAll();
 						gui.update();
 						counter = 0;
 					}
@@ -51,6 +51,7 @@ public class DotCrassusFileGui {
 					counter++;
 					break;
 				}catch(Exception e){
+					e.printStackTrace();
 					String[] options = {"Try Again","Exit"};
 					int result = JOptionPane.showOptionDialog(frame, 
 							"Your connection with the server has been lost. You can either try to connect again, or exit the program",  
@@ -92,7 +93,6 @@ public class DotCrassusFileGui {
 
 	private boolean tryWrite(File file) {
 		try {
-			
 			fio.write(file,stocks);
 			this.f=file;
 			return true;
@@ -117,7 +117,6 @@ public class DotCrassusFileGui {
 	}
 	
 	public boolean fileSaveAs() {
-		
 		int fcResult = fc.showSaveDialog(frame);
 		
 		if(fcResult == JFileChooser.APPROVE_OPTION){
@@ -131,6 +130,9 @@ public class DotCrassusFileGui {
 					return fileSaveAs();
 				if(result==2)
 					return false;
+			}
+			else{
+				return tryWrite(file);
 			}
 		}
 		return false;
@@ -160,19 +162,19 @@ public class DotCrassusFileGui {
 		
 		if(timer!=null)
 			timer.stop();
-		
-		String[] possibilities = {"Yahoo Finance","Demo Data"};
-		String result = (String) JOptionPane.showInputDialog(frame, "choose a data source", "Message", 
-				JOptionPane.PLAIN_MESSAGE, null, possibilities, "Yahoo Finance");
-		
-		DataSourceType source;
-		
-		if("Yahoo Finance".equals(result))
-			source = DataSourceType.YAHOOFINANCE;
-		else
-			source = DataSourceType.DEMODATA;
-		
-		StockList stocks = new StockListImpl(source);
+//		
+//		String[] possibilities = {"Yahoo Finance","Demo Data"};
+//		String result = (String) JOptionPane.showInputDialog(frame, "choose a data source", "Message", 
+//				JOptionPane.PLAIN_MESSAGE, null, possibilities, "Yahoo Finance");
+//		
+//		DataSourceType source;
+//		
+//		if("Yahoo Finance".equals(result))
+//			source = DataSourceType.YAHOOFINANCE;
+//		else
+//			source = DataSourceType.DEMODATA;
+//		
+		StockList stocks = new StockListImpl(FileIO.DATA_SOURCE_TYPE);
 		
 		this.stocks = stocks;
 		

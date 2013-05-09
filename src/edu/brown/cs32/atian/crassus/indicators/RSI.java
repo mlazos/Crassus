@@ -83,7 +83,7 @@ public class RSI implements Indicator {
 	 * 
 	 * @param datum		StockTimeFrameData
 	 */
-	void incrementalUpdate(StockTimeFrameData datum) {
+	public void incrementalUpdate(StockTimeFrameData datum) {
 		data.add(datum);
 		
 		int lastIndex = data.size() - 1;

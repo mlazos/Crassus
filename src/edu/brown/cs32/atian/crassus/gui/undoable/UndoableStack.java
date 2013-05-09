@@ -82,6 +82,14 @@ public class UndoableStack {
 	}
 
 	public boolean isEmpty() {
+		return undoables.isEmpty() && redoables.isEmpty();
+	}
+	
+	public boolean hasNoMajorChanges() {
 		return intensity==0;
+	}
+	
+	public void clearChangeState() {
+		intensity = 0;
 	}
 }

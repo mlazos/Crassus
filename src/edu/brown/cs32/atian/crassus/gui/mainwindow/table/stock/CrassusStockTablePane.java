@@ -126,8 +126,8 @@ public class CrassusStockTablePane extends JPanel {
 		
 		for(int i=0; i<5; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
-			column.setPreferredWidth(50);
-			column.setMaxWidth(50);
+			column.setPreferredWidth(40);
+			column.setMaxWidth(40);
 			column.setResizable(false);
 			
 			column.setCellRenderer(renderer);
@@ -140,7 +140,7 @@ public class CrassusStockTablePane extends JPanel {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(290,250));
+		scrollPane.setPreferredSize(new Dimension(240,250));
 		
 		JLabel title = new JLabel("Tickers",JLabel.CENTER);
 		title.setFont(new Font("SansSerif",Font.BOLD,18));
@@ -149,7 +149,7 @@ public class CrassusStockTablePane extends JPanel {
 		this.add(scrollPane, BorderLayout.CENTER);
 		
 		this.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createEmptyBorder(20,20,20,20),
+				BorderFactory.createEmptyBorder(15,15,15,15),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
 		
 		JButton addButton = new CrassusButton("+");
@@ -229,6 +229,13 @@ public class CrassusStockTablePane extends JPanel {
 		renderer.changeStockListTo(stocks);
 		model.changeStockListTo(stocks);
 		selector.select(0);
+	}
+
+
+	public void refreshActiveStock() {
+		Stock stock = model.getStock(table.getSelectedRow());
+		if(stock!=null)
+			stock.refresh();
 	}
 
 

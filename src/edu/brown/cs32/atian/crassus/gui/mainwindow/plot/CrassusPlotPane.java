@@ -92,7 +92,7 @@ public class CrassusPlotPane extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createCompoundBorder(
-						BorderFactory.createEmptyBorder(20,20,20,20),
+						BorderFactory.createEmptyBorder(10,10,10,0),
 						BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)),
 				BorderFactory.createEmptyBorder(5,5,5,5)));
 		
@@ -156,7 +156,7 @@ public class CrassusPlotPane extends JPanel {
 		timePanel.setLayout(new FlowLayout());
 		timePanel.add(new JLabel("Time-scale: "));
 		timePanel.add(timeframe);
-		timePanel.add(new JLabel("  Time-frequency: "));
+		timePanel.add(new JLabel("Time-freq: "));
 		timePanel.add(timeFreq);
 		
 		this.add(timePanel, BorderLayout.SOUTH);

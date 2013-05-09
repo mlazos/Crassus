@@ -143,7 +143,7 @@ public class CrassusGUI implements GUI {
 		
 		frame.add(stockBox, BorderLayout.WEST);
 		frame.add(stockInfo,BorderLayout.CENTER);
-		frame.setMinimumSize(new Dimension(1080,500));
+		frame.setMinimumSize(new Dimension(900,500));
 		
 		frame.addWindowListener(
 				new WindowListener(){
@@ -193,7 +193,7 @@ public class CrassusGUI implements GUI {
 		mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
 		mSave.addActionListener(
 				new ActionListener(){@Override
-					public void actionPerformed(ActionEvent arg0) {fileGui.fileSave();}
+					public void actionPerformed(ActionEvent arg0) {fileGui.fileSave();undoables.clearChangeState();}
 				});
 		fileMenu.add(mSave);
 		
@@ -201,7 +201,7 @@ public class CrassusGUI implements GUI {
 		mSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK|ActionEvent.ALT_MASK));
 		mSaveAs.addActionListener(
 				new ActionListener(){ @Override
-					public void actionPerformed(ActionEvent arg0) {fileGui.fileSaveAs();}
+					public void actionPerformed(ActionEvent arg0) {fileGui.fileSaveAs();undoables.clearChangeState();}
 				});
 		fileMenu.add(mSaveAs);
 		
@@ -432,6 +432,7 @@ public class CrassusGUI implements GUI {
 
 	@Override
 	public void update() {
+		stockBox.refreshActiveStock();
 		indicatorBox.refresh();
 		plotPane.refresh();
 		boolean shouldNotifyUser = stockBox.refresh();
@@ -450,7 +451,7 @@ public class CrassusGUI implements GUI {
 	}
 	
 	public void possiblyExit() {
-		if(undoables.isEmpty())
+		if(undoables.hasNoMajorChanges())
 			System.exit(0);
 		if(fileGui.fileExit())
 			System.exit(0);

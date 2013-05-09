@@ -123,7 +123,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		
 		for(int i=0; i<3; i++){
 			TableColumn column = table.getColumnModel().getColumn(i);
-			int colWidth = (i==2) ? 150 : 26;
+			int colWidth = (i==2) ? 110 : 26;
 			column.setPreferredWidth(colWidth);
 			column.setMaxWidth(colWidth);
 			column.setResizable(false);
@@ -140,7 +140,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,20,0,0));//right border (0) taken care of by increased table size (to deal with scroll-bar)
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(230,250));
+		scrollPane.setPreferredSize(new Dimension(190,250));
 		
 		JLabel title = new JLabel("Indicators",JLabel.CENTER);
 		title.setFont(new Font("SansSerif",Font.BOLD,18));
@@ -149,7 +149,7 @@ public class CrassusIndicatorTablePane extends JPanel {
 		this.add(scrollPane, BorderLayout.CENTER);
 		
 		this.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createEmptyBorder(20,20,20,20),
+				BorderFactory.createEmptyBorder(10,10,10,10),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
 		
 

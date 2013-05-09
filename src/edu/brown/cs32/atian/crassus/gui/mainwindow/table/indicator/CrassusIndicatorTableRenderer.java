@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -47,6 +48,7 @@ public class CrassusIndicatorTableRenderer implements TableCellRenderer{// exten
 			break;
 		case 2:
 			JLabel label = new JLabel((String)value,JLabel.CENTER);
+			label.setFont(new Font("Arial", 0, 9));
 			label.setOpaque(true);
 			label.setBackground(TableColor.getColor(indicator.isTriggered(),indicator.getActive()));
 			c = label;

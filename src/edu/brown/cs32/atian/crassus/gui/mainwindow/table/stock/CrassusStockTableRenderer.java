@@ -37,10 +37,11 @@ public class CrassusStockTableRenderer extends DefaultTableCellRenderer {
 		panel.add(c,BorderLayout.CENTER);
 		
 		if(isSelected){
-			c.setFont(new Font("Arial Bold", Font.BOLD, 12));
+			c.setFont(new Font("Arial Bold", Font.BOLD, 9));
 			panel.setBackground(Color.BLACK);
 		}
 		else{
+			c.setFont(new Font("Arial", 0, 9));
 			panel.setBackground(c.getBackground());
 		}
 		

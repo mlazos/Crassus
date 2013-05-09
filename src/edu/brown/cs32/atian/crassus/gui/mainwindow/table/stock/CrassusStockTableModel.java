@@ -120,6 +120,8 @@ public class CrassusStockTableModel extends AbstractTableModel {
 	}
 
 	public Stock getStock(int index) {
+		if(index==-1 || index > stocks.getStockList().size())
+			return null;
 		return stocks.getStockList().get(index);
 	}
 

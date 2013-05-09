@@ -39,7 +39,7 @@ import edu.brown.cs32.atian.crassus.indicators.StochasticOscillator;
 
 public class FileIO {
 	
-	
+	public final static DataSourceType DATA_SOURCE_TYPE = DataSourceType.YAHOOFINANCE;
 
 	private void writeIndicator(Document doc, Element parent, Indicator indicator) {
 		
@@ -264,7 +264,7 @@ public class FileIO {
 		
 		Element root = doc.getDocumentElement();
 		
-		StockList stocks = new StockListImpl(DataSourceType.YAHOOFINANCE);
+		StockList stocks = new StockListImpl(DATA_SOURCE_TYPE);
 		
 		NodeList nList = root.getChildNodes();
 		
