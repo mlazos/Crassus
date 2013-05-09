@@ -34,9 +34,10 @@ public class BolingerBandPanel extends JPanel
 	private JDialog parent;
 	private JTextField periods;
 	private JTextField bandWidth;
-	private JLabel yearlyGain = new JLabel("Expected Yearly Gain: (Not tested yet)");
-	private JLabel monthlyGain = new JLabel("Expected Monthly Gain: (Not tested yet)");
-	private JLabel weeklyGain = new JLabel("Expected Weekly Gain: (Not tested yet)");
+	private JLabel expectedGainsLabel = new JLabel("Expected Gains:");
+	private JLabel yearlyGain = new JLabel("Yearly: (Not tested yet)");
+	private JLabel monthlyGain = new JLabel("Monthly: (Not tested yet)");
+	private JLabel weeklyGain = new JLabel("Weekly: (Not tested yet)");
 	private String periodstt = "<html>The number of days when calculating the standard deviation and simple moving average.</html>";
 	private String bandWidthtt = "<html>The number of standard deviations for the outer bands.</html>";
 	
@@ -76,12 +77,7 @@ public class BolingerBandPanel extends JPanel
 		parameters.add(periodsInput);
 		parameters.add(bandWidthInput);
 		
-		JPanel expectedGains = new JPanel();
-		expectedGains.setLayout(new BoxLayout(expectedGains, BoxLayout.Y_AXIS));
-		expectedGains.add(yearlyGain);
-		expectedGains.add(monthlyGain);
-		expectedGains.add(weeklyGain);
-		expectedGains.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20,20,20,125), new EtchedBorder()));
+		ExpectedGainsPanel ep = new ExpectedGainsPanel(weeklyGain, monthlyGain, yearlyGain);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -100,7 +96,7 @@ public class BolingerBandPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
-		this.add(expectedGains);
+		this.add(ep);
 		
 
 		

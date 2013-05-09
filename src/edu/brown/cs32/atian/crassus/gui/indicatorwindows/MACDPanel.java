@@ -83,11 +83,7 @@ public class MACDPanel extends JPanel
 		parameters.add(shorterInput);
 		parameters.add(longerInput);
 		
-		JPanel expectedGains = new JPanel();
-		expectedGains.setLayout(new BoxLayout(expectedGains, BoxLayout.Y_AXIS));
-		expectedGains.add(yearlyGain);
-		expectedGains.add(monthlyGain);
-		expectedGains.add(weeklyGain);
+		ExpectedGainsPanel ep = new ExpectedGainsPanel(weeklyGain, monthlyGain, yearlyGain);
 		
 		//middle panel
 		JPanel buttons = new JPanel();
@@ -106,7 +102,7 @@ public class MACDPanel extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(parameters);
 		this.add(buttons);
-		this.add(expectedGains);
+		this.add(ep);
 
 		
 	}
