@@ -124,6 +124,10 @@ public class StockHistDataMinutely implements StockHistData {
         } catch (NumberFormatException e) {
             //e.printStackTrace();
             return false;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
+            return false;
         }
     }
     

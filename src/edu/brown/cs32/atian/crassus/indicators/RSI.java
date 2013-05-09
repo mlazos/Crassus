@@ -34,7 +34,7 @@ public class RSI implements Indicator {
 	private boolean isVisible;
 	private final double EPSILON = 0.01;
 	private final double START_AMT = 10000;
-	private double percentMade;
+	private double percentMade = 0;
 	double avgGain = 0;
 	double avgLoss = 0;
 	private StockEventType currentEvent = StockEventType.NONE;
@@ -196,7 +196,7 @@ public class RSI implements Indicator {
 
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
-
+		stockPlot.setRSTitles("Relative Strength Index", "Time", "RSI");
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(RSIPoints, "Relative Strength Index", startTime, endTime, Color.red);
 
 		try {

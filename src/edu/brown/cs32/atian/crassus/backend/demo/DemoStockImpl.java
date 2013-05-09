@@ -241,6 +241,10 @@ public class DemoStockImpl implements Stock {
         } catch (IOException e) {
             //e.printStackTrace();
             _companyName = "";
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
+            _companyName = "";
         }
         return _companyName;
     }
@@ -368,10 +372,10 @@ public class DemoStockImpl implements Stock {
             calendar.setTimeInMillis(tmp);
             // time in history data has format "yyyy-MM-dd" while time in realtime data has format 1367006400
             // here we realtime Data format to "yyyy-MM-dd"
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            String date = df.format(calendar.getTime());
-            latestRealTime.setTime(date);
-            latestRealTime.setIsHist(true);
+//            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//            String date = df.format(calendar.getTime());
+//            latestRealTime.setTime(date);
+//            latestRealTime.setIsHist(true);
         }
 
         if (result.size() > 0) {
@@ -463,7 +467,7 @@ public class DemoStockImpl implements Stock {
             if (_refreshIndicator) {
                 for (Indicator ind : _events) {
                     ind.refresh(stockPriceData);
-                    System.out.println("Stock " + this.getTicker() + " sent data of size " + length + " with latest timeStamp " + stockPriceData.get(length - 1).getTimeInNumber() + " and latest price " + stockPriceData.get(length - 1).getClose() + " to refresh of indicator " + ind.getName());
+                    System.out.println("Stock " + this.getTicker() + " sent data of size " + length + " with latest timeStamp " + stockPriceData.get(length - 1).getTimeInNumber() + " and latest price " + stockPriceData.get(length - 1).getClose() + " to refresh of indicator " + ind.getName());  // remove before demo
                 }
                 _lastTimeStampSentToIndicator = stockPriceData.get(length - 1).getTimeInNumber();
                 _refreshIndicator = false;
@@ -474,13 +478,13 @@ public class DemoStockImpl implements Stock {
                 //if (latestData.getTimeInNumber() > _lastTimeStampSentToIndicator) {
                     for (Indicator ind : _events) {
                         ind.incrementalUpdate(latestData);
-                        System.out.println("Stock " + this.getTicker() + " sent data of timeStamp " + latestData.getTimeInNumber() + " with updated price " + latestData.getClose() + " to incrementalUpdate of indicator " + ind.getName());                 
+                        System.out.println("Stock " + this.getTicker() + " sent data of timeStamp " + latestData.getTimeInNumber() + " with updated price " + latestData.getClose() + " to incrementalUpdate of indicator " + ind.getName());     // remove before demo
                     }
                     _lastTimeStampSentToIndicator = latestData.getTimeInNumber();
                 //}
             }   
         } catch (Exception e) {
-            e.printStackTrace();  // remove before demo
+            //e.printStackTrace();  // remove before demo
         }
     }
 
@@ -514,7 +518,7 @@ public class DemoStockImpl implements Stock {
         	} 
         } 
         } catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();  // remove before demo
         }
         return stType; 
     } 

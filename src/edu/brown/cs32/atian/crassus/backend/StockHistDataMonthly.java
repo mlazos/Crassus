@@ -114,6 +114,10 @@ public class StockHistDataMonthly implements StockHistData {
             //e.printStackTrace();
             //System.exit(1);
             return false;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Error: Cannot connect to data server");
+            return false;
         }
     }
 

@@ -43,7 +43,7 @@ public class PriceChannel implements Indicator {
 	private boolean isVisible;
 	private final double EPSILON = 0.1;
 	private final double START_AMT = 10000;
-	private double percentMade;
+	private double percentMade = 0;
 	private StockEventType currentEvent;
 	
 	public PriceChannel(List<StockTimeFrameData> data, int lookBackPeriod) {
@@ -181,9 +181,9 @@ public class PriceChannel implements Indicator {
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
-		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperChannel, "Upper Channel", startTime, endTime, Color.pink);
+		SeriesWrapper upperSeries = stockPlot.getTimeSeries(upperChannel, "Upper Channel", startTime, endTime, Color.orange);
 		SeriesWrapper middleSeries = stockPlot.getTimeSeries(centreLine, "Centre Line", startTime, endTime, Color.cyan);
-		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerChannel, "Lower Channel", startTime, endTime, Color.green);
+		SeriesWrapper lowerSeries = stockPlot.getTimeSeries(lowerChannel, "Lower Channel", startTime, endTime, Color.MAGENTA);
 		
 		stockPlot.addSeries(upperSeries);
 		stockPlot.addSeries(middleSeries);
