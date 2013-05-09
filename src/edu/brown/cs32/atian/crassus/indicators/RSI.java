@@ -37,6 +37,7 @@ public class RSI implements Indicator {
 	private double percentMade;
 	double avgGain = 0;
 	double avgLoss = 0;
+	private StockEventType currentEvent = StockEventType.NONE;
 	
 	public RSI(List<StockTimeFrameData> data, int period) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
@@ -84,7 +85,6 @@ public class RSI implements Indicator {
 	 * @param datum		StockTimeFrameData
 	 */
 	void incrementalUpdate(StockTimeFrameData datum) {
-		data.add(datum);
 		
 		int lastIndex = data.size() - 1;
 		double currChange = data.get(lastIndex - 1).getAdjustedClose() - data.get(lastIndex - 2).getAdjustedClose();
@@ -195,7 +195,6 @@ public class RSI implements Indicator {
 	}
 
 	@Override
-	// TODO get the second plot window!
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
 
 		SeriesWrapper upperSeries = stockPlot.getTimeSeries(RSIPoints, "Relative Strength Index", startTime, endTime, Color.red);
@@ -203,7 +202,6 @@ public class RSI implements Indicator {
 		try {
 			stockPlot.setRS(true);
 		} catch (CantTurnRsOnAfterChartsRetreivedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		stockPlot.addRsSeries(upperSeries);
@@ -218,8 +216,24 @@ public class RSI implements Indicator {
 
 	@Override
 	public StockEventType isTriggered() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		double rsi = RSIPoints.get(RSIPoints.size() - 1).getValue();
+		double currClose = data.get(data.size() - 1).getAdjustedClose();
+		
+		if (((rsi > 0.7 - EPSILON) && (currClose < 0.7 + EPSILON))) {
+			currentEvent = StockEventType.SELL;
+		
+		}
+		
+		if (((currClose > 0.3 - EPSILON) && (currClose < 0.3 + EPSILON))) {
+			currentEvent = StockEventType.BUY;
+		}
+		
+		else {
+			currentEvent = StockEventType.NONE;
+		}
+		
+		return currentEvent;
 	}
 
 	@Override

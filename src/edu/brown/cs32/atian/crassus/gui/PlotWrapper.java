@@ -186,7 +186,6 @@ public class PlotWrapper implements StockPlot
 		try {
 			pw.setRS(true);
 		} catch (CantTurnRsOnAfterChartsRetreivedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -225,19 +224,7 @@ public class PlotWrapper implements StockPlot
     		Date endTime, Color seriesColor) {
         TimeSeries series = new TimeSeries(seriesName);
         
-        List<Long> dateValues = new ArrayList<Long>();
-        
         for(IndicatorDatum datum : indicatorPoints) {
-             //  return time represented by a second value 
-/*             long tmp = datum.getTime() * 1000;    // from second to Millisecond
-             Calendar calendar = Calendar.getInstance();             
-             calendar.setTimeInMillis(tmp);
-             Date date = calendar.getTime();  
-             
-             Calendar calendarStart = Calendar.getInstance();
-             calendarStart.setTime(startTime);
-             Calendar calendarEnd = Calendar.getInstance();
-             calendarStart.setTime(endTime);*/
         	
             long tmp = datum.getTime() * 1000;    // from second to Millisecond
             Calendar calendar = Calendar.getInstance();

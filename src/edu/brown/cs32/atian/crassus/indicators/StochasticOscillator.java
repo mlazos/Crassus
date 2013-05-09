@@ -1,11 +1,14 @@
 package edu.brown.cs32.atian.crassus.indicators;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import edu.brown.cs32.atian.crassus.backend.StockEventType;
 import edu.brown.cs32.atian.crassus.backend.StockTimeFrameData;
+import edu.brown.cs32.atian.crassus.gui.CantTurnRsOnAfterChartsRetreivedException;
+import edu.brown.cs32.atian.crassus.gui.SeriesWrapper;
 import edu.brown.cs32.atian.crassus.gui.StockPlot;
 
 /**
@@ -104,8 +107,7 @@ public class StochasticOscillator implements Indicator {
 	}
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
-		
-		data.add(datum);
+
 		int lastIndex = data.size() - 1;
 		double[] highLow = getHighLow(lastIndex - period + 1, lastIndex);
 		double high = highLow[0];
@@ -145,8 +147,17 @@ public class StochasticOscillator implements Indicator {
 	
 	@Override
 	public void addToPlot(StockPlot stockPlot, Date startTime, Date endTime) {
-		// TODO Auto-generated method stub
 		
+		SeriesWrapper stochasticOscillator = stockPlot.getTimeSeries(stocOscillator, "Stochastic Oscillator", startTime, endTime, Color.red);
+		SeriesWrapper signalline = stockPlot.getTimeSeries(stocOscillator, "Signal Line", startTime, endTime, Color.black);
+			
+		try {
+			stockPlot.setRS(true);
+		} catch (CantTurnRsOnAfterChartsRetreivedException e) {
+			e.printStackTrace();
+		}
+		stockPlot.addRsSeries(stochasticOscillator);
+		stockPlot.addRsSeries(signalline);
 	}
 
 	@Override
