@@ -61,6 +61,8 @@ public interface StockPlot {
 	
 	public BufferedImage getRsBufferedImage(int width, int height);
 	
+	public void setRSTitles(String chartTitle, String xAxisTitle, String yAxisTitle);
+	
 	public SeriesWrapper getTimeSeries(List<IndicatorDatum> indicatorPoints, String seriesName, Date startTime, Date endTime, Color seriesColor);
 
 	void addRsSeries(SeriesWrapper series);
