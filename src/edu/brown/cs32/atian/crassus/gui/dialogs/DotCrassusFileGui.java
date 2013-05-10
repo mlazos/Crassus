@@ -187,6 +187,7 @@ public class DotCrassusFileGui {
 		timer.setRepeats(true);
 		timer.start();
 		
+		f = null;
 		return stocks;
 		
 	}
