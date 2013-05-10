@@ -136,6 +136,10 @@ public class CrassusStockTableModel extends AbstractTableModel {
 		}
 	}
 
+	public void forceToRender(int row) {
+		this.fireTableRowsUpdated(row,row);
+	}
+
 
 
 }

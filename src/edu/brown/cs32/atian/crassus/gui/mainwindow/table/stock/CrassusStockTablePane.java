@@ -7,11 +7,18 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -42,26 +50,28 @@ public class CrassusStockTablePane extends JPanel {
 
 	private class ChangeStockListenerForwarder implements ListSelectionListener {
 		private Stock lastStock;
-		int lastIndex = -1;
+		private int lastIndex = -1;
 		@Override 
 		public void valueChanged(ListSelectionEvent e) {
 			if(listener!=null){
 				int index = table.getSelectedRow();
-				if(index==-1){
-					if(lastStock!=null)
-						listener.changeToStock(null);
-					lastStock = null;
-					lastIndex = index;
-				}
-				else{
-					Stock nextStock = model.getStock(table.getSelectedRow());
-					if(lastStock!=nextStock){
-						listener.changeToStock(nextStock);
-						if(selector.shouldRegisterSelection())
-							undoables.push(new SelectUndoable(lastIndex, index, selector));
+				if(listener!=null){
+					if(index==-1){
+						if(lastStock!=null)
+							listener.changeToStock(null);
+						lastStock = null;
+						lastIndex = index;
 					}
-					lastStock = nextStock;
-					lastIndex = index;
+					else{
+						Stock nextStock = model.getStock(index);
+						if(lastStock!=nextStock){
+							listener.changeToStock(nextStock);
+							if(selector.shouldRegisterSelection())
+								undoables.push(new SelectUndoable(lastIndex, index, selector));
+						}
+						lastStock = nextStock;
+						lastIndex = index;
+					}
 				}
 			}
 		}
@@ -98,6 +108,7 @@ public class CrassusStockTablePane extends JPanel {
 	
 	private StockList stocks;
 	
+	@SuppressWarnings("static-access")
 	public CrassusStockTablePane(JFrame frame, UndoableStack undoables){
 		this.frame = frame;
 		this.undoables = undoables;
@@ -157,14 +168,40 @@ public class CrassusStockTablePane extends JPanel {
 		this.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(15,15,15,15),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+		table.addFocusListener(
+				new FocusListener(){
+					@Override
+					public void focusGained(FocusEvent e) {
+						setBorder(BorderFactory.createCompoundBorder(
+								BorderFactory.createEmptyBorder(14,14,14,14),
+								BorderFactory.createMatteBorder(3,3,3,3,Color.BLACK)));
+					}
+
+					@Override
+					public void focusLost(FocusEvent e) {
+						setBorder(BorderFactory.createCompoundBorder(
+								BorderFactory.createEmptyBorder(15,15,15,15),
+								BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+					}
+				});
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.ALT_DOWN_MASK),
+				"REQUEST STOCK FOCUS");
+		this.getActionMap().put(
+				"REQUEST STOCK FOCUS",
+				new AbstractAction(){@Override
+					public void actionPerformed(ActionEvent arg0) {
+						table.requestFocus();
+					}
+				});
 		
 		JButton addButton = new CrassusButton("+");
 		addButton.addActionListener(new PlusButtonListener());
-		addButton.setToolTipText("<html>add new ticker<br>CTRL +</html>");
+		addButton.setToolTipText("<html>add new ticker<br>CTRL-T</html>");
 		
 		JButton removeButton = new CrassusButton("-");
 		removeButton.addActionListener(new MinusButtonListener());
-		removeButton.setToolTipText("<html>remove selected ticker<br>CTRL SHIFT -</html>");
+		removeButton.setToolTipText("<html>remove selected ticker<br>CTRL+SHIFT-T</html>");
 		
 		JPanel buttonHolder = new JPanel();
 		buttonHolder.setBackground(Color.WHITE);
@@ -201,6 +238,7 @@ public class CrassusStockTablePane extends JPanel {
 					JOptionPane.showMessageDialog(frame, "\'"+symbol+"\' is already in your ticker-table");
 					int index = stocks.getStockList().indexOf(other);
 					table.setRowSelectionInterval(index,index);
+					table.requestFocus();
 					return;
 				}
 			}
@@ -214,12 +252,15 @@ public class CrassusStockTablePane extends JPanel {
 		}catch(IllegalArgumentException e){
 			JOptionPane.showMessageDialog(frame,"\'"+symbol+"\' is not a valid ticker symbol");
 		}
+		table.requestFocus();
 	}
 
 	public void removeSelectedTicker() {
 		int index = table.getSelectedRow();
 		Stock stock = model.removeStock(index);
-		undoables.push(new RemoveStockUndoable(model, stock, index, selector));
+		if(stock!=null)
+			undoables.push(new RemoveStockUndoable(model, stock, index, selector));
+		table.requestFocus();
 	}
 
 	public void setChangeStockListener(CrassusChangeStockListener listener){
@@ -243,6 +284,4 @@ public class CrassusStockTablePane extends JPanel {
 		if(stock!=null)
 			stock.refresh();
 	}
-
-
 }

@@ -7,12 +7,18 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -20,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -167,15 +174,41 @@ public class CrassusIndicatorTablePane extends JPanel {
 		this.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(10,10,10,10),
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+		table.addFocusListener(
+				new FocusListener(){
+					@Override
+					public void focusGained(FocusEvent e) {
+						setBorder(BorderFactory.createCompoundBorder(
+								BorderFactory.createEmptyBorder(9,9,9,9),
+								BorderFactory.createMatteBorder(3,3,3,3,Color.BLACK)));
+					}
+
+					@Override
+					public void focusLost(FocusEvent e) {
+						setBorder(BorderFactory.createCompoundBorder(
+								BorderFactory.createEmptyBorder(10,10,10,10),
+								BorderFactory.createEtchedBorder(EtchedBorder.LOWERED)));
+					}
+				});
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_DOWN_MASK),
+				"REQUEST INDICATOR FOCUS");
+		this.getActionMap().put(
+				"REQUEST INDICATOR FOCUS",
+				new AbstractAction(){@Override
+					public void actionPerformed(ActionEvent arg0) {
+						table.requestFocus();
+					}
+				});
 		
 
 		JButton addButton = new CrassusButton("+");
 		addButton.addActionListener(new PlusButtonListener());
-		addButton.setToolTipText("<html>add new indicator<br>CTRL I</html>");
+		addButton.setToolTipText("<html>add new indicator<br>CTRL-I</html>");
 		
 		JButton removeButton = new CrassusButton("-");
 		removeButton.addActionListener(new MinusButtonListener());
-		removeButton.setToolTipText("<html>remove selected indicator<br>CTRL SHIFT I</html>");
+		removeButton.setToolTipText("<html>remove selected indicator<br>CTRL+SHIFT-I</html>");
 		
 		JPanel buttonHolder = new JPanel();
 		buttonHolder.setBackground(Color.WHITE);

@@ -104,6 +104,10 @@ public class CrassusGUI implements GUI {
 				mRedo.setEnabled(true);  
 			}
 		}
+		@Override
+		public void informHasChanges(boolean b) {
+			frame.setTitle("Crassus "+ (b ? "*" : ""));
+		}
 	};
 
 	public CrassusGUI() {
@@ -176,32 +180,47 @@ public class CrassusGUI implements GUI {
 		JMenuItem mNew = new JMenuItem("New");
 		mNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,ActionEvent.CTRL_MASK));
 		mNew.addActionListener(
-				new ActionListener(){@Override
-					public void actionPerformed(ActionEvent arg0) {changeStockListTo(fileGui.fileNew());}
+				new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						changeStockListTo(fileGui.fileNew());
+					}
 				});
 		fileMenu.add(mNew);
 
 		JMenuItem mOpen = new JMenuItem("Open");
 		mOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,ActionEvent.CTRL_MASK));
 		mOpen.addActionListener(
-				new ActionListener(){@Override
-					public void actionPerformed(ActionEvent arg0) {changeStockListTo(fileGui.fileOpen());}
+				new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						
+						changeStockListTo(fileGui.fileOpen());
+					}
 				});
 		fileMenu.add(mOpen);
 		
 		JMenuItem mSave = new JMenuItem("Save");
 		mSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
 		mSave.addActionListener(
-				new ActionListener(){@Override
-					public void actionPerformed(ActionEvent arg0) {fileGui.fileSave();undoables.clearChangeState();}
+				new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if(fileGui.fileSave())
+							undoables.clearChangeState();
+					}
 				});
 		fileMenu.add(mSave);
 		
 		JMenuItem mSaveAs = new JMenuItem("Save As");
 		mSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK|ActionEvent.ALT_MASK));
 		mSaveAs.addActionListener(
-				new ActionListener(){ @Override
-					public void actionPerformed(ActionEvent arg0) {fileGui.fileSaveAs();undoables.clearChangeState();}
+				new ActionListener(){ 
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if(fileGui.fileSaveAs())
+							undoables.clearChangeState();
+					}
 				});
 		fileMenu.add(mSaveAs);
 		
@@ -401,8 +420,12 @@ public class CrassusGUI implements GUI {
 		
 	}
 	
+	private StockList stocks;
 	public void changeStockListTo(StockList stocks) {
-
+		if(this.stocks==stocks)
+			return;
+		this.stocks = stocks;
+		
 		stockBox.changeStockListTo(stocks);
 
 		if(stocks.getStockList().isEmpty()){

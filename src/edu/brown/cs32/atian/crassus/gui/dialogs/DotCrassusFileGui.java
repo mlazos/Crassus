@@ -123,12 +123,16 @@ public class DotCrassusFileGui {
 			File file = new File(ExtensionUtils.setExtension("crassus",fc.getSelectedFile().getAbsolutePath()));
 			
 			if(file.exists()){
-				int result = JOptionPane.showConfirmDialog(frame, file.getName() + " already exists in this directory. Would you like to overwrite it?");
+//				int result = JOptionPane.showConfirmDialog(frame, file.getName() + " already exists in this directory. Would you like to overwrite it?");
+				
+				String[] options = {"OK","CANCEL"};
+				int result = JOptionPane.showOptionDialog(frame, file.getName() + " already exists in this directory. Would you like to overwrite it?", 
+						"Message", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, 
+						null, options, "CANCEL");
+				
 				if(result==0)
 					return tryWrite(file);
 				if(result==1)
-					return fileSaveAs();
-				if(result==2)
 					return false;
 			}
 			else{

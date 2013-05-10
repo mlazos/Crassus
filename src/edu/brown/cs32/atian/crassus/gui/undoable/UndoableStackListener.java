@@ -4,5 +4,6 @@ public interface UndoableStackListener {
 
 	public void changeUndo(String string);	
 	public void changeRedo(String string);
+	public void informHasChanges(boolean b);
 	
 }

@@ -33,6 +33,8 @@ public class UndoableStack {
 		else{
 			listener.changeRedo(redoables.peek().getName());
 		}
+		
+		listener.informHasChanges(intensity!=0);
 	}
 	
 	public void undo(){
@@ -91,5 +93,6 @@ public class UndoableStack {
 	
 	public void clearChangeState() {
 		intensity = 0;
+		updateListener();
 	}
 }

@@ -168,7 +168,10 @@ public class CrassusPlotPane extends JPanel {
 
 	public void changeToStock(Stock stock){
 		this.stock = stock;
-		if(stock!=null){
+		if(stock==null){
+			plot = null;
+		}
+		else{
 			this.stock.setTimeFrame(timeframeFromIndex(timeframe.getSelectedIndex()));
 			this.stock.setCurrFreq(timeFreqFromIndex(timeFreq.getSelectedIndex()));
 			this.stock.refresh();
