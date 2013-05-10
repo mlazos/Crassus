@@ -35,6 +35,9 @@ public class BollingerBands implements Indicator {
 	private final double EPSILON = 0.1;
 	private double percentMade = 0;
 	private StockEventType currentEvent = StockEventType.NONE;
+	private double currLatest;
+	private double lVal = 0;
+	private double uVal = 0;
 	
 	public BollingerBands(List<StockTimeFrameData> data, int period, int bandWidth) throws IllegalArgumentException {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
@@ -204,7 +207,7 @@ public class BollingerBands implements Indicator {
 	
 	public void incrementalUpdate(StockTimeFrameData datum) {
 
-		
+		currLatest = datum.getAdjustedClose();
 		int lastIndex = data.size() - 1;
 		
 		double avg = calcSMA(lastIndex - (period - 1), lastIndex);
@@ -212,7 +215,10 @@ public class BollingerBands implements Indicator {
 		
 		double upperBandValue = avg + (bandWidth * stdDev);
 		double lowerBandValue = avg - (bandWidth * stdDev);
-
+		
+		lVal = lowerBandValue;
+		uVal = upperBandValue;
+	
 		middleBand.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), avg));
 		upperBand.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), upperBandValue));
 		lowerBand.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), lowerBandValue));
@@ -223,23 +229,42 @@ public class BollingerBands implements Indicator {
 	@Override
 	public StockEventType isTriggered() {
 		
-		double currClose = data.get(data.size() - 1).getAdjustedClose();
+		System.out.println("============================");
+		double currClose = currLatest;
 		double upperBandValue = upperBand.get(upperBand.size() - 1).getValue();
 		double lowerBandValue = lowerBand.get(upperBand.size() - 1).getValue();
 		
-		if (((currClose > upperBandValue - EPSILON) && (currClose < upperBandValue + EPSILON))) {
-			currentEvent = StockEventType.SELL;
+		StockEventType toReturn = StockEventType.NONE;
+		
+		if (((currClose > uVal))) {
+			
+			System.out.println("IMPORTANT CURRCLOSE > UVAL, CURREVENT=" + currentEvent);
+			//if (currentEvent.equals(StockEventType.BUY) || currentEvent.equals(StockEventType.NONE)) {
+				currentEvent = StockEventType.SELL;
+				toReturn = StockEventType.SELL;
+			//}
 		}
 		
-		else if (((currClose > lowerBandValue - EPSILON) && (currClose < lowerBandValue + EPSILON))) {
-			currentEvent = StockEventType.BUY;
+		else if ((currClose < lVal)) {
+			System.out.println("IMPORTANT CURRCLOSE < LVAL, CURREVENT=" + currentEvent);
+			//if (currentEvent.equals(StockEventType.SELL) || currentEvent.equals(StockEventType.NONE)) {
+				currentEvent = StockEventType.BUY;
+				toReturn = StockEventType.BUY;
+			//}
 		}
 		
 		else {
-			currentEvent = StockEventType.NONE;
+			 toReturn = StockEventType.NONE;
 		}
+
+;
+		System.out.println("currClose=["  + currClose + "], > uVal =[" + uVal + "], =" +(currClose > uVal));
+		System.out.println("currClose=["  + currClose + "], < lVal =[" + lVal + "], =" + (currClose < lVal));
+		System.out.println("Bollinger Bands isTriggered() called currEvent=" + toReturn + ", currClose=" + currClose + ", uVal=" + upperBandValue + ", lVal=" + lowerBandValue);
+		System.out.println("============================");
+		return toReturn;
 		
-		return currentEvent;
+		//return StockEventType.BUY;
 	}
 
 	@Override

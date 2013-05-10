@@ -38,6 +38,8 @@ public class RSI implements Indicator {
 	double avgGain = 0;
 	double avgLoss = 0;
 	private StockEventType currentEvent = StockEventType.NONE;
+	private double currLatest;
+	private double currRSI;
 	
 	public RSI(List<StockTimeFrameData> data, int period) {
 		if (period == 0) throw new IllegalArgumentException("ERROR: " + period + " is not a valid period");
@@ -86,6 +88,8 @@ public class RSI implements Indicator {
 	 */
 	public void incrementalUpdate(StockTimeFrameData datum) {
 		
+		currLatest = datum.getAdjustedClose();
+		
 		int lastIndex = data.size() - 1;
 		double currChange = data.get(lastIndex - 1).getAdjustedClose() - data.get(lastIndex - 2).getAdjustedClose();
 		// smoothing technique similar to exponential moving average calculation
@@ -101,6 +105,7 @@ public class RSI implements Indicator {
 		double rsi = 100 - (100 / (1 + rs));
 		RSIPoints.add(new IndicatorDatum(datum.getTime(), datum.getTimeInNumber(), rsi));
 		
+		currRSI	= rsi;
 	}
 	
 	/**
@@ -217,15 +222,17 @@ public class RSI implements Indicator {
 	@Override
 	public StockEventType isTriggered() {
 		
-		double rsi = RSIPoints.get(RSIPoints.size() - 1).getValue();
-		double currClose = data.get(data.size() - 1).getAdjustedClose();
+		//double rsi = RSIPoints.get(RSIPoints.size() - 1).getValue();
+		//double currClose = data.get(data.size() - 1).getAdjustedClose();
 		
-		if (((rsi > 0.7 - EPSILON) && (currClose < 0.7 + EPSILON))) {
+		double rsi = currRSI;
+		
+		if ((rsi > 0.7)) {
 			currentEvent = StockEventType.SELL;
 		
 		}
 		
-		if (((currClose > 0.3 - EPSILON) && (currClose < 0.3 + EPSILON))) {
+		if ((rsi < 0.3)) {
 			currentEvent = StockEventType.BUY;
 		}
 		

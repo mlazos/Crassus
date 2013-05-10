@@ -379,7 +379,11 @@ public class StockImpl implements Stock {
     // combine both the history data with today's data so the plot and indicator calculation don't need to combine the hist data with realtime data
     @Override
     public List<StockTimeFrameData> getStockPriceData(StockFreqType freq) {  // freq = "minutely", or "daily" or "monthly" or "weekly"
-
+        
+		if(this._currFreq != freq) {
+            this.setCurrFreq(freq);
+        }
+		
         List<StockTimeFrameData> realTime = this._realTime.getRealTimeData();
         List<StockTimeFrameData> result = new ArrayList<StockTimeFrameData>();
 
