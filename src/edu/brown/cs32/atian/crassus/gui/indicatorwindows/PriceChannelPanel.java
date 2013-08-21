@@ -144,14 +144,18 @@ public class PriceChannelPanel extends JPanel
 			{
 				try
 				{
+					StockFreqType prev = stock.getCurrFreq();
+					
+					stock.setCurrFreq(StockFreqType.DAILY);
 					Indicator indDaily = new PriceChannel(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(lookBackArg));
 					
-					
+					stock.setCurrFreq(StockFreqType.WEEKLY);
 					Indicator indWeekly = new PriceChannel(stock.getStockPriceData(StockFreqType.WEEKLY), Integer.parseInt(lookBackArg));
 					
-					
+					stock.setCurrFreq(StockFreqType.MONTHLY);
 					Indicator indMonthly = new PriceChannel(stock.getStockPriceData(StockFreqType.MONTHLY), Integer.parseInt(lookBackArg));
 					
+					stock.setCurrFreq(prev);
 					
 					test(indDaily, indWeekly, indMonthly);
 				}

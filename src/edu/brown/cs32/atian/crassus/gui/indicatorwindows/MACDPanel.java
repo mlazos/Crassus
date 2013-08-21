@@ -188,14 +188,21 @@ public class MACDPanel extends JPanel
 			{
 				try
 				{
+					StockFreqType prev = stock.getCurrFreq();
+					
+					stock.setCurrFreq(StockFreqType.DAILY);
 					Indicator indDaily = new MACD(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(signalPArg), 
 							Integer.parseInt(shortPArg), Integer.parseInt(longPArg));
 					
+					stock.setCurrFreq(StockFreqType.WEEKLY);
 					Indicator indWeekly = new MACD(stock.getStockPriceData(StockFreqType.WEEKLY), Integer.parseInt(signalPArg), 
 							Integer.parseInt(shortPArg), Integer.parseInt(longPArg));
 					
+					stock.setCurrFreq(StockFreqType.MONTHLY);
 					Indicator indMonthly = new MACD(stock.getStockPriceData(StockFreqType.MONTHLY), Integer.parseInt(signalPArg), 
 							Integer.parseInt(shortPArg), Integer.parseInt(longPArg));
+					
+					stock.setCurrFreq(prev);
 					
 					test(indDaily, indWeekly, indMonthly);
 				}

@@ -146,14 +146,18 @@ public class StochOscillPanel extends JPanel {
 			{
 				try
 				{
+					StockFreqType prev = stock.getCurrFreq();
+					
+					stock.setCurrFreq(StockFreqType.DAILY);
 					Indicator indDaily = new StochasticOscillator(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodArg));
 					
-					
+					stock.setCurrFreq(StockFreqType.WEEKLY);
 					Indicator indWeekly = new StochasticOscillator(stock.getStockPriceData(StockFreqType.WEEKLY), Integer.parseInt(periodArg));
 					
-					
+					stock.setCurrFreq(StockFreqType.MONTHLY);
 					Indicator indMonthly = new StochasticOscillator(stock.getStockPriceData(StockFreqType.MONTHLY), Integer.parseInt(periodArg));
 					
+					stock.setCurrFreq(prev);
 					
 					test(indDaily, indWeekly, indMonthly);
 				}

@@ -202,14 +202,20 @@ public class PivotPanel extends JPanel
 			
 			try
 			{
+				StockFreqType prev = stock.getCurrFreq();
+				
+				stock.setCurrFreq(StockFreqType.DAILY);
 				Indicator indDaily = new PivotPoints(stock.getStockPriceData(StockFreqType.DAILY), currentButton);
 				
+				stock.setCurrFreq(StockFreqType.WEEKLY);
 				Indicator indWeekly = new PivotPoints(stock.getStockPriceData(StockFreqType.WEEKLY), currentButton);
 				
+				stock.setCurrFreq(StockFreqType.MONTHLY);
 				Indicator indMonthly = new PivotPoints(stock.getStockPriceData(StockFreqType.MONTHLY), currentButton);
 				
 				test(indDaily, indWeekly, indMonthly);
 				
+				stock.setCurrFreq(prev);
 			}
 			catch(NumberFormatException nfe)
 			{

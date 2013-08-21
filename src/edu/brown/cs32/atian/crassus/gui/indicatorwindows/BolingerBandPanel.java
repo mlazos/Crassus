@@ -176,15 +176,21 @@ public class BolingerBandPanel extends JPanel
 			{
 				try
 				{
+					StockFreqType prev = stock.getCurrFreq();
+					
+					stock.setCurrFreq(StockFreqType.DAILY);
 					Indicator indDaily = new BollingerBands(stock.getStockPriceData(StockFreqType.DAILY), Integer.parseInt(periodsArg), 
 							Integer.parseInt(bandWidthArg));
 					
+					stock.setCurrFreq(StockFreqType.WEEKLY);
 					Indicator indWeekly = new BollingerBands(stock.getStockPriceData(StockFreqType.WEEKLY), Integer.parseInt(periodsArg), 
 							Integer.parseInt(bandWidthArg));
 					
+					stock.setCurrFreq(StockFreqType.MONTHLY);
 					Indicator indMonthly = new BollingerBands(stock.getStockPriceData(StockFreqType.MONTHLY), Integer.parseInt(periodsArg), 
 							Integer.parseInt(bandWidthArg));
 					
+					stock.setCurrFreq(prev);
 					test(indDaily, indWeekly, indMonthly);
 				}
 				catch(NumberFormatException nfe)
